@@ -1,0 +1,754 @@
+{
+  "info": {
+    "name": "Vitalize Health API",
+    "description": "Full collection for the Vitalize Health backend.\n\nAuthentication is cookie-based (httpOnly access + refresh cookies).\nPostman's cookie jar handles them automatically — just call any of the **Login** or **Register** requests first, then run any other request.\n\n- Login is rate-limited to 10 requests/minute per IP; admin auth and registration to 5/min.\n- Content routes require any authenticated user.\n- Admin routes require role = `admin`.\n- Admin registration requires the operator's `ADMIN_INVITE_CODE` (set in `backend/.env`).\n\nDefault base URL: `http://localhost:3005`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "f9c5b3b1-7f24-4d1e-9bdc-c4c7d3e3a001"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3005", "type": "string" },
+    { "key": "adminUsername", "value": "admin", "type": "string" },
+    { "key": "adminPassword", "value": "vitalize2026", "type": "string" },
+    { "key": "readerUsername", "value": "reader", "type": "string" },
+    { "key": "readerPassword", "value": "reader2026", "type": "string" },
+    { "key": "adminInviteCode", "value": "vitalize-admin-invite-2026", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /api/health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] },
+            "description": "Public health probe. Returns `{ status, env }`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login as admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('returns userId + role', () => {",
+                  "  pm.expect(json).to.have.property('userId');",
+                  "  pm.expect(json).to.have.property('role');",
+                  "});",
+                  "pm.test('role is admin', () => pm.expect(json.role).to.eql('admin'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Sets `auth_token` (15m) and `auth_refresh_token` (30d) httpOnly cookies on success.\nResponse body never contains the token — only `{ userId, role }`.\nRate limited: 10 requests / minute / IP."
+          }
+        },
+        {
+          "name": "Login as reader",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('role is user', () => pm.expect(pm.response.json().role).to.eql('user'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{readerUsername}}\",\n  \"password\": \"{{readerPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Logs in the demo non-admin user (`reader` / `reader2026`)."
+          }
+        },
+        {
+          "name": "Login — invalid credentials (expect 401)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"wrong\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Demonstrates 401 on bad credentials."
+          }
+        },
+        {
+          "name": "Register new user",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Generate a unique username so the request can be replayed without 409s.",
+                  "pm.collectionVariables.set('signupUsername', 'qa_' + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('role is user', () => pm.expect(json.role).to.eql('user'));",
+                  "pm.test('returns userId', () => pm.expect(json).to.have.property('userId'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{signupUsername}}\",\n  \"password\": \"secret123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Self-service signup for regular users. Always creates a `role: 'user'` account and immediately signs the user in via httpOnly cookies. Username must be 3–32 chars (letters, digits, `_.-`); password must be 8+ chars. Rate-limited 5/min/IP."
+          }
+        },
+        {
+          "name": "Register — duplicate username (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"anything12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Demonstrates 409 Conflict when the username already exists."
+          }
+        },
+        {
+          "name": "Register — weak password (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"someone_new\",\n  \"password\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Demonstrates 400 with Zod validation details on password too short."
+          }
+        },
+        {
+          "name": "Admin login (admin role required)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('role is admin', () => pm.expect(pm.response.json().role).to.eql('admin'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "admin", "login"]
+            },
+            "description": "Admin-only login endpoint backing the hidden `/admin/login` UI page. Same credential check as `/login` but returns 403 if the account's role is not admin. Rate-limited 5/min/IP."
+          }
+        },
+        {
+          "name": "Admin login — non-admin account (expect 403)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{readerUsername}}\",\n  \"password\": \"{{readerPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "admin", "login"]
+            },
+            "description": "Demonstrates that regular users CANNOT use the admin login endpoint, even with valid credentials."
+          }
+        },
+        {
+          "name": "Admin register (requires invite code)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('newAdminUsername', 'qa_admin_' + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('role is admin', () => pm.expect(pm.response.json().role).to.eql('admin'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{newAdminUsername}}\",\n  \"password\": \"secret123\",\n  \"inviteCode\": \"{{adminInviteCode}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/admin/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "admin", "register"]
+            },
+            "description": "Self-service signup for **admin** accounts via the hidden `/admin/register` page. The `inviteCode` body field MUST equal `ADMIN_INVITE_CODE` from `backend/.env` — without it the request returns 403. Rate-limited 5/min/IP."
+          }
+        },
+        {
+          "name": "Admin register — bad invite code (expect 403)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"bogus_admin\",\n  \"password\": \"secret123\",\n  \"inviteCode\": \"definitely-wrong\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/admin/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "admin", "register"]
+            },
+            "description": "Demonstrates that knowing the URL is not enough — the invite code is required."
+          }
+        },
+        {
+          "name": "GET /api/auth/me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Reads the current session from the access cookie. Returns `{ userId, role }` or 401."
+          }
+        },
+        {
+          "name": "POST /api/auth/refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            },
+            "description": "Verifies the refresh cookie and reissues a fresh access + refresh cookie pair."
+          }
+        },
+        {
+          "name": "POST /api/auth/logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Clears both auth cookies. Always returns `{ success: true }`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Content (requires auth)",
+      "item": [
+        {
+          "name": "GET /api/articles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/articles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "articles"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/podcasts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/podcasts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "podcasts"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/experts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/experts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "experts"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/tips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tips"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/plans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plans"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/user/stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "stats"]
+            },
+            "description": "Personal stats card data: `{ streakCount, articlesRead, podcastsListened, aiQueries }`."
+          }
+        },
+        {
+          "name": "GET /api/config/features",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/config/features",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "config", "features"]
+            },
+            "description": "Backend-driven feature flags consumed by `useFeatureFlags()`."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Stats",
+      "item": [
+        {
+          "name": "GET /api/admin/stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Articles",
+      "item": [
+        {
+          "name": "GET /api/admin/articles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/articles?page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "articles"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            },
+            "description": "Returns `{ data, total, page, pageSize }`."
+          }
+        },
+        {
+          "name": "POST /api/admin/articles",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "const created = pm.response.json();",
+                  "pm.collectionVariables.set('lastArticleId', String(created.id));",
+                  "pm.test('captured id', () => pm.expect(created).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cat\": \"m\",\n  \"categoryLabel\": \"Mental Health\",\n  \"categoryColor\": \"#4A8DB8\",\n  \"title\": \"New Article from Postman\",\n  \"author\": \"QA Engineer\",\n  \"date\": \"Apr 28\",\n  \"readTime\": \"5 min\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=700&q=80\",\n  \"excerpt\": \"This article was created via the API.\",\n  \"isPremium\": false,\n  \"slug\": \"postman-test-article\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/articles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "articles"]
+            },
+            "description": "Creates an article. Saves the new `id` into the collection variable `lastArticleId`."
+          }
+        },
+        {
+          "name": "PUT /api/admin/articles/:id",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Article Title from Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/articles/{{lastArticleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "articles", "{{lastArticleId}}"]
+            },
+            "description": "Partial update — any subset of the article fields is allowed."
+          }
+        },
+        {
+          "name": "DELETE /api/admin/articles/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/articles/{{lastArticleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "articles", "{{lastArticleId}}"]
+            },
+            "description": "Deletes by `id`. Returns 204 No Content on success."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Podcasts",
+      "item": [
+        {
+          "name": "GET /api/admin/podcasts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/podcasts?page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "podcasts"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/admin/podcasts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('lastPodcastId', String(pm.response.json().id));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"episode\": \"EP 99\",\n  \"category\": \"Mental Health\",\n  \"title\": \"New Episode from Postman\",\n  \"guest\": \"Dr. Postman\",\n  \"duration\": \"45m\",\n  \"date\": \"Apr 28\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&q=80\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/podcasts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "podcasts"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/admin/podcasts/:id",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Podcast Title\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/podcasts/{{lastPodcastId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "podcasts", "{{lastPodcastId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/admin/podcasts/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/podcasts/{{lastPodcastId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "podcasts", "{{lastPodcastId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Experts",
+      "item": [
+        {
+          "name": "GET /api/admin/experts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/experts?page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "experts"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/admin/experts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('lastExpertId', String(pm.response.json().id));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Test Expert\",\n  \"role\": \"Endocrinologist\",\n  \"credentials\": \"MD Yale · Endocrine Society Fellow\",\n  \"articleCount\": 12,\n  \"imageUrl\": \"https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&q=80\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/experts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "experts"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/admin/experts/:id",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"articleCount\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/experts/{{lastExpertId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "experts", "{{lastExpertId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/admin/experts/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/experts/{{lastExpertId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "experts", "{{lastExpertId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Tips",
+      "item": [
+        {
+          "name": "GET /api/admin/tips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/tips?page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "tips"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/admin/tips",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('lastTipId', String(pm.response.json().id));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"icon\": \"💧\",\n  \"colors\": { \"bg\": \"#EFF6FB\", \"border\": \"#C8DFF2\" },\n  \"title\": \"Hydrate Right\",\n  \"text\": \"Drink half your body weight (lbs) in ounces of water daily for optimal cellular function.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/tips",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "tips"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/admin/tips/:id",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Hydration Strategy\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/tips/{{lastTipId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "tips", "{{lastTipId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/admin/tips/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/tips/{{lastTipId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "tips", "{{lastTipId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
