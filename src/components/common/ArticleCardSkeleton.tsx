@@ -28,4 +28,3 @@ export function ArticleCardSkeleton({ count = 3 }: Props): React.ReactNode {
     </div>
   )
 }
-// fix some issue
