@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { ArticleCard } from '@/components/feature/ArticleCard'
+import { ArticleDetailModal } from '@/components/feature/ArticleDetailModal'
 import { CategoryPills } from '@/components/feature/CategoryPills'
 import { SectionHeader } from '@/components/common/SectionHeader'
 import { ArticleCardSkeleton } from '@/components/common/ArticleCardSkeleton'
@@ -7,10 +8,12 @@ import { ErrorMessage } from '@/components/common/ErrorMessage'
 import { EmptyState } from '@/components/common/EmptyState'
 import { useArticles } from '@/features/articles/hooks/useArticles'
 import { getUserFriendlyMessage } from '@/lib/errors'
+import type { Article } from '@/globals/types'
 
 export function ArticlesPage(): React.ReactNode {
   const [selectedCat, setSelectedCat] = useState('All')
   const [search, setSearch] = useState('')
+  const [viewingArticle, setViewingArticle] = useState<Article | null>(null)
   const { data: articles, isLoading, isError, error, refetch } = useArticles()
 
   const filtered = useMemo(() => {
@@ -74,11 +77,20 @@ export function ArticlesPage(): React.ReactNode {
               className="grid gap-px bg-border rounded-2xl overflow-hidden mb-4"
               style={{ gridTemplateColumns: '1.7fr 1fr' }}
             >
-              <ArticleCard article={filtered[0]} size="xl" />
+              <ArticleCard
+                article={filtered[0]}
+                size="xl"
+                onClick={setViewingArticle}
+              />
               {filtered.length > 1 && (
                 <div className="grid gap-px bg-border">
                   {filtered.slice(1, 3).map((a) => (
-                    <ArticleCard key={a.id} article={a} size="lg" />
+                    <ArticleCard
+                      key={a.id}
+                      article={a}
+                      size="lg"
+                      onClick={setViewingArticle}
+                    />
                   ))}
                 </div>
               )}
@@ -87,7 +99,12 @@ export function ArticlesPage(): React.ReactNode {
             {filtered.length > 3 && (
               <div className="grid grid-cols-3 gap-3 mt-4">
                 {filtered.slice(3).map((a) => (
-                  <ArticleCard key={a.id} article={a} size="md" />
+                  <ArticleCard
+                    key={a.id}
+                    article={a}
+                    size="md"
+                    onClick={setViewingArticle}
+                  />
                 ))}
               </div>
             )}
@@ -98,6 +115,14 @@ export function ArticlesPage(): React.ReactNode {
           </>
         )}
       </div>
+
+      {/* Article Detail Modal */}
+      {viewingArticle && (
+        <ArticleDetailModal
+          article={viewingArticle}
+          onClose={() => setViewingArticle(null)}
+        />
+      )}
     </main>
   )
 }

@@ -33,12 +33,12 @@ export function TipForm({ initial, onSubmit, onCancel, isSubmitting }: Props): R
   const [values, setValues] = useState<TipFormValues>(() =>
     initial
       ? {
-          icon: initial.icon,
-          title: initial.title,
-          text: initial.text,
-          bg: initial.colors.bg,
-          border: initial.colors.border,
-        }
+        icon: initial.icon,
+        title: initial.title,
+        text: initial.text,
+        bg: initial.colors.bg,
+        border: initial.colors.border,
+      }
       : EMPTY
   )
   const [errors, setErrors] = useState<Partial<Record<keyof TipFormValues, string>>>({})
@@ -82,22 +82,51 @@ export function TipForm({ initial, onSubmit, onCancel, isSubmitting }: Props): R
             maxLength={4}
           />
         </Field>
+
         <Field label="Bg color" error={errors.bg} required>
-          <input
-            type="text"
-            value={values.bg}
-            onChange={(e) => setField('bg', e.target.value)}
-            className={INPUT_CLASS}
-          />
+          <div className="flex items-center gap-2 w-full border border-border rounded-xl px-3.5 py-1.5 bg-white focus-within:border-green-400 transition-colors">
+            <input
+              type="color"
+              value={values.bg}
+              onChange={(e) => setField('bg', e.target.value)}
+              className="w-7 h-7 rounded-md cursor-pointer border-0 p-0 bg-transparent flex-shrink-0"
+            />
+            <input
+              type="text"
+              value={values.bg}
+              onChange={(e) => setField('bg', e.target.value)}
+              className="flex-1 text-sm text-ink outline-none bg-transparent"
+              placeholder="#ffffff"
+            />
+            <div
+              className="w-6 h-6 rounded-md flex-shrink-0 border border-gray-200"
+              style={{ backgroundColor: values.bg }}
+            />
+          </div>
         </Field>
+
         <Field label="Border color" error={errors.border} required>
-          <input
-            type="text"
-            value={values.border}
-            onChange={(e) => setField('border', e.target.value)}
-            className={INPUT_CLASS}
-          />
+          <div className="flex items-center gap-2 w-full border border-border rounded-xl px-3.5 py-1.5 bg-white focus-within:border-green-400 transition-colors">
+            <input
+              type="color"
+              value={values.border}
+              onChange={(e) => setField('border', e.target.value)}
+              className="w-7 h-7 rounded-md cursor-pointer border-0 p-0 bg-transparent flex-shrink-0"
+            />
+            <input
+              type="text"
+              value={values.border}
+              onChange={(e) => setField('border', e.target.value)}
+              className="flex-1 text-sm text-ink outline-none bg-transparent"
+              placeholder="#e2e8f0"
+            />
+            <div
+              className="w-6 h-6 rounded-md flex-shrink-0 border border-gray-200"
+              style={{ backgroundColor: values.border }}
+            />
+          </div>
         </Field>
+
       </div>
 
       <Field label="Title" error={errors.title} required>

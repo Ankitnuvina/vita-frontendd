@@ -6,6 +6,7 @@ type CardSize = 'xl' | 'lg' | 'md'
 interface ArticleCardProps {
   article: Article
   size?: CardSize
+  onClick?: (article: Article) => void
 }
 
 const IMAGE_HEIGHTS: Record<CardSize, string> = {
@@ -20,18 +21,18 @@ const TITLE_SIZES: Record<CardSize, string> = {
   md: 'text-sm',
 }
 
-export function ArticleCard({ article, size = 'md' }: ArticleCardProps): React.ReactNode {
+export function ArticleCard({ article, size = 'md', onClick }: ArticleCardProps): React.ReactNode {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
     <article
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative bg-white rounded-2xl overflow-hidden border border-border cursor-pointer transition-all duration-300 ${
-        isHovered
-          ? 'shadow-[0_8px_28px_rgba(19,25,23,0.1)] -translate-y-0.5'
-          : 'shadow-[0_1px_4px_rgba(19,25,23,0.05)]'
-      }`}
+      onClick={() => onClick?.(article)}
+      className={`relative bg-white rounded-2xl overflow-hidden border border-border cursor-pointer transition-all duration-300 ${isHovered
+        ? 'shadow-[0_8px_28px_rgba(19,25,23,0.1)] -translate-y-0.5'
+        : 'shadow-[0_1px_4px_rgba(19,25,23,0.05)]'
+        }`}
     >
       {article.isPremium && (
         <div className="absolute top-2.5 right-2.5 z-10 bg-tan-400 text-white text-[8px] font-bold tracking-[0.08em] uppercase px-1.5 py-0.5 rounded-full">
@@ -46,9 +47,8 @@ export function ArticleCard({ article, size = 'md' }: ArticleCardProps): React.R
           loading="lazy"
           width={700}
           height={400}
-          className={`w-full object-cover transition-transform duration-500 ${
-            isHovered ? 'scale-105' : 'scale-100'
-          } ${IMAGE_HEIGHTS[size]}`}
+          className={`w-full object-cover transition-transform duration-500 ${isHovered ? 'scale-105' : 'scale-100'
+            } ${IMAGE_HEIGHTS[size]}`}
         />
       </div>
 
@@ -75,7 +75,7 @@ export function ArticleCard({ article, size = 'md' }: ArticleCardProps): React.R
         <div className="flex items-center gap-2 text-[10px] text-ink-4 flex-wrap">
           <span className="font-semibold text-ink-2">{article.author}</span>
           <span className="w-1 h-1 bg-ink-4 rounded-full inline-block" />
-          <span>{article.readTime} read</span>
+          <span>{article.readTime}</span>
           <span className="w-1 h-1 bg-ink-4 rounded-full inline-block" />
           <span>{article.date}</span>
         </div>

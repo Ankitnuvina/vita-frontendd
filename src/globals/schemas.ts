@@ -17,8 +17,11 @@ export const articleSchema = z.object({
   readTime: z.string(),
   imageUrl: z.string(),
   excerpt: z.string(),
-  isPremium: z.boolean(),
-  slug: z.string(),
+  articleStatus: z.enum(['draft', 'published', 'scheduled',]), isPremium: z.boolean(), slug: z.string(),
+  sections: z.array(z.object({ heading: z.string(), items: z.array(z.string()), })).optional(),
+  tags: z.array(z.string()).optional(),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
 })
 
 export const podcastSchema = z.object({

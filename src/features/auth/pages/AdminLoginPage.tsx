@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth.store'
 import { UserRole } from '@/globals/enums'
+import { Eye, EyeOff } from "lucide-react";
 
 export function AdminLoginPage(): React.ReactNode {
+  const [showPassword, setShowPassword] = useState(false);
+
   const adminLogin = useAuthStore((s) => s.adminLogin)
   const isLoading = useAuthStore((s) => s.isLoading)
   const error = useAuthStore((s) => s.error)
@@ -74,7 +77,7 @@ export function AdminLoginPage(): React.ReactNode {
               />
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="admin-pass"
                 className="block text-xs font-semibold text-ink-2 mb-1.5"
@@ -93,6 +96,41 @@ export function AdminLoginPage(): React.ReactNode {
                 autoComplete="current-password"
                 className="w-full border border-border rounded-xl px-3.5 py-2.5 text-sm text-ink outline-none focus:border-ink transition-colors"
               />
+            </div> */}
+            <div className="mb-4">
+              <label
+                htmlFor="admin-pass"
+                className="block text-xs font-semibold text-ink-2 mb-1.5"
+              >
+                Password
+              </label>
+
+              <div className="relative">
+                <input
+                  id="admin-pass"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => {
+                    clearError()
+                    setPassword(e.target.value)
+                  }}
+                  required
+                  autoComplete="current-password"
+                  className="w-full border border-border rounded-xl px-3.5 py-2.5 pr-11 text-sm text-ink outline-none focus:border-ink transition-colors"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
+                >
+                  {showPassword ? (
+                    <Eye className="w-5 h-5" />
+                  ) : (
+                    <EyeOff className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && (

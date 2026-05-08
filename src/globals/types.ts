@@ -1,3 +1,8 @@
+export interface Section {
+  heading: string
+  items: string[]
+}
+
 export interface Article {
   id: number
   cat: string
@@ -9,8 +14,13 @@ export interface Article {
   readTime: string
   imageUrl: string
   excerpt: string
+  articleStatus: 'draft' | 'published' | 'scheduled'
   isPremium: boolean
   slug: string
+  sections?: Section[]
+  tags?: string[]
+  seoTitle?: string
+  seoDescription?: string
 }
 
 export interface Podcast {
