@@ -20,8 +20,8 @@ const formSchema = z.object({
   slug: z.string().min(1, 'Slug is required').max(120),
   sections: z.array(z.object({ heading: z.string().min(1).max(200), items: z.array(z.string().min(1)).min(1), })).optional(),
   tags: z.array(z.string()).optional(),
-  seoTitle: z.string().optional(),
-  seoDescription: z.string().optional(),
+  seoTitle: z.string().min(1).max(200).optional(),
+  seoDescription: z.string().min(1).max(500).optional(),
 })
 
 export type ArticleFormValues = z.infer<typeof formSchema>
@@ -120,12 +120,26 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
               type="file"
               accept="image/*"
               id="image-file-picker"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const objectUrl = URL.createObjectURL(file);
-                setField('imageUrl', objectUrl);
+              className="hidden"             
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                if (!file) return
+                try {
+                  const formData = new FormData()
+                  formData.append('image', file)
+                  const response = await fetch(
+                      `${import.meta.env.VITE_API_BASE_URL}/api/admin/upload-image`,
+                    {
+                      method: 'POST',
+                      credentials: 'include',
+                      body: formData,
+                    }
+                  )
+                  const data = await response.json()
+                  setField('imageUrl', data.imageUrl)
+                } catch (error) {
+                  console.error(error)
+                }
               }}
             />
             <label
@@ -144,7 +158,7 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
             />
           </div>
           {values.imageUrl && (
-            <div className="relative w-full h-40 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800">
+            <div className="relative w-full h-40 rounded-md overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800">
               <img
                 src={values.imageUrl}
                 alt="Preview"
@@ -433,28 +447,34 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
       {/* SEO part title and des  */}
       <div className="border rounded-lg p-4 space-y-4">
         <h3 className="font-semibold text-sm">SEO Settings</h3>
-
         <Field label="SEO Title">
           <input
             type="text"
             placeholder='Enter SEO title...'
             value={values.seoTitle}
             onChange={(e) =>
-              setField('seoTitle', e.target.value)
+              setField('seoTitle', e.target.value.slice(0, 200))
             }
             className={INPUT_CLASS}
+            maxLength={200}
           />
+          <div className="text-right text-xs text-neutral-400">
+            {(values.seoTitle ?? '').length}/200
+          </div>
         </Field>
-
         <Field label="SEO Description">
           <textarea
             rows={3}
             value={values.seoDescription}
             onChange={(e) =>
-              setField('seoDescription', e.target.value)
+              setField('seoDescription', e.target.value.slice(0, 500))
             }
             className={`${INPUT_CLASS} resize-none`}
+            maxLength={500}
           />
+          <div className="text-right text-xs text-neutral-400">
+            {(values.seoDescription ?? '').length}/500
+          </div>
         </Field>
       </div>
 
@@ -613,10 +633,10 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
               )}
               <span
                 className={`text-[10px] font-bold px-2.5 py-1 rounded-full border capitalize ${values.articleStatus === 'published'
-                    ? 'bg-green-50 text-green-700 border-green-200'
-                    : values.articleStatus === 'draft'
-                      ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                      : 'bg-blue-50 text-blue-700 border-blue-200'
+                  ? 'bg-green-50 text-green-700 border-green-200'
+                  : values.articleStatus === 'draft'
+                    ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                    : 'bg-blue-50 text-blue-700 border-blue-200'
                   }`}
               >
                 {values.articleStatus}
@@ -624,140 +644,140 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
             </div>
 
             <div className="px-6 py-2 flex flex-col gap-5">
-          <div className="flex items-center gap-3 text-[12px] text-neutral-500 flex-wrap border-b border-neutral-200 pb-4">
-            <span className="font-semibold text-neutral-700">
-              {values.author}
-            </span>
-            <span className="opacity-30">•</span>
-            <span>{values.date}</span>
-            <span className="opacity-30">•</span>
-            <span>{values.readTime}</span>
-            <span className="opacity-30">•</span>
-            <span className="truncate max-w-[180px] text-neutral-400">
-              {values.slug}
-            </span>
-          </div>
-
-          {/* Article Title */}
-          <div className="flex flex-col gap-2">
-            <h1 className="text-[22px] font-bold text-neutral-900 leading-snug tracking-tight">
-              {values.title}
-            </h1>
-            <div
-              className="w-14 h-[3px] rounded-full"
-              style={{ backgroundColor: values.categoryColor }}
-            />
-          </div>
-
-          {/* Excerpt */}
-          {values.excerpt && (
-            <div className="flex flex-col gap-1.5">
-              <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
-                Excerpt
-              </p>
-
-              <p
-                className="text-[13.5px] text-neutral-500 leading-relaxed italic pl-4 border-l-[3px]"
-                style={{ borderColor: values.categoryColor }}
-              >
-                {values.excerpt}
-              </p>
-            </div>
-          )}
-
-          {/* Tags */}
-          {values.tags && values.tags.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
-                Tags ({values.tags.length})
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {values.tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-[11px] font-medium px-3 py-1 rounded-full bg-neutral-100 text-neutral-700 border border-neutral-200 hover:bg-neutral-200 transition-colors"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+              <div className="flex items-center gap-3 text-[12px] text-neutral-500 flex-wrap border-b border-neutral-200 pb-4">
+                <span className="font-semibold text-neutral-700">
+                  {values.author}
+                </span>
+                <span className="opacity-30">•</span>
+                <span>{values.date}</span>
+                <span className="opacity-30">•</span>
+                <span>{values.readTime}</span>
+                <span className="opacity-30">•</span>
+                <span className="truncate max-w-[180px] text-neutral-400">
+                  {values.slug}
+                </span>
               </div>
-            </div>
-          )}
 
-          {/* SEO Preview */}
-          {(values.seoTitle || values.seoDescription) && (
-            <div className="flex flex-col gap-2">
-              <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
-                SEO Preview
-              </p>
-
-              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 flex flex-col gap-1.5">
-
-                {values.seoTitle && (
-                  <p className="text-[14px] font-semibold text-black leading-snug">
-                    {values.seoTitle}
-                  </p>
-                )}
-
-                {values.seoDescription && (
-                  <p className="text-[12px] text-neutral-500 leading-relaxed">
-                    {values.seoDescription}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Sections */}
-          {values.sections && values.sections.length > 0 && (
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-neutral-800">
-                  💬  About Sections
-                </h2>
-                <p className="text-xs text-neutral-400">
-                  Total = {values.sections.length} section
-                  {values.sections.length > 1 ? 's' : ''}
-                </p>
-              </div>
-              {values.sections.map((section, sIdx) => (
+              {/* Article Title */}
+              <div className="flex flex-col gap-2">
+                <h1 className="text-[22px] font-bold text-neutral-900 leading-snug tracking-tight">
+                  {values.title}
+                </h1>
                 <div
-                  key={sIdx}
-                  className="rounded-2xl border border-neutral-200 overflow-hidden bg-white"
-                >
-                  {/* Section Header */}
-                  <div className="flex items-center gap-3 px-4 py-3 bg-neutral-50 border-b border-neutral-100">
+                  className="w-14 h-[3px] rounded-full"
+                  style={{ backgroundColor: values.categoryColor }}
+                />
+              </div>
 
-                    <div className="w-6 h-6 rounded-md bg-black/50 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
-                      {sIdx + 1}
-                    </div>
-                    <p className="text-[13px] font-semibold text-neutral-800">
-                      {section.heading}
-                    </p>
-                  </div>
+              {/* Excerpt */}
+              {values.excerpt && (
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
+                    Excerpt
+                  </p>
 
-                  {/* Section Items */}
-                  <div className="flex flex-col divide-y divide-neutral-100">
-                    {section.items.map((item, iIdx) => (
-                      <div
-                        key={iIdx}
-                        className="flex items-start gap-3 px-4 py-2"
+                  <p
+                    className="text-[13.5px] text-neutral-500 leading-relaxed italic pl-4 border-l-[3px]"
+                    style={{ borderColor: values.categoryColor }}
+                  >
+                    {values.excerpt}
+                  </p>
+                </div>
+              )}
+
+              {/* Tags */}
+              {values.tags && values.tags.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
+                    Tags ({values.tags.length})
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {values.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="text-[11px] font-medium px-3 py-1 rounded-full bg-neutral-100 text-neutral-700 border border-neutral-200 hover:bg-neutral-200 transition-colors"
                       >
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
-
-                        <p className="text-[13px] text-neutral-600 leading-relaxed">
-                          {item}
-                        </p>
-                      </div>
+                        #{tag}
+                      </span>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-        </div>
+              {/* SEO Preview */}
+              {(values.seoTitle || values.seoDescription) && (
+                <div className="flex flex-col gap-2">
+                  <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-neutral-400">
+                    SEO Preview
+                  </p>
+
+                  <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 flex flex-col gap-1.5">
+
+                    {values.seoTitle && (
+                      <p className="text-[14px] font-semibold text-black leading-snug">
+                        {values.seoTitle}
+                      </p>
+                    )}
+
+                    {values.seoDescription && (
+                      <p className="text-[12px] text-neutral-500 leading-relaxed">
+                        {values.seoDescription}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Sections */}
+              {values.sections && values.sections.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-semibold text-neutral-800">
+                      💬  About Sections
+                    </h2>
+                    <p className="text-xs text-neutral-400">
+                      Total = {values.sections.length} section
+                      {values.sections.length > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  {values.sections.map((section, sIdx) => (
+                    <div
+                      key={sIdx}
+                      className="rounded-2xl border border-neutral-200 overflow-hidden bg-white"
+                    >
+                      {/* Section Header */}
+                      <div className="flex items-center gap-3 px-4 py-3 bg-neutral-50 border-b border-neutral-100">
+
+                        <div className="w-6 h-6 rounded-md bg-black/50 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
+                          {sIdx + 1}
+                        </div>
+                        <p className="text-[13px] font-semibold text-neutral-800">
+                          {section.heading}
+                        </p>
+                      </div>
+
+                      {/* Section Items */}
+                      <div className="flex flex-col divide-y divide-neutral-100">
+                        {section.items.map((item, iIdx) => (
+                          <div
+                            key={iIdx}
+                            className="flex items-start gap-3 px-4 py-2"
+                          >
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
+
+                            <p className="text-[13px] text-neutral-600 leading-relaxed">
+                              {item}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+            </div>
           </div>
         </div>
       )}

@@ -187,3 +187,111 @@ Tables:
 All admin CRUD endpoints (`POST/PUT/DELETE /api/admin/articles|podcasts|experts|tips`)
 write directly to these tables, so any change in `/admin/*` is durable across
 server restarts and immediately visible to the user-facing endpoints.
+
+
+
+
+
+
+
+
+
+
+1. Wellness Journal Module
+mood select
+daily notes
+private/public
+journal history
+analytics
+
+2. Meditation Module
+meditation sessions
+audio player
+timer
+categories
+progress tracking
+
+3. Sleep Tracking Module
+sleep hours
+sleep quality
+weekly report
+suggestions
+
+4. Mood Tracker System
+emoji mood selection
+weekly graph
+stress tracking
+AI suggestions
+
+5. Habit Tracker
+create habits
+streak system
+reminders
+progress charts
+
+6. Daily Wellness Challenges
+drink water
+meditate 10 mins
+no social media
+
+7. Newsletter System
+email subscriptions
+automated mails
+latest wellness articles
+
+8. User Dashboard
+saved articles
+activity
+streaks
+recommendations
+progress
+
+9. AI Recommendation Engine
+Based on:
+user mood
+reading history
+activity
+
+recommend:
+articles
+podcasts
+wellness plans
+
+10. Notifications Module
+article published
+reminders
+streak reminders
+admin announcements
+
+11. Video Wellness Library
+yoga videos
+therapy videos
+meditation videos
+
+12. Wellness Courses
+chapters
+progress
+certificates
+
+13. AI Wellness Assistant
+suggest wellness tips
+suggest meditation
+answer mental health questions
+
+14. Admin Analytics Panel
+top articles
+user activity
+engagement
+views
+
+15. Advanced SEO System
+sitemap
+robots.txt
+OG tags
+canonical tags
+
+16. User Profile System
+avatar
+bio
+achievements
+saved content

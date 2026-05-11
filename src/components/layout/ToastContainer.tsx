@@ -68,7 +68,7 @@ export function ToastContainer(): React.ReactNode {
 
   return (
     <div
-      className="fixed bottom-5 right-5 z-[9999] flex flex-col gap-2.5 pointer-events-none"
+      className="fixed top-5 right-5 z-[9999] flex flex-col gap-2.5 pointer-events-none"
       aria-live="polite"
     >
       {toasts.map((t) => (

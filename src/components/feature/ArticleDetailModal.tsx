@@ -63,7 +63,7 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
 
                 <div className="px-6 py-5 flex flex-col gap-5">
                     <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2 text-[12px] text-neutral-400 flex-wrap">
+                        <div className="flex items-center gap-3 text-[12px] text-neutral-400 flex-wrap">
                             <span className="font-semibold text-neutral-600">{article.author}</span>
                             <span className="w-1 h-1 bg-neutral-300 rounded-full inline-block" />
                             <span>{article.readTime} read</span>
