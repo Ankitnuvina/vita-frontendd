@@ -7,7 +7,7 @@ const SAMPLE_TOPICS = [
   { icon: '🧠', label: 'Stress', q: 'What are evidence-based stress reduction techniques?' },
   { icon: '🥗', label: 'Nutrition', q: 'What are the best foods for gut health?' },
   { icon: '💪', label: 'Fitness', q: 'What is Zone 2 cardio and its benefits?' },
-  { icon: '🫁', label: 'Breathwork', q: 'Teach me box breathing technique' },
+  { icon: '🧐', label: 'Breathwork', q: 'Teach me box breathing technique' },
   { icon: '🌙', label: 'Recovery', q: 'How do I optimize recovery after workouts?' },
 ]
 

@@ -14,7 +14,7 @@ export function CategoryPills({
 }: CategoryPillsProps): React.ReactNode {
   return (
     <div
-      className={`bg-white border-b border-border py-2.5 ${
+      className={`bg-white  py-3 ${
         sticky ? 'sticky top-[58px] z-[98]' : ''
       }`}
     >

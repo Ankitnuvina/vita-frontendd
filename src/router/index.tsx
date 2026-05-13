@@ -13,11 +13,22 @@ const HomePage = lazy(() =>
 const ArticlesPage = lazy(() =>
   import('@/features/articles/components/ArticlesPage').then((m) => ({ default: m.ArticlesPage }))
 )
+const BlogsPage = lazy(() =>
+  import('@/features/blogs/components/BlogsPage').then((m) => ({ default: m.BlogsPage }))
+)
+const BlogDetailPage = lazy(() =>
+  import('@/features/blogs/components/BlogDetailPage').then((m) => ({ default: m.BlogDetailPage }))
+)
 const PodcastsPage = lazy(() =>
   import('@/features/podcasts/components/PodcastsPage').then((m) => ({ default: m.PodcastsPage }))
 )
 const VideosPage = lazy(() =>
   import('@/features/videos/components/VideosPage').then((m) => ({ default: m.VideosPage }))
+)
+const ExpertDetailPage = lazy(() =>
+  import('@/features/experts/components/ExpertDetailPage').then((m) => ({
+    default: m.ExpertDetailPage,
+  }))
 )
 const AiPage = lazy(() =>
   import('@/features/ai/components/AiPage').then((m) => ({ default: m.AiPage }))
@@ -81,8 +92,11 @@ const routes: RouteObject[] = [
     children: [
       { index: true, element: withSuspense(<HomePage />) },
       { path: 'articles', element: withSuspense(<ArticlesPage />) },
+      { path: 'blogs', element: withSuspense(<BlogsPage />) },
+      { path: 'blogs/:slug', element: withSuspense(<BlogDetailPage />) },
       { path: 'podcasts', element: withSuspense(<PodcastsPage />) },
       { path: 'videos', element: withSuspense(<VideosPage />) },
+      { path: 'experts/:expertId', element: withSuspense(<ExpertDetailPage />) },
       { path: 'ai', element: withSuspense(<AiPage />) },
       { path: 'subscription', element: withSuspense(<SubscriptionPage />) },
       {

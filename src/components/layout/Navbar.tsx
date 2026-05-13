@@ -8,6 +8,7 @@ import { LoginDialog } from '@/features/auth/components/LoginDialog'
 const NAV_LINKS: { to: string; label: string; end?: boolean }[] = [
   { to: '/', label: 'Home', end: true },
   { to: '/articles', label: 'Articles' },
+  { to: '/blogs', label: 'Blogs' },
   { to: '/podcasts', label: 'Podcasts' },
   { to: '/videos', label: 'Videos' },
   { to: '/ai', label: 'AI' },
@@ -61,7 +62,7 @@ export function Navbar(): React.ReactNode {
                 className={({ isActive }) =>
                   `text-xs font-medium px-2.5 py-1.5 rounded-lg border-none transition-all whitespace-nowrap ${
                     isActive
-                      ? 'text-green-600 font-bold bg-green-50'
+                      ? 'text-green-800 font-bold bg-green-100'
                       : 'text-ink-3 bg-none hover:text-green-600 hover:bg-green-50/50'
                   }`
                 }

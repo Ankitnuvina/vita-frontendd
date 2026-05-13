@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useDeferredValue, useMemo, useState } from 'react'
 import { ArticleCard } from '@/components/feature/ArticleCard'
 import { ArticleDetailModal } from '@/components/feature/ArticleDetailModal'
 import { CategoryPills } from '@/components/feature/CategoryPills'
@@ -15,18 +15,25 @@ export function ArticlesPage(): React.ReactNode {
   const [search, setSearch] = useState('')
   const [viewingArticle, setViewingArticle] = useState<Article | null>(null)
   const { data: articles, isLoading, isError, error, refetch } = useArticles()
+  const deferredSearch = useDeferredValue(search)
+  const isSearching = search !== deferredSearch
 
   const filtered = useMemo(() => {
     if (!articles) return []
+    const query = deferredSearch.trim().toLowerCase()
     return articles.filter((a) => {
       const matchCat = selectedCat === 'All' || a.categoryLabel === selectedCat
       const matchSearch =
-        !search ||
-        a.title.toLowerCase().includes(search.toLowerCase()) ||
-        a.author.toLowerCase().includes(search.toLowerCase())
+        !query ||
+        a.title.toLowerCase().includes(query) ||
+        a.author.toLowerCase().includes(query) ||
+        a.excerpt.toLowerCase().includes(query) ||
+        a.categoryLabel.toLowerCase().includes(query) ||
+        a.slug.toLowerCase().includes(query) ||
+        a.tags?.some((tag) => tag.toLowerCase().includes(query))
       return matchCat && matchSearch
     })
-  }, [articles, selectedCat, search])
+  }, [articles, selectedCat, deferredSearch])
 
   return (
     <main id="main-content">
@@ -50,7 +57,7 @@ export function ArticlesPage(): React.ReactNode {
           </div>
         </div>
 
-        {isLoading ? (
+        {isLoading || isSearching ? (
           <ArticleCardSkeleton count={6} />
         ) : isError ? (
           <ErrorMessage

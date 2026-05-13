@@ -4,6 +4,7 @@ export const APP_TAGLINE = 'Science-backed health wisdom for modern life'
 export const NAV_PAGES = [
   { path: '/', label: 'Home' },
   { path: '/articles', label: 'Articles' },
+  { path: '/blogs', label: 'Blogs' },
   { path: '/podcasts', label: 'Podcasts' },
   { path: '/videos', label: 'Videos' },
   { path: '/ai', label: 'AI' },

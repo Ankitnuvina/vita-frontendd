@@ -83,14 +83,14 @@ export function Footer(): React.ReactNode {
                     {link.to ? (
                       <Link
                         to={link.to}
-                        className="text-xs text-white/40 cursor-pointer font-light hover:text-white/70 transition-colors bg-none border-none text-left"
+                        className="text-xs text-white/50 cursor-pointer font-light hover:text-white/80 transition-colors bg-none border-none text-left"
                       >
                         {link.label}
                       </Link>
                     ) : (
                       <button
                         type="button"
-                        className="text-xs text-white/40 cursor-pointer font-light hover:text-white/70 transition-colors bg-none border-none text-left"
+                        className="text-xs text-white/50 cursor-pointer font-light hover:text-white/80 transition-colors bg-none border-none text-left"
                       >
                         {link.label}
                       </button>

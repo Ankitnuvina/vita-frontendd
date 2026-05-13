@@ -268,7 +268,7 @@ export function HomePage(): React.ReactNode {
                 >
                   Open Full AI Chat →
                 </button>
-                <button className="bg-white/[0.07] border border-white/14 text-white/78 rounded-full px-5 py-2.5 text-xs hover:bg-white/10 transition-colors">
+                <button className="bg-white/[0.07] border border-white/14 text-white rounded-full px-5 py-2.5 text-xs hover:bg-white/10 transition-colors">
                   View Sample Answers
                 </button>
               </div>
@@ -363,6 +363,7 @@ export function HomePage(): React.ReactNode {
               {experts.map((expert) => (
                 <div
                   key={expert.id}
+                  onClick={() => navigate(`/experts/${expert.id}`)}
                   className="bg-white rounded-2xl p-5 text-center border border-border hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="w-16 h-16 rounded-full mx-auto mb-2.5 overflow-hidden border-2 border-green-100">
@@ -375,8 +376,17 @@ export function HomePage(): React.ReactNode {
                   </div>
                   <div className="inline-flex items-center gap-1 bg-green-50 border border-green-100 rounded-full px-2 py-0.5 text-[9px] font-bold text-green-600 mb-2">
                     ✓ Verified
-                  </div>
-                  <h3 className="font-serif text-sm font-bold text-ink mb-0.5">{expert.name}</h3>
+                  </div><br/>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      navigate(`/experts/${expert.id}`)
+                    }}
+                    className="font-serif text-sm font-bold text-ink mb-0.5 hover:text-green-600 transition-colors"
+                  >
+                    {expert.name}
+                  </button>
                   <p className="text-[11px] font-semibold text-green-500 mb-1">{expert.role}</p>
                   <p className="text-[10px] text-ink-3 leading-relaxed mb-2 font-light">
                     {expert.credentials}

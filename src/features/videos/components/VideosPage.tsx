@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useDeferredValue, useMemo, useState } from 'react'
 import { SectionHeader } from '@/components/common/SectionHeader'
+import { EmptyState } from '@/components/common/EmptyState'
+import { ArticleCardSkeleton } from '@/components/common/ArticleCardSkeleton'
+import { UnifiedMediaPlayer } from '@/components/media/UnifiedMediaPlayer'
 
 const VIDEOS = [
   {
@@ -10,6 +13,7 @@ const VIDEOS = [
     category: 'Fitness',
     imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80',
     instructor: 'Coach Maya Rivera',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
   },
   {
     id: 2,
@@ -19,6 +23,7 @@ const VIDEOS = [
     category: 'Mindfulness',
     imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&q=80',
     instructor: 'Dr. Priya Nair',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
   },
   {
     id: 3,
@@ -28,6 +33,7 @@ const VIDEOS = [
     category: 'Nutrition',
     imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80',
     instructor: 'Dr. James Liu',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
   },
   {
     id: 4,
@@ -37,6 +43,7 @@ const VIDEOS = [
     category: 'Fitness',
     imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80',
     instructor: 'Coach Maya Rivera',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
   },
   {
     id: 5,
@@ -46,6 +53,7 @@ const VIDEOS = [
     category: 'Nutrition',
     imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80',
     instructor: 'Dr. Sarah Okafor',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
   },
   {
     id: 6,
@@ -55,6 +63,7 @@ const VIDEOS = [
     category: 'Mindfulness',
     imageUrl: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&q=80',
     instructor: 'Dr. Priya Nair',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
   },
 ]
 
@@ -64,7 +73,71 @@ const CAT_COLORS: Record<string, string> = {
   Nutrition: '#C47845',
 }
 
+type VideoItem = (typeof VIDEOS)[number]
+
+interface VideoDetailModalProps {
+  video: VideoItem
+  onClose: () => void
+}
+
+function VideoDetailModal({ video, onClose }: VideoDetailModalProps): React.ReactNode {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      <div className="w-full max-w-3xl rounded-2xl border border-border bg-white p-5 shadow-2xl">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-green-600">
+              {video.category}
+            </p>
+            <h2 className="font-serif text-xl font-black text-ink">{video.title}</h2>
+            <p className="mt-1 text-xs text-ink-3">
+              {video.instructor} · {video.duration} · {video.views}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-ink-3 hover:border-ink-3"
+          >
+            Close
+          </button>
+        </div>
+        <UnifiedMediaPlayer
+          mediaId={`video-${video.id}-detail`}
+          title={video.title}
+          sourceUrl={video.videoUrl}
+          kind="video"
+          posterUrl={video.imageUrl}
+        />
+      </div>
+    </div>
+  )
+}
+
 export function VideosPage(): React.ReactNode {
+  const [expandedVideoId, setExpandedVideoId] = useState<number | null>(null)
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null)
+  const [search, setSearch] = useState('')
+  const deferredSearch = useDeferredValue(search)
+  const isSearching = search !== deferredSearch
+
+  const filteredVideos = useMemo(() => {
+    const query = deferredSearch.trim().toLowerCase()
+    if (!query) return VIDEOS
+    return VIDEOS.filter((video) => {
+      return (
+        video.title.toLowerCase().includes(query) ||
+        video.category.toLowerCase().includes(query) ||
+        video.instructor.toLowerCase().includes(query)
+      )
+    })
+  }, [deferredSearch])
+
   return (
     <main id="main-content">
       {/* Hero */}
@@ -86,9 +159,27 @@ export function VideosPage(): React.ReactNode {
 
       {/* Grid */}
       <div className="max-w-[1100px] mx-auto px-5 py-12">
-        <SectionHeader eyebrow="Browse" title="All" titleAccent="Videos" />
-        <div className="grid grid-cols-3 gap-5">
-          {VIDEOS.map((v) => (
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeader eyebrow="Browse" title="All" titleAccent="Videos" />
+          <div className="relative mb-8 w-64 shrink-0">
+            <label htmlFor="video-search" className="sr-only">Search videos</label>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40">🔍</span>
+            <input
+              id="video-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search videos..."
+              className="w-full rounded-full border border-border bg-white py-2 pl-8 pr-4 text-xs text-ink outline-none transition-colors focus:border-green-400"
+            />
+          </div>
+        </div>
+        {isSearching ? (
+          <ArticleCardSkeleton count={3} />
+        ) : filteredVideos.length === 0 ? (
+          <EmptyState message="No videos match your search." icon="🎬" />
+        ) : (
+          <div className="grid grid-cols-3 gap-5">
+            {filteredVideos.map((v) => (
             <article
               key={v.id}
               className="bg-white rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow cursor-pointer group"
@@ -122,14 +213,55 @@ export function VideosPage(): React.ReactNode {
                 <p className="text-[11px] text-ink-3 font-light mb-2">{v.instructor}</p>
                 <div className="flex items-center justify-between text-[10px] text-ink-4">
                   <span>👁 {v.views}</span>
-                  <button className="text-green-600 font-semibold hover:text-green-500 transition-colors">
-                    Watch →
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedVideoId((curr) => {
+                        if (curr === v.id) return null
+                        return v.id
+                      })
+                    }
+                    className="text-green-600 font-semibold hover:text-green-500 transition-colors"
+                  >
+                    {expandedVideoId === v.id ? 'Pause' : 'Watch'}
                   </button>
                 </div>
+                <div className="mt-3 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedVideoId((curr) => {
+                        if (curr === v.id) return null
+                        return v.id
+                      })
+                    }
+                    className="flex-1 rounded-full border border-green-100 bg-green-50 py-1.5 text-[10px] font-semibold text-green-600"
+                  >
+                    {expandedVideoId === v.id ? '❚❚ Pause' : '▶ Play'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedVideo(v)}
+                    className="flex-1 rounded-full border border-border py-1.5 text-[10px] font-semibold text-ink-3"
+                  >
+                    View Details
+                  </button>
+                </div>
+                {expandedVideoId === v.id && (
+                  <UnifiedMediaPlayer
+                    className="mt-3"
+                    mediaId={`video-${v.id}`}
+                    title={v.title}
+                    sourceUrl={v.videoUrl}
+                    kind="video"
+                    posterUrl={v.imageUrl}
+                  />
+                )}
               </div>
             </article>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Channel stats */}
         <div className="mt-12 bg-ink rounded-2xl p-8 text-white text-center">
@@ -144,6 +276,8 @@ export function VideosPage(): React.ReactNode {
           </button>
         </div>
       </div>
+
+      {selectedVideo && <VideoDetailModal video={selectedVideo} onClose={() => setSelectedVideo(null)} />}
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef  } from 'react'
 import {
   useAdminPodcasts,
   useCreatePodcast,
@@ -18,6 +18,37 @@ import { ConfirmDialog } from '@/features/admin/components/ConfirmDialog'
 import { PodcastForm, type PodcastFormValues } from '@/features/admin/components/PodcastForm'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Podcast } from '@/globals/types'
+
+
+function PodcastMiniPlayer({ videoUrl }: { videoUrl: string }): React.ReactNode {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(false)
+
+  const toggle = (): void => {
+    const v = videoRef.current
+    if (!v) return
+    if (playing) { v.pause(); setPlaying(false) }
+    else { void v.play(); setPlaying(true) }
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <video
+        ref={videoRef}
+        src={videoUrl}
+        className="h-10 w-16 rounded-lg object-cover bg-black"
+        onEnded={() => setPlaying(false)}
+      />
+      <button
+        type="button"
+        onClick={toggle}
+        className="flex items-center justify-center h-8 w-8 rounded-full bg-green-100 hover:bg-green-200 text-green-700 transition-colors text-sm"
+      >
+        {playing ? '❚❚' : '▶'}
+      </button>
+    </div>
+  )
+}
 
 export function AdminPodcastsPage(): React.ReactNode {
   const podcastsQuery = useAdminPodcasts()
@@ -85,19 +116,16 @@ export function AdminPodcastsPage(): React.ReactNode {
           <tbody>
             {items.map((p) => (
               <tr key={p.id} className="hover:bg-paper transition-colors">
+               
                 <td className={TABLE_CELL_CLASS}>
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={p.imageUrl}
-                      alt=""
-                      className="w-10 h-10 rounded-lg object-cover shrink-0"
-                    />
-                    <div>
-                      <p className="font-semibold text-ink">{p.episode}</p>
-                      <p className="text-[10px] text-ink-4">{p.category}</p>
-                    </div>
-                  </div>
-                </td>
+  <div className="flex items-center gap-3">
+    <PodcastMiniPlayer videoUrl={p.videoUrl} />
+    <div>
+      <p className="font-semibold text-ink">{p.episode}</p>
+      <p className="text-[10px] text-ink-4">{p.category}</p>
+    </div>
+  </div>
+</td>
                 <td className={TABLE_CELL_CLASS}>
                   <p className="font-semibold text-ink truncate max-w-[260px]">{p.title}</p>
                 </td>

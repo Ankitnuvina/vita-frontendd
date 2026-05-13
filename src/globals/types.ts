@@ -31,7 +31,8 @@ export interface Podcast {
   guest: string
   duration: string
   date: string
-  imageUrl: string
+  // imageUrl: string
+  videoUrl: string
 }
 
 export interface Expert {

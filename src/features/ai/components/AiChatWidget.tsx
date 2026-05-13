@@ -70,7 +70,7 @@ export function AiChatWidget({ compact = false }: AiChatWidgetProps): React.Reac
             <div
               className={`text-xs leading-relaxed whitespace-pre-line max-w-[80%] px-3 py-2.5 ${
                 msg.role === ChatRole.AI
-                  ? 'bg-white/8 text-white/88 rounded-[4px_12px_12px_12px]'
+                  ? 'bg-white/8 text-white rounded-[4px_12px_12px_12px]'
                   : 'bg-green-500 text-white rounded-[12px_4px_12px_12px]'
               }`}
             >
@@ -104,7 +104,7 @@ export function AiChatWidget({ compact = false }: AiChatWidgetProps): React.Reac
           <button
             key={chip}
             onClick={() => void sendMessage(chip)}
-            className="bg-white/[0.06] border border-white/10 rounded-full px-2.5 py-1 text-[10px] text-white/62 hover:bg-white/10 transition-colors"
+            className="bg-white/[0.06] border border-white/10 rounded-full px-2.5 py-1 text-[10px] text-white hover:bg-white/10 transition-colors"
           >
             {chip}
           </button>
@@ -133,7 +133,7 @@ export function AiChatWidget({ compact = false }: AiChatWidgetProps): React.Reac
       </div>
 
       {/* Disclaimer */}
-      <p className="px-3 py-1.5 text-center text-[10px] text-white/22 italic border-t border-white/[0.06]">
+      <p className="px-3 py-1.5 text-center text-[10px] text-white italic border-t border-white/[0.06]">
         {AI_DISCLAIMER}
       </p>
     </div>

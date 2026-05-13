@@ -62,7 +62,7 @@ export function ArticleCard({ article, size = 'md', onClick }: ArticleCardProps)
             style={{ background: article.categoryColor }}
           />
           {article.categoryLabel}
-        </div>
+        </div>        
 
         <h3 className={`font-serif font-bold text-ink leading-snug mb-2 ${TITLE_SIZES[size]}`}>
           {article.title}

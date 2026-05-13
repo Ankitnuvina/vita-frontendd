@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { z } from 'zod'
 import type { Podcast } from '@/globals/types'
 import { ErrorMessage } from '@/components/common/ErrorMessage'
@@ -11,7 +11,8 @@ const formSchema = z.object({
   guest: z.string().min(1, 'Guest is required').max(120),
   duration: z.string().min(1, 'Duration is required').max(16),
   date: z.string().min(1, 'Date is required').max(32),
-  imageUrl: z.string().url('Must be a valid URL'),
+  // imageUrl: z.string().url('Must be a valid URL'),
+  videoUrl: z.string().url('Valid video URL required'),
 })
 
 export type PodcastFormValues = z.infer<typeof formSchema>
@@ -23,7 +24,8 @@ const EMPTY: PodcastFormValues = {
   guest: '',
   duration: '1h 00m',
   date: '',
-  imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&q=80',
+  // imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&q=80',
+  videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
 }
 
 interface Props {
@@ -34,17 +36,20 @@ interface Props {
 }
 
 export function PodcastForm({ initial, onSubmit, onCancel, isSubmitting }: Props): React.ReactNode {
+  const videoInputRef = useRef<HTMLInputElement>(null)
+
   const [values, setValues] = useState<PodcastFormValues>(() =>
     initial
       ? {
-          episode: initial.episode,
-          category: initial.category,
-          title: initial.title,
-          guest: initial.guest,
-          duration: initial.duration,
-          date: initial.date,
-          imageUrl: initial.imageUrl,
-        }
+        episode: initial.episode,
+        category: initial.category,
+        title: initial.title,
+        guest: initial.guest,
+        duration: initial.duration,
+        date: initial.date,
+        // imageUrl: initial.imageUrl,
+        videoUrl: initial.videoUrl,
+      }
       : EMPTY
   )
   const [errors, setErrors] = useState<Partial<Record<keyof PodcastFormValues, string>>>({})
@@ -53,6 +58,34 @@ export function PodcastForm({ initial, onSubmit, onCancel, isSubmitting }: Props
   const setField = <K extends keyof PodcastFormValues>(key: K, value: PodcastFormValues[K]): void => {
     setValues((prev) => ({ ...prev, [key]: value }))
     setErrors((prev) => ({ ...prev, [key]: undefined }))
+  }
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const fd = new FormData()
+    fd.append('video', file)
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin/upload-video`,
+        {
+          method: 'POST',
+          credentials: 'include',   // ← yeh missing tha
+          body: fd,
+        }
+      )
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        setFormError((err as { error?: string }).error ?? 'Upload failed')
+        return
+      }
+
+      const json = await res.json() as { videoUrl: string }
+      setField('videoUrl', json.videoUrl)
+    } catch {
+      setFormError('Video upload failed')
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
@@ -134,13 +167,41 @@ export function PodcastForm({ initial, onSubmit, onCancel, isSubmitting }: Props
         </Field>
       </div>
 
-      <Field label="Image URL" error={errors.imageUrl} required>
+
+      <Field label="Video URL" error={errors.videoUrl} required>
+        {/* File upload button */}
+        <input
+          type="file"
+          accept="video/mp4,video/webm"
+          ref={videoInputRef}
+          className="hidden"
+          onChange={handleVideoUpload}
+        />
+        <button
+          type="button"
+          onClick={() => videoInputRef.current?.click()}
+          className="mb-2 text-xs font-semibold text-purple-600 border border-purple-300 bg-purple-50 hover:bg-purple-100 rounded-full px-4 py-1.5 transition-colors"
+        >
+          Upload Video
+        </button>
+
+        {/* URL input */}
         <input
           type="url"
-          value={values.imageUrl}
-          onChange={(e) => setField('imageUrl', e.target.value)}
+          value={values.videoUrl}
+          onChange={e => setValues(v => ({ ...v, videoUrl: e.target.value }))}
+          placeholder="https://..."
           className={INPUT_CLASS}
         />
+
+        {/* Preview player */}
+        {values.videoUrl && (
+          <video
+            src={values.videoUrl}
+            controls
+            className="mt-2 w-full rounded-xl max-h-40 bg-black"
+          />
+        )}
       </Field>
 
       <div className="flex gap-2 justify-end mt-4 pt-4 border-t border-border">
