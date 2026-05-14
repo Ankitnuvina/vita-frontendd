@@ -21,6 +21,8 @@ export interface Article {
   tags?: string[]
   seoTitle?: string
   seoDescription?: string
+
+  expertId?: number
 }
 
 export interface Podcast {

@@ -1,5 +1,6 @@
 import React from 'react'
 import type { Article } from '@/globals/types'
+import { LikeButton } from '@/features/likes/components/common/LikeButton'
 
 interface Props {
     article: Article
@@ -59,6 +60,12 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                     >
                         {article.articleStatus}
                     </span>
+                    <div className="ml-auto flex items-center">
+                        <LikeButton
+                            contentType="article"
+                            contentId={article.id}
+                        />
+                    </div>
                 </div>
 
                 <div className="px-6 py-5 flex flex-col gap-5">

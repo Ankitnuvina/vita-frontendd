@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import type { Article } from '@/globals/types'
 
+import { LikeButton } from '@/features/likes/components/common/LikeButton'
+
 type CardSize = 'xl' | 'lg' | 'md'
 
 interface ArticleCardProps {
@@ -53,17 +55,26 @@ export function ArticleCard({ article, size = 'md', onClick }: ArticleCardProps)
       </div>
 
       <div className="p-4">
-        <div
-          className="flex items-center text-[10px] font-bold tracking-[0.1em] uppercase mb-1.5"
-          style={{ color: article.categoryColor }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full inline-block mr-1 shrink-0"
-            style={{ background: article.categoryColor }}
-          />
-          {article.categoryLabel}
-        </div>        
-
+        <div className="flex items-center justify-between mb-2">
+          <div
+            className="flex items-center text-[10px] font-bold tracking-[0.12em] uppercase"
+            style={{ color: article.categoryColor }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full inline-block mr-1.5 shrink-0"
+              style={{ background: article.categoryColor }}
+            />
+            <span className="truncate">
+              {article.categoryLabel}
+            </span>
+          </div>
+          <div className="flex items-center shrink-0 ml-3">
+            <LikeButton
+              contentType="article"
+              contentId={article.id}
+            />
+          </div>
+        </div>
         <h3 className={`font-serif font-bold text-ink leading-snug mb-2 ${TITLE_SIZES[size]}`}>
           {article.title}
         </h3>
@@ -72,14 +83,20 @@ export function ArticleCard({ article, size = 'md', onClick }: ArticleCardProps)
           <p className="text-sm text-ink-3 leading-relaxed mb-3 font-light">{article.excerpt}</p>
         )}
 
-        <div className="flex items-center gap-2 text-[10px] text-ink-4 flex-wrap">
-          <span className="font-semibold text-ink-2">{article.author}</span>
-          <span className="w-1 h-1 bg-ink-4 rounded-full inline-block" />
-          <span>{article.readTime}</span>
-          <span className="w-1 h-1 bg-ink-4 rounded-full inline-block" />
-          <span>{article.date}</span>
+
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center gap-2 text-[10px] text-ink-4">
+            <span className="font-semibold text-ink-2">{article.author}</span>
+            <span className="w-1 h-1 bg-ink-4 rounded-full" />
+            <span>{article.readTime}</span>
+            <span className="w-1 h-1 bg-ink-4 rounded-full" />
+            <span>{article.date}</span>
+          </div>
+
         </div>
       </div>
+
+
     </article>
   )
 }

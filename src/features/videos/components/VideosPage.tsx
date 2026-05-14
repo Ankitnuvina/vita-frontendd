@@ -180,85 +180,90 @@ export function VideosPage(): React.ReactNode {
         ) : (
           <div className="grid grid-cols-3 gap-5">
             {filteredVideos.map((v) => (
-            <article
-              key={v.id}
-              className="bg-white rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow cursor-pointer group"
-            >
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={v.imageUrl}
-                  alt={v.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-green-600 text-lg shadow-lg">
-                    ▶
-                  </div>
-                </div>
-                <span className="absolute bottom-2 right-2 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                  {v.duration}
-                </span>
-                <span
-                  className="absolute top-2 left-2 text-[9px] font-bold tracking-[0.08em] uppercase text-white bg-black/30 rounded-full px-2 py-0.5"
-                  style={{ background: CAT_COLORS[v.category] + 'cc' }}
-                >
-                  {v.category}
-                </span>
-              </div>
-              <div className="p-4">
-                <h3 className="font-serif text-sm font-bold text-ink leading-snug mb-1.5">
-                  {v.title}
-                </h3>
-                <p className="text-[11px] text-ink-3 font-light mb-2">{v.instructor}</p>
-                <div className="flex items-center justify-between text-[10px] text-ink-4">
-                  <span>👁 {v.views}</span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setExpandedVideoId((curr) => {
-                        if (curr === v.id) return null
-                        return v.id
-                      })
-                    }
-                    className="text-green-600 font-semibold hover:text-green-500 transition-colors"
-                  >
-                    {expandedVideoId === v.id ? 'Pause' : 'Watch'}
-                  </button>
-                </div>
-                <div className="mt-3 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setExpandedVideoId((curr) => {
-                        if (curr === v.id) return null
-                        return v.id
-                      })
-                    }
-                    className="flex-1 rounded-full border border-green-100 bg-green-50 py-1.5 text-[10px] font-semibold text-green-600"
-                  >
-                    {expandedVideoId === v.id ? '❚❚ Pause' : '▶ Play'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedVideo(v)}
-                    className="flex-1 rounded-full border border-border py-1.5 text-[10px] font-semibold text-ink-3"
-                  >
-                    View Details
-                  </button>
-                </div>
-                {expandedVideoId === v.id && (
-                  <UnifiedMediaPlayer
-                    className="mt-3"
-                    mediaId={`video-${v.id}`}
-                    title={v.title}
-                    sourceUrl={v.videoUrl}
-                    kind="video"
-                    posterUrl={v.imageUrl}
+              <article
+                key={v.id}
+                className="bg-white rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow cursor-pointer group"
+              >
+                <div className="relative h-44 overflow-hidden">
+                  <img
+                    src={v.imageUrl}
+                    alt={v.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                )}
-              </div>
-            </article>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-green-600 text-lg shadow-lg">
+                      ▶
+                    </div>
+                  </div>
+                  <span className="absolute bottom-2 right-2 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                    {v.duration}
+                  </span>
+                  <span
+                    className="absolute top-2 left-2 text-[9px] font-bold tracking-[0.08em] uppercase text-white bg-black/30 rounded-full px-2 py-0.5"
+                    style={{ background: CAT_COLORS[v.category] + 'cc' }}
+                  >
+                    {v.category}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="flex-1 font-serif text-sm font-bold text-ink leading-snug mb-1.5 truncate ">
+                      {v.title}
+                    </h3>
+                    <div className="shrink-0 text-base leading-none">
+                      💖
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-ink-3 font-light mb-2">{v.instructor}</p>
+                  <div className="flex items-center justify-between text-[10px] text-ink-4">
+                    <span>👁‍🗨 {v.views}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedVideoId((curr) => {
+                          if (curr === v.id) return null
+                          return v.id
+                        })
+                      }
+                      className="text-green-600 font-semibold hover:text-green-500 transition-colors"
+                    >
+                      {expandedVideoId === v.id ? 'Pause' : 'Watch'}
+                    </button>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedVideoId((curr) => {
+                          if (curr === v.id) return null
+                          return v.id
+                        })
+                      }
+                      className="flex-1 rounded-full border border-green-100 bg-green-50 py-1.5 text-[10px] font-semibold text-green-600"
+                    >
+                      {expandedVideoId === v.id ? '❚❚ Pause' : '▶ Play'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedVideo(v)}
+                      className="flex-1 rounded-full border border-border py-1.5 text-[10px] font-semibold text-ink-3"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                  {expandedVideoId === v.id && (
+                    <UnifiedMediaPlayer
+                      className="mt-3"
+                      mediaId={`video-${v.id}`}
+                      title={v.title}
+                      sourceUrl={v.videoUrl}
+                      kind="video"
+                      posterUrl={v.imageUrl}
+                    />
+                  )}
+                </div>
+              </article>
             ))}
           </div>
         )}

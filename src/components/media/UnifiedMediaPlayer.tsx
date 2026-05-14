@@ -148,18 +148,18 @@ window.addEventListener('beforeunload', onBeforeUnload)
   return (
     <div className={className}>
       {kind === 'video' ? (
-        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} className="w-full rounded-xl bg-black" />
+        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} className="w-full rounded-md bg-black" />
       ) : (
         <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
       )}
 
-      <div className="mt-3 rounded-xl border border-border bg-white p-3">
+      <div className="mt-2 rounded-md border border-border bg-white p-2">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => void togglePlayPause()}
             aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`}
-            className="h-10 min-w-10 rounded-full bg-green-500 px-3 text-xs font-bold text-white transition-colors hover:bg-green-600"
+            className="h-8 min-w-10 rounded-md bg-green-500 px-3 text-xs font-bold text-white transition-colors hover:bg-green-600"
           >
             {isPlaying ? 'Pause' : 'Play'}
           </button>
@@ -174,7 +174,7 @@ window.addEventListener('beforeunload', onBeforeUnload)
                 step={1}
                 value={Math.min(currentTime, duration || 0)}
                 onChange={(e) => handleSeek(Number(e.target.value))}
-                className="h-1 w-full accent-green-500"
+                className="h-1 w-full accent-green-500  cursor-pointer"
               />
               <span className="w-10 text-right text-[10px] text-ink-4">{formatTime(duration)}</span>
             </div>

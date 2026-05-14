@@ -5,6 +5,8 @@ import { ErrorMessage } from '@/components/common/ErrorMessage'
 import { Field, FORM_INPUT_CLASS as INPUT_CLASS } from '@/features/admin/components/formField'
 import { X, Image as ImageIcon, ChevronDown, CalendarDays } from 'lucide-react'
 
+import { useAdminExperts } from '../hooks/useAdminExperts'
+
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
   author: z.string().min(1, 'Author is required').max(120),
@@ -22,6 +24,8 @@ const formSchema = z.object({
   tags: z.array(z.string()).optional(),
   seoTitle: z.string().min(1).max(200).optional(),
   seoDescription: z.string().min(1).max(500).optional(),
+
+  expertId: z.number().optional(),
 })
 
 export type ArticleFormValues = z.infer<typeof formSchema>
@@ -50,9 +54,15 @@ const EMPTY: ArticleFormValues = {
   tags: [],
   seoTitle: '',
   seoDescription: '',
+
+  expertId: undefined,
 }
 
 export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props): React.ReactNode {
+
+  const { data: expertsData } = useAdminExperts()
+  const experts = expertsData?.data ?? []
+
   const [isOpen, setIsOpen] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -77,6 +87,8 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
         tags: initial.tags ?? [],
         seoTitle: initial.seoTitle ?? '',
         seoDescription: initial.seoDescription ?? '',
+
+        expertId: initial.expertId,
       }
       : EMPTY
   )
@@ -120,7 +132,7 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
               type="file"
               accept="image/*"
               id="image-file-picker"
-              className="hidden"             
+              className="hidden"
               onChange={async (e) => {
                 const file = e.target.files?.[0]
                 if (!file) return
@@ -128,7 +140,7 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
                   const formData = new FormData()
                   formData.append('image', file)
                   const response = await fetch(
-                      `${import.meta.env.VITE_API_BASE_URL}/api/admin/upload-image`,
+                    `${import.meta.env.VITE_API_BASE_URL}/api/admin/upload-image`,
                     {
                       method: 'POST',
                       credentials: 'include',
@@ -268,7 +280,7 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
 
       {/* Articles Author & Slug  */}
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Author" error={errors.author} required>
+        {/* <Field label="Author" error={errors.author} required>
           <input
             type="text"
             value={values.author}
@@ -276,6 +288,60 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
             className={INPUT_CLASS}
             maxLength={120}
           />
+          <div className="text-right text-xs text-neutral-400">
+            {values.author.length}/120
+          </div>
+        </Field> */}
+        <Field label="Author" error={errors.author} required>
+          <select
+            value={values.expertId ?? 'normal'}
+            onChange={(e) => {
+              if (e.target.value === 'normal') {
+                setField('expertId', undefined)
+              } else {
+                const expert = experts.find((ex) => ex.id === Number(e.target.value))
+                if (expert) {
+                  setField('expertId', expert.id)
+                  setField('author', expert.name)
+                }
+              }
+            }}
+            className={INPUT_CLASS}
+          >
+            <option value="normal">✍️ Normal (Manual)</option>
+            {experts.map((ex) => (
+              <option key={ex.id} value={ex.id}>
+                {ex.name} — {ex.role}
+              </option>
+            ))}
+          </select>
+
+          {/* Normal selected — manual input */}
+          {!values.expertId && (
+            <input
+              type="text"
+              placeholder="Author name..."
+              value={values.author}
+              onChange={(e) => setField('author', e.target.value)}
+              className={`${INPUT_CLASS} mt-2`}
+              maxLength={120}
+            />
+          )}
+
+          {/* Expert selected — preview card */}
+          {values.expertId && (() => {
+            const ex = experts.find((e) => e.id === values.expertId)
+            return ex ? (
+              <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-xl">
+                <img src={ex.imageUrl} alt={ex.name} className="w-7 h-7 rounded-full object-cover" />
+                <div>
+                  <p className="text-xs font-semibold text-green-800">{ex.name}</p>
+                  <p className="text-[10px] text-green-600">{ex.role}</p>
+                </div>
+              </div>
+            ) : null
+          })()}
+
           <div className="text-right text-xs text-neutral-400">
             {values.author.length}/120
           </div>

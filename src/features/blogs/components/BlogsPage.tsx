@@ -8,6 +8,8 @@ import { useArticles } from '@/features/articles/hooks/useArticles'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Article } from '@/globals/types'
 
+// import { LikeButton } from '@/features/likes/components/common/LikeButton'
+
 function BlogCard({
   article,
   onOpen,
@@ -19,9 +21,8 @@ function BlogCard({
 }): React.ReactNode {
   return (
     <article
-      className={`cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-shadow hover:shadow-lg ${
-        compact ? 'flex gap-3 p-3' : ''
-      }`}
+      className={`cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-shadow hover:shadow-lg ${compact ? 'flex gap-3 p-3' : ''
+        }`}
       onClick={() => onOpen(article.slug)}
     >
       <img
@@ -30,9 +31,21 @@ function BlogCard({
         className={compact ? 'h-20 w-24 rounded-xl object-cover' : 'h-44 w-full object-cover'}
       />
       <div className={compact ? 'min-w-0 flex-1' : 'p-4'}>
-        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.1em]" style={{ color: article.categoryColor }}>
-          {article.categoryLabel}
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <p
+            className="text-[10px] font-bold uppercase tracking-[0.1em]"
+            style={{ color: article.categoryColor }}
+          >
+            {article.categoryLabel}
+          </p>
+          <div className="shrink-0">
+            {/* <LikeButton
+              contentType="blog"
+              contentId={blog.id}
+            /> */}
+            💖
+          </div>
+        </div>
         <h3 className={`font-serif font-bold text-ink ${compact ? 'text-sm' : 'text-base'}`}>{article.title}</h3>
         <p className="mt-1 text-[11px] text-ink-4">
           {article.author} · {article.date}
@@ -115,20 +128,31 @@ export function BlogsPage(): React.ReactNode {
             <SectionHeader eyebrow="Top Pick" title="Featured" titleAccent="Blog" />
             {featured[0] && (
               <article
-                className="mb-10 cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-shadow hover:shadow-xl"
+                className="mb-10 cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 onClick={() => openBlog(featured[0].slug)}
               >
-                <img src={featured[0].imageUrl} alt={featured[0].title} className="h-72 w-full object-cover" />
+                <img
+                  src={featured[0].imageUrl}
+                  alt={featured[0].title}
+                  className="h-72 w-full object-cover"
+                />
                 <div className="p-5">
-                  <p
-                    className="mb-2 text-[10px] font-bold uppercase tracking-[0.1em]"
-                    style={{ color: featured[0].categoryColor }}
-                  >
-                    {featured[0].categoryLabel}
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <p
+                      className="text-[10px] font-bold uppercase tracking-[0.12em]"
+                      style={{ color: featured[0].categoryColor }}
+                    >
+                      {featured[0].categoryLabel}
+                    </p>
+                    <p className="shrink-0 text-lg leading-none">💖</p>
+                  </div>
+                  <h2 className="font-serif text-2xl font-black text-ink leading-snug">
+                    {featured[0].title}
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-3 line-clamp-3">
+                    {featured[0].excerpt}
                   </p>
-                  <h2 className="font-serif text-2xl font-black text-ink">{featured[0].title}</h2>
-                  <p className="mt-2 text-sm text-ink-3">{featured[0].excerpt}</p>
-                  <p className="mt-3 text-xs text-ink-4">
+                  <p className="mt-4 text-xs font-medium text-ink-4">
                     {featured[0].author} · {featured[0].date}
                   </p>
                 </div>

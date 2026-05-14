@@ -43,19 +43,35 @@ export function AiPage(): React.ReactNode {
         </div>
 
         <AiChatWidget />
+        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
 
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-[11px] text-white/22">
-            {messages.length - 1} message{messages.length !== 2 ? 's' : ''} in this session
-          </p>
-          <button
-            onClick={resetChat}
-            className="text-[11px] text-white/30 hover:text-white/55 transition-colors bg-none border-none cursor-pointer"
-          >
-            ↺ New conversation
-          </button>
+          {/* Note */}
+          <div className="text-[12px] leading-relaxed text-white/85">
+            <span className="font-semibold text-green-300">
+              ⚠️Note :
+            </span>{' '}
+            This response is AI-generated and not provided by a medical expert.
+          </div>
+
+          {/* Bottom Section */}
+          <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+
+            {/* Message Count */}
+            <p className="text-[11px] font-medium text-white/40">
+              {messages.length - 1} message
+              {messages.length !== 2 ? 's' : ''} in this session
+            </p>
+
+            {/* Reset Button */}
+            <button
+              onClick={resetChat}
+              className="rounded-md px-2.5 py-1 text-[11px] font-medium text-white/50 transition-all hover:bg-white/10 hover:text-white"
+            >
+              ↺ New conversation
+            </button>
+
+          </div>
         </div>
-
         <div className="mt-8 bg-white/[0.04] border border-white/[0.07] rounded-xl p-4 text-center">
           <p className="text-[11px] text-white/30 leading-relaxed">
             ⚠️ Vita AI provides general wellness information based on peer-reviewed research.
