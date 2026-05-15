@@ -14,19 +14,19 @@ export function CategoryPills({
 }: CategoryPillsProps): React.ReactNode {
   return (
     <div
-      className={`bg-white  py-3 ${
-        sticky ? 'sticky top-[58px] z-[98]' : ''
+      className={`bg-white/95 backdrop-blur-md border-b border-border py-3 ${
+        sticky ? 'sticky top-14 sm:top-16 z-[98]' : ''
       }`}
     >
-      <div className="max-w-[1100px] mx-auto px-5 flex gap-1.5 overflow-x-auto pb-0.5">
+      <div className="vh-container flex gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
         {ARTICLE_CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => onSelect(cat)}
-            className={`text-[11px] font-semibold px-3.5 py-1.5 rounded-full border-[1.5px] shrink-0 mr-1.5 transition-all ${
+            className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${
               selected === cat
-                ? 'bg-green-600 text-white border-green-600'
-                : 'border-border text-ink-3 bg-none hover:border-green-200 hover:text-green-600'
+                ? 'bg-green-600 text-white border-green-600 shadow-soft'
+                : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
             }`}
           >
             {cat}

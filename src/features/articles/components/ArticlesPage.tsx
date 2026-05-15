@@ -39,10 +39,10 @@ export function ArticlesPage(): React.ReactNode {
     <main id="main-content">
       <CategoryPills selected={selectedCat} onSelect={setSelectedCat} sticky />
 
-      <div className="max-w-[1100px] mx-auto px-5 py-10">
-        <div className="flex items-end justify-between mb-6 gap-4">
+      <div className="vh-container py-8 sm:py-10">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
           <SectionHeader eyebrow="Library" title="All" titleAccent="Articles" />
-          <div className="relative mb-8 shrink-0">
+          <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="article-search" className="sr-only">Search articles</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
               🔍
@@ -52,7 +52,7 @@ export function ArticlesPage(): React.ReactNode {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search articles…"
-              className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-56 outline-none focus:border-green-400 transition-colors"
+              className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
             />
           </div>
         </div>
@@ -80,10 +80,7 @@ export function ArticlesPage(): React.ReactNode {
           </div>
         ) : (
           <>
-            <div
-              className="grid gap-px bg-border rounded-2xl overflow-hidden mb-4"
-              style={{ gridTemplateColumns: '1.7fr 1fr' }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-[1.7fr_1fr] gap-px bg-border rounded-2xl overflow-hidden mb-4">
               <ArticleCard
                 article={filtered[0]}
                 size="xl"
@@ -104,7 +101,7 @@ export function ArticlesPage(): React.ReactNode {
             </div>
 
             {filtered.length > 3 && (
-              <div className="grid grid-cols-3 gap-3 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-4">
                 {filtered.slice(3).map((a) => (
                   <ArticleCard
                     key={a.id}

@@ -83,18 +83,18 @@ interface VideoDetailModalProps {
 function VideoDetailModal({ video, onClose }: VideoDetailModalProps): React.ReactNode {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-6 animate-fade-in"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="w-full max-w-3xl rounded-2xl border border-border bg-white p-5 shadow-2xl">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-white p-4 sm:p-6 shadow-pop animate-zoom-in">
         <div className="mb-4 flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-green-600">
               {video.category}
             </p>
-            <h2 className="font-serif text-xl font-black text-ink">{video.title}</h2>
+            <h2 className="font-serif text-lg sm:text-xl font-black text-ink">{video.title}</h2>
             <p className="mt-1 text-xs text-ink-3">
               {video.instructor} · {video.duration} · {video.views}
             </p>
@@ -102,7 +102,8 @@ function VideoDetailModal({ video, onClose }: VideoDetailModalProps): React.Reac
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-ink-3 hover:border-ink-3"
+            aria-label="Close video detail"
+            className="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-ink-3 hover:border-ink-3 hover:text-ink transition-colors"
           >
             Close
           </button>
@@ -143,25 +144,27 @@ export function VideosPage(): React.ReactNode {
       {/* Hero */}
       <section
         aria-label="Videos hero"
-        className="bg-gradient-to-br from-ink-2 to-ink py-14 text-white text-center"
+        className="bg-gradient-to-br from-ink-2 to-ink py-12 sm:py-14 text-white text-center"
       >
-        <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-300 mb-3">
-          🎬 Video Library
-        </p>
-        <h1 className="font-serif text-[clamp(24px,4vw,46px)] font-black mb-3 tracking-tight">
-          Health{' '}
-          <em className="text-green-300 not-italic font-light">in Motion</em>
-        </h1>
-        <p className="text-sm text-white/55 max-w-md mx-auto font-light">
-          Expert-led workouts, masterclasses, and guided practices — all grounded in science.
-        </p>
+        <div className="vh-container">
+          <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-300 mb-3">
+            🎬 Video Library
+          </p>
+          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-black mb-3 tracking-tight">
+            Health{' '}
+            <em className="text-green-300 not-italic font-light">in Motion</em>
+          </h1>
+          <p className="text-sm sm:text-base text-white/55 max-w-md mx-auto font-light leading-relaxed">
+            Expert-led workouts, masterclasses, and guided practices — all grounded in science.
+          </p>
+        </div>
       </section>
 
       {/* Grid */}
-      <div className="max-w-[1100px] mx-auto px-5 py-12">
-        <div className="flex items-end justify-between gap-4">
+      <div className="vh-container py-10 sm:py-12">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8">
           <SectionHeader eyebrow="Browse" title="All" titleAccent="Videos" />
-          <div className="relative mb-8 w-64 shrink-0">
+          <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="video-search" className="sr-only">Search videos</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40">🔍</span>
             <input
@@ -178,11 +181,11 @@ export function VideosPage(): React.ReactNode {
         ) : filteredVideos.length === 0 ? (
           <EmptyState message="No videos match your search." icon="🎬" />
         ) : (
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {filteredVideos.map((v) => (
               <article
                 key={v.id}
-                className="bg-white rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-shadow cursor-pointer group"
+                className="vh-card vh-card-hover overflow-hidden cursor-pointer group"
               >
                 <div className="relative h-44 overflow-hidden">
                   <img
@@ -269,14 +272,14 @@ export function VideosPage(): React.ReactNode {
         )}
 
         {/* Channel stats */}
-        <div className="mt-12 bg-ink rounded-2xl p-8 text-white text-center">
+        <div className="mt-10 sm:mt-12 bg-ink rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-white text-center">
           <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-300 mb-2">
             Subscribe for New Content
           </p>
-          <h2 className="font-serif text-2xl font-black mb-4">
+          <h2 className="font-serif text-2xl sm:text-3xl font-black mb-4">
             Join <em className="text-green-400 not-italic font-light">142,000+</em> learners
           </h2>
-          <button className="bg-green-500 text-white rounded-full px-8 py-3 text-sm font-semibold hover:bg-green-400 transition-colors">
+          <button className="vh-btn vh-btn-primary text-sm px-6 sm:px-8 py-3">
             Subscribe on YouTube →
           </button>
         </div>

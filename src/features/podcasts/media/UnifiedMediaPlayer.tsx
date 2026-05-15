@@ -12,12 +12,13 @@ interface UnifiedMediaPlayerProps {
   autoPlay?: boolean
 }
 
-
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00'
-  const mins = Math.floor(seconds / 60)
-  const secs = Math.floor(seconds % 60)
-  return `${mins}:${secs.toString().padStart(2, '0')}`
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = Math.floor(seconds % 60)
+  if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+  return `${m}:${s.toString().padStart(2, '0')}`
 }
 
 export function UnifiedMediaPlayer({
@@ -57,23 +58,10 @@ export function UnifiedMediaPlayer({
     const media = mediaRef.current
     if (!media) return
 
-    // const onLoadedMetadata = async () => {
-    //   setDuration(media.duration || 0)
-    //   try {
-    //     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`, {
-    //       credentials: 'include',
-    //     })
-    //     if (res.ok) {
-    //       const data = await res.json() as { positionSec: number; durationSec: number }
-    //       if (data.positionSec > 0 && data.positionSec < media.duration - 1) {
-    //         media.currentTime = data.positionSec
-    //         setCurrentTime(data.positionSec)
-    //       }
-    //     }
-    //   } catch { }
-    // }
     const onLoadedMetadata = (): void => {
-      setDuration(media.duration || 0)
+      if (Number.isFinite(media.duration) && media.duration > 0) {
+        setDuration(media.duration)
+      }
       void (async () => {
         try {
           const res = await fetch(
@@ -85,7 +73,6 @@ export function UnifiedMediaPlayer({
             if (data.positionSec > 0 && data.positionSec < media.duration - 1) {
               media.currentTime = data.positionSec
               setCurrentTime(data.positionSec)
-              // autoPlay hai toh resume pe bhi play karo
               if (autoPlay) void media.play()
             }
           }
@@ -93,20 +80,9 @@ export function UnifiedMediaPlayer({
       })()
     }
 
-
-    // let lastSaved = 0
-    // const onTimeUpdate = () => {
-    //   setCurrentTime(media.currentTime)
-    //   // Har 5 second pe hi save karo
-    //   if (Math.abs(media.currentTime - lastSaved) >= 5) {
-    //     lastSaved = media.currentTime
-    //     void saveProgress(media.currentTime)
-    //   }
-    // }
     let lastSaved = 0
     const onTimeUpdate = (): void => {
       setCurrentTime(media.currentTime)
-      // Video almost end ho gayi toh save mat karo — onEnded handle karega
       if (media.duration && media.currentTime >= media.duration - 0.5) return
       if (Math.abs(media.currentTime - lastSaved) >= 10) {
         lastSaved = media.currentTime
@@ -115,10 +91,9 @@ export function UnifiedMediaPlayer({
     }
 
     const onPlay = () => setIsPlaying(true)
-    // const onPause = () => setIsPlaying(false)
     const onPause = (): void => {
       setIsPlaying(false)
-      void saveProgress(media.currentTime)  // ← add karo yahan
+      void saveProgress(media.currentTime)
     }
 
     const onBeforeUnload = (): void => {
@@ -180,7 +155,7 @@ export function UnifiedMediaPlayer({
   return (
     <div className={className}>
       {kind === 'video' ? (
-        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full rounded-md bg-black" />
+        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full h-52 rounded-md bg-black object-cover" />
       ) : (
         <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
       )}
@@ -197,18 +172,23 @@ export function UnifiedMediaPlayer({
           </button>
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-semibold text-ink">{title}</p>
+
             <div className="mt-2 flex items-center gap-2">
-              <span className="w-10 text-[10px] text-ink-4">{formatTime(currentTime)}</span>
+              <span className="shrink-0 text-[10px] text-ink-4 tabular-nums">
+                {formatTime(currentTime)}
+              </span>
               <input
                 type="range"
                 min={0}
                 max={Math.max(duration, 0)}
-                step={1}
+                step={0.1}
                 value={Math.min(currentTime, duration || 0)}
                 onChange={(e) => handleSeek(Number(e.target.value))}
-                className="h-1 w-full accent-green-500  cursor-pointer"
+                className="h-1 min-w-0 flex-1 accent-green-500 cursor-pointer"
               />
-              <span className="w-10 text-right text-[10px] text-ink-4">{formatTime(duration)}</span>
+              <span className="shrink-0 text-right text-[10px] text-ink-4 tabular-nums">
+                {formatTime(duration)}
+              </span>
             </div>
           </div>
         </div>

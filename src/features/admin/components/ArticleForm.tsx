@@ -308,7 +308,7 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
             }}
             className={INPUT_CLASS}
           >
-            <option value="normal">✍️ Normal (Manual)</option>
+            <option value="normal">Normal (Manual)</option>
             {experts.map((ex) => (
               <option key={ex.id} value={ex.id}>
                 {ex.name} — {ex.role}

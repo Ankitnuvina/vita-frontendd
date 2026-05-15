@@ -33,7 +33,6 @@ export interface Podcast {
   guest: string
   duration: string
   date: string
-  // imageUrl: string
   videoUrl: string
 }
 

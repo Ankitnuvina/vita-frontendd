@@ -21,33 +21,39 @@ function BlogCard({
 }): React.ReactNode {
   return (
     <article
-      className={`cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-shadow hover:shadow-lg ${compact ? 'flex gap-3 p-3' : ''
-        }`}
+      className={`vh-card vh-card-hover cursor-pointer overflow-hidden ${
+        compact ? 'flex flex-col xs:flex-row gap-3 p-3' : ''
+      }`}
       onClick={() => onOpen(article.slug)}
     >
       <img
         src={article.imageUrl}
         alt={article.title}
-        className={compact ? 'h-20 w-24 rounded-xl object-cover' : 'h-44 w-full object-cover'}
+        loading="lazy"
+        className={
+          compact
+            ? 'h-32 xs:h-20 w-full xs:w-24 rounded-xl object-cover shrink-0'
+            : 'h-44 sm:h-48 w-full object-cover'
+        }
       />
-      <div className={compact ? 'min-w-0 flex-1' : 'p-4'}>
+      <div className={compact ? 'min-w-0 flex-1' : 'p-4 sm:p-5'}>
         <div className="flex items-center justify-between gap-3">
           <p
-            className="text-[10px] font-bold uppercase tracking-[0.1em]"
+            className="text-[10px] font-bold uppercase tracking-[0.1em] truncate"
             style={{ color: article.categoryColor }}
           >
             {article.categoryLabel}
           </p>
-          <div className="shrink-0">
-            {/* <LikeButton
-              contentType="blog"
-              contentId={blog.id}
-            /> */}
-            💖
-          </div>
+          <div className="shrink-0">💖</div>
         </div>
-        <h3 className={`font-serif font-bold text-ink ${compact ? 'text-sm' : 'text-base'}`}>{article.title}</h3>
-        <p className="mt-1 text-[11px] text-ink-4">
+        <h3
+          className={`font-serif font-bold text-ink leading-snug mt-1 ${
+            compact ? 'text-sm line-clamp-2' : 'text-base sm:text-lg line-clamp-2'
+          }`}
+        >
+          {article.title}
+        </h3>
+        <p className="mt-2 text-[11px] text-ink-4">
           {article.author} · {article.date}
         </p>
       </div>
@@ -89,32 +95,38 @@ export function BlogsPage(): React.ReactNode {
 
   return (
     <main id="main-content">
-      <section className="bg-gradient-to-br from-ink to-green-700 py-14 text-white">
-        <div className="mx-auto max-w-[1100px] px-5 text-center">
+      <section className="bg-gradient-to-br from-ink to-green-700 py-12 sm:py-16 text-white">
+        <div className="vh-container text-center">
           <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-green-300">
             Healthcare Blogs
           </p>
-          <h1 className="font-serif text-[clamp(26px,4vw,46px)] font-black tracking-tight">Vitalize Blog</h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-white/70">
+          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-black tracking-tight">
+            Vitalize Blog
+          </h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-white/70 leading-relaxed">
             Explore expert-backed healthcare articles, practical wellness guides, and science-first insights.
           </p>
           <div className="mx-auto mt-6 max-w-md">
-            <label htmlFor="blog-search" className="sr-only">Search blogs</label>
+            <label htmlFor="blog-search" className="sr-only">
+              Search blogs
+            </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-white/70">🔍</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-white/70">
+                🔍
+              </span>
               <input
                 id="blog-search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search blogs by title, keyword, author..."
-                className="w-full rounded-full border border-white/20 bg-white/10 py-2 pl-8 pr-4 text-xs text-white placeholder:text-white/60 outline-none transition-colors focus:border-green-300"
+                className="w-full rounded-full border border-white/20 bg-white/10 py-2.5 pl-9 pr-4 text-sm text-white placeholder:text-white/60 outline-none transition-all focus:border-green-300 focus:bg-white/15"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-[1100px] px-5 py-10">
+      <div className="vh-container py-10 sm:py-12">
         {isLoading || isSearching ? (
           <ArticleCardSkeleton count={6} />
         ) : isError ? (
@@ -128,15 +140,15 @@ export function BlogsPage(): React.ReactNode {
             <SectionHeader eyebrow="Top Pick" title="Featured" titleAccent="Blog" />
             {featured[0] && (
               <article
-                className="mb-10 cursor-pointer overflow-hidden rounded-2xl border border-border bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                className="vh-card vh-card-hover mb-10 cursor-pointer overflow-hidden"
                 onClick={() => openBlog(featured[0].slug)}
               >
                 <img
                   src={featured[0].imageUrl}
                   alt={featured[0].title}
-                  className="h-72 w-full object-cover"
+                  className="h-56 sm:h-72 lg:h-80 w-full object-cover"
                 />
-                <div className="p-5">
+                <div className="p-5 sm:p-6">
                   <div className="flex items-center justify-between gap-3 mb-3">
                     <p
                       className="text-[10px] font-bold uppercase tracking-[0.12em]"
@@ -146,7 +158,7 @@ export function BlogsPage(): React.ReactNode {
                     </p>
                     <p className="shrink-0 text-lg leading-none">💖</p>
                   </div>
-                  <h2 className="font-serif text-2xl font-black text-ink leading-snug">
+                  <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-black text-ink leading-snug">
                     {featured[0].title}
                   </h2>
                   <p className="mt-2 text-sm leading-relaxed text-ink-3 line-clamp-3">
@@ -160,14 +172,14 @@ export function BlogsPage(): React.ReactNode {
             )}
 
             <SectionHeader eyebrow="Fresh Reads" title="Latest" titleAccent="Blogs" />
-            <div className="mb-10 grid grid-cols-2 gap-4">
+            <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {latest.map((article) => (
                 <BlogCard key={article.id} article={article} onOpen={openBlog} />
               ))}
             </div>
 
             <SectionHeader eyebrow="Reader Favorites" title="Popular" titleAccent="Blogs" />
-            <div className="mb-10 grid grid-cols-2 gap-4">
+            <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {popular.map((article) => (
                 <BlogCard key={article.id} article={article} onOpen={openBlog} compact />
               ))}

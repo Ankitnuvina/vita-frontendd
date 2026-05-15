@@ -42,10 +42,10 @@ export function PodcastsPage(): React.ReactNode {
 
   return (
     <main id="main-content">
-      <section aria-label="Podcasts hero" className="relative bg-neutral-950 text-white py-16 overflow-hidden">
+      <section aria-label="Podcasts hero" className="relative bg-neutral-950 text-white py-12 sm:py-16 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900/40 via-neutral-950 to-neutral-950" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-green-950/30 via-transparent to-transparent" />
-        <div className="relative max-w-[1100px] mx-auto px-5 text-center">
+        <div className="relative vh-container text-center">
           <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-400">
@@ -56,14 +56,14 @@ export function PodcastsPage(): React.ReactNode {
             The Vitalize{' '}
             <em className="text-green-400 not-italic">Podcast</em>
           </h1>
-          <p className="text-sm text-white/50 max-w-md mx-auto font-light leading-relaxed mb-8">
+          <p className="text-sm sm:text-base text-white/50 max-w-md mx-auto font-light leading-relaxed mb-8">
             Deep-dive conversations with world-leading health scientists, clinicians and coaches.
           </p>
-          <div className="flex gap-2 justify-center flex-wrap">
+          <div className="flex gap-2 justify-start sm:justify-center flex-nowrap sm:flex-wrap overflow-x-auto scroll-x-clean -mx-4 px-4">
             {['🧠 Mental Health', '🌿 Longevity', '🧘 Mindfulness', '💪 Fitness'].map((p) => (
               <button
                 key={p}
-                className="text-xs font-semibold text-white/70 bg-white/8 border border-white/10 rounded-full px-4 py-2 hover:bg-white/15 hover:border-white/20 hover:text-white transition-all duration-200"
+                className="shrink-0 text-xs font-semibold text-white/70 bg-white/[0.08] border border-white/10 rounded-full px-4 py-2 hover:bg-white/15 hover:border-white/20 hover:text-white transition-all duration-200"
               >
                 {p}
               </button>
@@ -72,10 +72,10 @@ export function PodcastsPage(): React.ReactNode {
         </div>
       </section>
 
-      <div className="max-w-[1100px] mx-auto px-5 py-12">
-        <div className="flex items-end justify-between gap-4 mb-8">
+      <div className="vh-container py-10 sm:py-12">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
           <SectionHeader eyebrow="Latest Episodes" title="Recent" titleAccent="Shows" />
-          <div className="relative w-64 shrink-0">
+          <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="podcast-search" className="sr-only">Search podcasts</label>
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400">🔍</span>
             <input
@@ -99,7 +99,7 @@ export function PodcastsPage(): React.ReactNode {
         ) : filteredPodcasts.length === 0 ? (
           <EmptyState message="No podcasts match your search." icon="🔎" />
         ) : (
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
             {filteredPodcasts.map((p) => (
               <PodcastCard
                 key={p.id}
@@ -116,7 +116,7 @@ export function PodcastsPage(): React.ReactNode {
             ))}
           </div>
         )}
-        <div className="mt-14 bg-neutral-950 rounded-3xl p-6 grid grid-cols-4 gap-4 text-center">
+        <div className="mt-12 sm:mt-14 bg-neutral-950 rounded-3xl p-6 sm:p-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
           {[
             ['00', 'Episodes'],
             ['0.0★', 'Avg Rating'],
@@ -124,7 +124,7 @@ export function PodcastsPage(): React.ReactNode {
             ['0', 'Categories'],
           ].map(([val, label]) => (
             <div key={label} className="flex flex-col items-center gap-1">
-              <p className="font-serif text-2xl font-black text-white">{val}</p>
+              <p className="font-serif text-2xl sm:text-3xl font-black text-white">{val}</p>
               <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">{label}</p>
             </div>
           ))}
@@ -150,22 +150,22 @@ function PodcastDetailModal({ podcast, onClose }: PodcastDetailModalProps): Reac
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="w-full max-w-2xl rounded-md border border-neutral-100 bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-start justify-between gap-3 px-6 pt-4 pb-4 border-b border-neutral-100">
-          <div className="flex flex-col gap-2">
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-100 bg-white shadow-2xl animate-zoom-in">
+        <div className="flex items-start justify-between gap-3 px-4 sm:px-6 pt-4 pb-4 border-b border-neutral-100">
+          <div className="flex flex-col gap-2 min-w-0 flex-1">
             <p className="text-[11px] font-bold uppercase tracking-widest text-green-600">
               {podcast.episode} · {podcast.category}
             </p>
-            <h2 className="text-xl font-bold leading-snug text-neutral-900">
+            <h2 className="text-lg sm:text-xl font-bold leading-snug text-neutral-900">
               {podcast.title}
-              <span className="ml-2 text-[15px] font-medium text-neutral-500">
+              <span className="ml-2 text-sm font-medium text-neutral-500">
                 with
               </span>
-              <span className="ml-1 text-[15px] font-semibold text-neutral-600">
+              <span className="ml-1 text-sm font-semibold text-neutral-600">
                 {podcast.guest}
               </span>
             </h2>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-neutral-500">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-neutral-500">
               <span className="flex items-center gap-1">
                 <span className="font-medium text-neutral-700">
                   EP Duration :
@@ -189,12 +189,13 @@ function PodcastDetailModal({ podcast, onClose }: PodcastDetailModalProps): Reac
           <button
             type="button"
             onClick={onClose}
-            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-md bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-700 transition-colors text-sm font-bold"
+            aria-label="Close podcast detail"
+            className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-700 transition-colors text-sm font-bold"
           >
             ✕
           </button>
         </div>
-        <div className="px-6 py-5">
+        <div className="px-4 sm:px-6 py-5">
           <UnifiedMediaPlayer
             mediaId={`podcast-${podcast.id}-detail`}
             title={podcast.title}
@@ -272,14 +273,11 @@ function PodcastCard({
             {podcast.category}
           </span>
         )}
-        {/* Title + Like */}
         <div className="flex items-start justify-between gap-3 mb-1">
-
           <div className="flex-1 min-w-0">
             <h3 className="font-serif text-sm font-bold text-neutral-900 leading-snug line-clamp-2 truncate ">
               {podcast.title}
             </h3>
-
             <p className="mt-1 text-[11px] text-neutral-400 truncate">
               with{' '}
               <span className="text-neutral-600 font-medium">
@@ -287,18 +285,14 @@ function PodcastCard({
               </span>
             </p>
           </div>
-
-          {/* Right Side Like */}
           <div className="shrink-0">
             <LikeButton
               contentType="podcast"
               contentId={podcast.id}
             />
           </div>
-
         </div>
 
-        {/* Duration + Date */}
         <div className="flex items-center justify-between mb-3 mt-2">
           <span className="flex items-center gap-1 text-[10px] text-neutral-400 font-medium">
             <span className="text-green-500">▶</span>
@@ -332,7 +326,6 @@ function PodcastCard({
             Details
           </button>
         </div>
-
       </div>
     </article>
   )

@@ -32,7 +32,6 @@ export const podcastSchema = z.object({
   guest: z.string(),
   duration: z.string(),
   date: z.string(),
-  // imageUrl: z.string(),
   videoUrl: z.string(),
 })
 

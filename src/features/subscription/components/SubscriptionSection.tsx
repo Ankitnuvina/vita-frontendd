@@ -12,7 +12,7 @@ interface Props {
 
 function PlanSkeleton(): React.ReactNode {
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="bg-white border-2 border-border rounded-2xl p-6 animate-pulse">
           <div className="h-3 w-20 bg-border rounded mb-2" />
@@ -35,8 +35,8 @@ export function SubscriptionSection({ preview = false }: Props): React.ReactNode
   const { data: plans, isLoading, isError, error, refetch } = usePlans()
 
   return (
-    <section className="py-16 bg-paper" aria-label="Subscription plans">
-      <div className="max-w-[1100px] mx-auto px-5">
+    <section className="py-12 sm:py-16 bg-paper" aria-label="Subscription plans">
+      <div className="vh-container">
         <SectionHeader
           eyebrow="Membership"
           title="Choose Your"
@@ -76,14 +76,14 @@ export function SubscriptionSection({ preview = false }: Props): React.ReactNode
         ) : !plans || plans.length === 0 ? (
           <EmptyState message="No plans available." icon="💳" />
         ) : (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {plans.map((plan) => (
               <div
                 key={plan.id}
                 className={`relative rounded-2xl p-6 border-2 transition-all ${
                   plan.isPopular
-                    ? 'border-green-500 bg-green-600 text-white shadow-[0_12px_36px_rgba(61,143,90,0.25)]'
-                    : 'border-border bg-white text-ink hover:border-green-200'
+                    ? 'border-green-500 bg-green-600 text-white shadow-glow lg:scale-[1.02]'
+                    : 'border-border bg-white text-ink hover:border-green-200 hover:shadow-card'
                 }`}
               >
                 {plan.isPopular && (
