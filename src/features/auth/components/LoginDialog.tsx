@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/auth.store'
+import { Eye, EyeOff } from "lucide-react";
+
 
 interface LoginDialogProps {
   open: boolean
@@ -9,6 +11,9 @@ interface LoginDialogProps {
 type Mode = 'signin' | 'signup'
 
 function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNode {
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const login = useAuthStore((s) => s.login)
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
@@ -97,11 +102,10 @@ function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNo
               aria-selected={mode === m}
               type="button"
               onClick={() => switchMode(m)}
-              className={`text-xs font-semibold py-2 rounded-lg transition-colors border-none cursor-pointer ${
-                mode === m
+              className={`text-xs font-semibold py-2 rounded-lg transition-colors border-none cursor-pointer ${mode === m
                   ? 'bg-white text-ink shadow-sm'
                   : 'bg-transparent text-ink-3 hover:text-ink-2'
-              }`}
+                }`}
             >
               {m === 'signin' ? 'Sign In' : 'Sign Up'}
             </button>
@@ -137,24 +141,40 @@ function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNo
             <label htmlFor="login-pass" className="block text-xs font-semibold text-ink-2 mb-1.5">
               Password
             </label>
-            <input
-              id="login-pass"
-              type="password"
-              value={password}
-              onChange={(e) => {
-                clearError()
-                setPassword(e.target.value)
-              }}
-              required
-              autoComplete={isSignup ? 'new-password' : 'current-password'}
-              placeholder="••••••••"
-              minLength={isSignup ? 8 : undefined}
-              className="w-full border border-border rounded-xl px-3.5 py-2.5 text-sm text-ink outline-none focus:border-green-400 transition-colors"
-            />
-            {isSignup && (
-              <p className="text-[11px] text-ink-4 mt-1">Minimum 8 characters</p>
-            )}
+            <div className="relative">
+
+              <input
+                id="login-pass"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  clearError()
+                  setPassword(e.target.value)
+                }}
+                required
+                autoComplete={isSignup ? 'new-password' : 'current-password'}
+                placeholder="••••••••"
+                minLength={isSignup ? 8 : undefined}
+                className="w-full border border-border rounded-xl px-3.5 py-2.5 text-sm text-ink outline-none focus:border-green-400 transition-colors"
+              />
+              {isSignup && (
+                <p className="text-[11px] text-ink-4 mt-1">Minimum 8 characters</p>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-6 -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
+              >
+                {showPassword ? (
+                  <Eye className="w-5 h-5" />
+                ) : (
+                  <EyeOff className="w-5 h-5" />
+                )}
+              </button>
+            </div>
           </div>
+
 
           {error && (
             <div

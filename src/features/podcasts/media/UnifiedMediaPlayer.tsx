@@ -9,6 +9,7 @@ interface UnifiedMediaPlayerProps {
   kind: MediaKind
   posterUrl?: string
   className?: string
+  autoPlay?: boolean
 }
 
 
@@ -26,6 +27,7 @@ export function UnifiedMediaPlayer({
   kind,
   posterUrl,
   className,
+  autoPlay = false,
 }: UnifiedMediaPlayerProps): React.ReactNode {
   const mediaRef = useRef<HTMLAudioElement & HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -55,28 +57,58 @@ export function UnifiedMediaPlayer({
     const media = mediaRef.current
     if (!media) return
 
-    const onLoadedMetadata = async () => {
+    // const onLoadedMetadata = async () => {
+    //   setDuration(media.duration || 0)
+    //   try {
+    //     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`, {
+    //       credentials: 'include',
+    //     })
+    //     if (res.ok) {
+    //       const data = await res.json() as { positionSec: number; durationSec: number }
+    //       if (data.positionSec > 0 && data.positionSec < media.duration - 1) {
+    //         media.currentTime = data.positionSec
+    //         setCurrentTime(data.positionSec)
+    //       }
+    //     }
+    //   } catch { }
+    // }
+    const onLoadedMetadata = (): void => {
       setDuration(media.duration || 0)
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`, {
-          credentials: 'include',
-        })
-        if (res.ok) {
-          const data = await res.json() as { positionSec: number; durationSec: number }
-          if (data.positionSec > 0 && data.positionSec < media.duration - 1) {
-            media.currentTime = data.positionSec
-            setCurrentTime(data.positionSec)
+      void (async () => {
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`,
+            { credentials: 'include' }
+          )
+          if (res.ok) {
+            const data = await res.json() as { positionSec: number }
+            if (data.positionSec > 0 && data.positionSec < media.duration - 1) {
+              media.currentTime = data.positionSec
+              setCurrentTime(data.positionSec)
+              // autoPlay hai toh resume pe bhi play karo
+              if (autoPlay) void media.play()
+            }
           }
-        }
-      } catch { }
+        } catch { }
+      })()
     }
 
 
+    // let lastSaved = 0
+    // const onTimeUpdate = () => {
+    //   setCurrentTime(media.currentTime)
+    //   // Har 5 second pe hi save karo
+    //   if (Math.abs(media.currentTime - lastSaved) >= 5) {
+    //     lastSaved = media.currentTime
+    //     void saveProgress(media.currentTime)
+    //   }
+    // }
     let lastSaved = 0
-    const onTimeUpdate = () => {
+    const onTimeUpdate = (): void => {
       setCurrentTime(media.currentTime)
-      // Har 5 second pe hi save karo
-      if (Math.abs(media.currentTime - lastSaved) >= 5) {
+      // Video almost end ho gayi toh save mat karo — onEnded handle karega
+      if (media.duration && media.currentTime >= media.duration - 0.5) return
+      if (Math.abs(media.currentTime - lastSaved) >= 10) {
         lastSaved = media.currentTime
         void saveProgress(media.currentTime)
       }
@@ -85,21 +117,21 @@ export function UnifiedMediaPlayer({
     const onPlay = () => setIsPlaying(true)
     // const onPause = () => setIsPlaying(false)
     const onPause = (): void => {
-  setIsPlaying(false)
-  void saveProgress(media.currentTime)  // ← add karo yahan
-}
+      setIsPlaying(false)
+      void saveProgress(media.currentTime)  // ← add karo yahan
+    }
 
-const onBeforeUnload = (): void => {
-  navigator.sendBeacon(
-    `${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`,
-    JSON.stringify({
-      kind,
-      positionSec: Math.floor(media.currentTime),
-      durationSec: Math.floor(media.duration),
-    })
-  )
-}
-window.addEventListener('beforeunload', onBeforeUnload)
+    const onBeforeUnload = (): void => {
+      navigator.sendBeacon(
+        `${import.meta.env.VITE_API_BASE_URL}/api/media/progress/${mediaId}`,
+        JSON.stringify({
+          kind,
+          positionSec: Math.floor(media.currentTime),
+          durationSec: Math.floor(media.duration),
+        })
+      )
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
 
     const onEnded = async () => {
       setIsPlaying(false)
@@ -123,7 +155,7 @@ window.addEventListener('beforeunload', onBeforeUnload)
       media.removeEventListener('play', onPlay)
       media.removeEventListener('pause', onPause)
       media.removeEventListener('ended', onEnded)
-       window.removeEventListener('beforeunload', onBeforeUnload)
+      window.removeEventListener('beforeunload', onBeforeUnload)
     }
   }, [mediaId, saveProgress])
 
@@ -148,7 +180,7 @@ window.addEventListener('beforeunload', onBeforeUnload)
   return (
     <div className={className}>
       {kind === 'video' ? (
-        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} className="w-full rounded-md bg-black" />
+        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full rounded-md bg-black" />
       ) : (
         <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
       )}

@@ -2,7 +2,7 @@ import React, { useDeferredValue, useMemo, useState } from 'react'
 import { SectionHeader } from '@/components/common/SectionHeader'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ArticleCardSkeleton } from '@/components/common/ArticleCardSkeleton'
-import { UnifiedMediaPlayer } from '@/components/media/UnifiedMediaPlayer'
+import { UnifiedMediaPlayer } from '@/features/podcasts/media/UnifiedMediaPlayer'
 
 const VIDEOS = [
   {

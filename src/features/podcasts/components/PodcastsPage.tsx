@@ -3,12 +3,12 @@ import { SectionHeader } from '@/components/common/SectionHeader'
 import { PodcastCardSkeleton } from '@/components/common/PodcastCardSkeleton'
 import { ErrorMessage } from '@/components/common/ErrorMessage'
 import { EmptyState } from '@/components/common/EmptyState'
-import { UnifiedMediaPlayer } from '@/components/media/UnifiedMediaPlayer'
 import { usePodcasts } from '@/features/podcasts/hooks/usePodcasts'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Podcast } from '@/globals/types'
 
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
+import { UnifiedMediaPlayer } from '@/features/podcasts/media/UnifiedMediaPlayer'
 
 interface PodcastCardProps {
   podcast: Podcast
@@ -226,6 +226,7 @@ function PodcastCard({
               sourceUrl={podcast.videoUrl}
               kind="video"
               className="rounded-2xl overflow-hidden"
+              autoPlay
             />
           </div>
         ) : (
@@ -255,7 +256,7 @@ function PodcastCard({
                 type="button"
                 onClick={onTogglePlay}
                 aria-label={`Play ${podcast.title}`}
-                className="w-10 h-10 bg-white active:scale-95 rounded-full flex items-center justify-center text-green-500 shadow-lg shadow-green-500/40 transition-all duration-200 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
+                className="w-10 h-10 bg-white active:scale-95 rounded-full flex items-center justify-center text-green-500 shadow-lg shadow-green-500/40 transition-all duration-200"
               >
                 <span className="text-sm pl-0.5">▶</span>
               </button>
@@ -312,7 +313,7 @@ function PodcastCard({
         <div className="h-px bg-neutral-100 mb-3" />
 
         <div className="flex gap-2">
-          <button
+          {/* <button
             type="button"
             onClick={onTogglePlay}
             className={`flex-1 text-[12px] font-bold rounded-md py-2 transition-all duration-200 ${isExpanded
@@ -321,7 +322,7 @@ function PodcastCard({
               }`}
           >
             {isExpanded ? '❚❚ Pause' : '▶ Play'}
-          </button>
+          </button> */}
 
           <button
             type="button"
