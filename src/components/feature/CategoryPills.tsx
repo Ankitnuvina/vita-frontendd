@@ -18,7 +18,7 @@ export function CategoryPills({
         sticky ? 'sticky top-14 sm:top-16 z-[98]' : ''
       }`}
     >
-      <div className="vh-container flex gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
+      <div className="vh-container flex justify-center gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
         {ARTICLE_CATEGORIES.map((cat) => (
           <button
             key={cat}

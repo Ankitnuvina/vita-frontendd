@@ -79,7 +79,8 @@
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    /* clip (not hidden) prevents horizontal scroll WITHOUT breaking position:sticky */
+    overflow-x: clip;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -90,7 +91,8 @@
     background-color: var(--vh-paper);
     color: var(--vh-ink);
     line-height: 1.6;
-    overflow-x: hidden;
+    /* clip (not hidden) prevents horizontal scroll WITHOUT breaking position:sticky */
+    overflow-x: clip;
     min-height: 100svh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -8,39 +8,40 @@ interface FooterLink {
 
 const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
-    title: 'Explore',
+    title: 'Categories',
     links: [
-      { label: 'Articles', to: '/articles' },
-      { label: 'Podcasts', to: '/podcasts' },
-      { label: 'Videos', to: '/videos' },
-      { label: 'AI Assistant', to: '/ai' },
-      { label: 'Dashboard', to: '/dashboard' },
+      { label: 'Mind' },
+      { label: 'Body' },
+      { label: 'Nutrition' },
+      { label: 'Sleep' },
+      { label: 'Longevity' },
+       { label: 'India Roots' },
     ],
   },
+
   {
+    title: 'Tools',
+    links: [
+      { label: 'Vita AI' },
+      { label: 'Vital Score' },
+      { label: 'Protocol Builder' },
+      { label: '28-Day Resets' },
+      { label: 'Habit Tracker' },
+    ],
+  },
+    {
     title: 'Company',
     links: [
       { label: 'About Us' },
-      { label: 'Editorial Standards' },
-      { label: 'Careers' },
-      { label: 'Press Kit' },
+      { label: 'Our Experts' },
+      { label: 'Editorial Policy' },
       { label: 'Advertise' },
-    ],
-  },
-  {
-    title: 'Support',
-    links: [
-      { label: 'Help Center' },
-      { label: 'Privacy Policy' },
-      { label: 'Terms of Use' },
-      { label: 'Cookie Settings' },
       { label: 'Contact' },
     ],
   },
 ]
 
 const SOCIAL_ICONS = ['𝕏', 'in', '📸', '▶', '🎧']
-const TRUST_BADGES = ['HIPAA Aware', 'HONcode', 'ADA AA']
 
 export function Footer(): React.ReactNode {
   return (
@@ -54,15 +55,12 @@ export function Footer(): React.ReactNode {
           <div className="col-span-2 lg:col-span-1">
             <Link
               to="/"
-              className="font-serif text-xl font-bold mb-2.5 inline-flex items-center gap-2 text-white"
-            >
-              <span className="w-8 h-8 bg-green-500 rounded-xl flex items-center justify-center text-base">
-                🌿
-              </span>
-              Vita<span className="text-green-400">lize</span>
+              className="font-serif text-xl font-bold mb-2.5 inline-flex items-center text-white"
+            >            
+              VIT<span className="text-green-400">A</span>
             </Link>
             <p className="text-xs text-white/40 leading-relaxed max-w-[260px] mb-4 mt-2 font-light">
-              Science-backed health wisdom for the modern generation.
+          Your trusted destination for science-backed health, wellness and lifestyle insights.
             </p>
             <div className="flex flex-wrap gap-1.5" role="list" aria-label="Social media links">
               {SOCIAL_ICONS.map((icon, i) => (
@@ -71,7 +69,7 @@ export function Footer(): React.ReactNode {
                   type="button"
                   role="listitem"
                   aria-label={`Social media link ${i + 1}`}
-                  className="w-9 h-9 bg-white/[0.06] rounded-lg flex items-center justify-center text-xs cursor-pointer text-white/60 hover:bg-white/15 hover:text-white transition-colors"
+                  className="w-9 h-9 bg-white/[0.08] rounded-lg flex items-center justify-center text-xs cursor-pointer text-white hover:bg-white/15 hover:text-white transition-colors"
                 >
                   {icon}
                 </button>
@@ -112,19 +110,9 @@ export function Footer(): React.ReactNode {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <span className="text-[11px] text-white/30 leading-relaxed">
-            © 2026 Vitalize Health Media. Content is for informational purposes only.
+          © 2026 VITA Health Media. All rights reserved.
           </span>
-          <div className="flex flex-wrap gap-1.5" role="list" aria-label="Compliance badges">
-            {TRUST_BADGES.map((badge) => (
-              <span
-                key={badge}
-                role="listitem"
-                className="text-[9px] font-semibold uppercase text-white/30 border border-white/10 px-2 py-0.5 rounded"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
+        
         </div>
       </div>
     </footer>

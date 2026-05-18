@@ -52,7 +52,7 @@ export function PodcastsPage(): React.ReactNode {
               Video Podcast
             </p>
           </div>
-          <h1 className="font-serif text-[clamp(28px,5vw,52px)] font-black mb-4 tracking-tight leading-tight">
+          <h1 className="text-white font-serif text-[clamp(28px,5vw,52px)] font-black mb-4 tracking-tight leading-tight">
             The Vitalize{' '}
             <em className="text-green-400 not-italic">Podcast</em>
           </h1>

@@ -150,7 +150,7 @@ export function VideosPage(): React.ReactNode {
           <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-300 mb-3">
             🎬 Video Library
           </p>
-          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-black mb-3 tracking-tight">
+          <h1 className="text-white font-serif text-[clamp(28px,5vw,48px)] font-black mb-3 tracking-tight">
             Health{' '}
             <em className="text-green-300 not-italic font-light">in Motion</em>
           </h1>

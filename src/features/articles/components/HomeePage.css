@@ -1,0 +1,2146 @@
+/* ============================================================
+   HomePage.css
+   Scoped to the home page only via the .vita-home-page wrapper.
+   Do not use these class names outside of <HomePage />.
+   ============================================================ */
+
+@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css');
+
+.vita-home-page,
+.vita-home-page * {
+  box-sizing: border-box
+}
+
+.vita-home-page * {
+  margin: 0;
+  padding: 0
+}
+
+.vita-home-page {
+  /* background: #F7F8FA; */
+  font-family: "Playfair Display", Georgia, serif;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh
+}
+
+/* ─ PAGE WRAPPER ─ */
+.vita-home-page .pg {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0px 0;
+  /* gap: 30px; */
+}
+
+.vita-home-page .vh-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  width: 100%
+}
+
+.vita-home-page .vh-container>* {
+  overflow: hidden;
+}
+
+/* TAB CONTENT */
+.vita-home-page .tab-content {
+  display: none
+}
+
+.vita-home-page .tab-content.active {
+  display: block;
+  animation: vh-fade-in .35s ease
+}
+
+@keyframes vh-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+/* TIPS TICKER */
+.vita-home-page .ticker {
+  height: 48px;
+  background: #1e6e3a14;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative
+}
+
+.vita-home-page .tick-lbl {
+  flex-shrink: 0;
+  padding: 0 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #86EFAC;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid rgba(255, 255, 255, .15);
+  height: 100%;
+  white-space: nowrap;
+  background: #1E6E3A;
+  position: relative;
+  z-index: 2
+}
+
+.vita-home-page .tick-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #86EFAC
+}
+
+.vita-home-page .tick-track {
+  display: flex;
+  overflow: hidden;
+  flex: 1;
+  height: 100%;
+  position: relative
+}
+
+.vita-home-page .tick-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  animation: vh-scroll 60s linear infinite;
+  will-change: transform
+}
+
+.vita-home-page .tick-item {
+  font-size: 13px;
+  color: rgb(92 92 92);
+  padding: 0 32px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.vita-home-page .tick-item::after {
+  content: '·';
+  margin-left: 32px;
+  color: rgba(255, 255, 255, .35);
+  font-size: 18px
+}
+
+@keyframes vh-scroll {
+  0% {
+    transform: translateX(0)
+  }
+
+  100% {
+    transform: translateX(-50%)
+  }
+}
+
+/* HERO */
+.vita-home-page .hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+.vita-home-page .hero-l {
+  padding: 56px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px
+}
+
+.vita-home-page .hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0FAF4;
+  border: 1px solid #C8EDD7;
+  border-radius: 24px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #1E6E3A;
+  width: fit-content
+}
+
+.vita-home-page .hero-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3B9D5E
+}
+
+.vita-home-page .hero-h1 {
+  font-size: 54px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  color: #111827
+}
+
+.vita-home-page .hero-h1 span {
+  color: #1E6E3A
+}
+
+.vita-home-page .hero-sub {
+  font-size: 16px;
+  color: #6B7280;
+  line-height: 1.65;
+  max-width: 480px
+}
+
+.vita-home-page .hero-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap
+}
+
+.vita-home-page .ava {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #C8EDD7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1E6E3A;
+  flex-shrink: 0;
+  border: 2px solid #86EFAC
+}
+
+.vita-home-page .ava-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px
+}
+
+.vita-home-page .ava-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827
+}
+
+.vita-home-page .ava-cred {
+  font-size: 12px;
+  color: #6B7280
+}
+
+.vita-home-page .verified-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #F0FAF4;
+  border: 1px solid #C8EDD7;
+  border-radius: 24px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1E6E3A
+}
+
+.vita-home-page .hero-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap
+}
+
+.vita-home-page .h-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6B7280;
+  background: #F9FAFB;
+  border: 1px solid rgba(17, 24, 39, .1);
+  border-radius: 24px;
+  padding: 6px 14px;
+  font-weight: 500
+}
+
+.vita-home-page .hero-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px
+}
+
+.vita-home-page .btn-p {
+  background: #1E6E3A;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 26px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all .18s;
+  border: none;
+  font-family: inherit
+}
+
+.vita-home-page .btn-p:hover {
+  background: #175A2F
+}
+
+.vita-home-page .btn-s {
+  border: 2px solid #1E6E3A;
+  color: #1E6E3A;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all .18s;
+  background: transparent;
+  font-family: inherit
+}
+
+.vita-home-page .btn-s:hover {
+  background: #F0FAF4
+}
+
+.vita-home-page .hero-r {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 18px;
+  background: #F0FAF4;
+}
+
+.vita-home-page .hero-img-circle {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: #C8EDD7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 110px;
+  border: 4px solid #86EFAC;
+  box-shadow: 0 8px 32px rgba(30, 110, 58, .15)
+}
+
+.vita-home-page .stat-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+}
+
+.vita-home-page .stat-card {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px
+}
+
+.vita-home-page .stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px
+}
+
+.vita-home-page .si-grn {
+  background: #F0FAF4;
+  color: #1E6E3A
+}
+
+.vita-home-page .si-blue {
+  background: #EFF6FF;
+  color: #3B82F6
+}
+
+.vita-home-page .si-coral {
+  background: #FFF1F2;
+  color: #F43F5E
+}
+
+.vita-home-page .si-amber {
+  background: #FFFBEB;
+  color: #F59E0B
+}
+
+.vita-home-page .stat-val {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1
+}
+
+.vita-home-page .stat-label {
+  font-size: 11px;
+  color: #9CA3AF;
+  letter-spacing: .04em;
+  margin-top: 3px
+}
+
+.vita-home-page .hero-tip-float {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  width: 95%;
+  display: flex;
+  align-items: center;
+  gap: 14px
+}
+
+.vita-home-page .tip-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F0FAF4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0
+}
+
+.vita-home-page .tip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #3B9D5E;
+  margin-bottom: 3px
+}
+
+.vita-home-page .tip-text {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500
+}
+
+/* SECTION TITLE BAR */
+.vita-home-page .sec-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 14px
+}
+
+.vita-home-page .sec-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -.01em
+}
+
+.vita-home-page .sec-more {
+  font-size: 13px;
+  color: #3B9D5E;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer
+}
+
+.vita-home-page .sec-more:hover {
+  color: #1E6E3A
+}
+
+/* FEATURE STRIP */
+.vita-home-page .feat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(17, 24, 39, .08);
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  background: #F9FAFB;
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .feat {
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  cursor: pointer;
+  transition: background .18s
+}
+
+.vita-home-page .feat:last-child {
+  border-right: none
+}
+
+.vita-home-page .feat:hover {
+  background: #fff
+}
+
+.vita-home-page .feat.hl {
+  background: #1E6E3A
+}
+
+.vita-home-page .feat.hl:hover {
+  background: #175A2F
+}
+
+.vita-home-page .feat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px
+}
+
+.vita-home-page .fi-g {
+  background: #F0FAF4;
+  color: #1E6E3A
+}
+
+.vita-home-page .fi-b {
+  background: #EFF6FF;
+  color: #3B82F6
+}
+
+.vita-home-page .fi-p {
+  background: #F5F3FF;
+  color: #8B5CF6
+}
+
+.vita-home-page .fi-a {
+  background: #FFFBEB;
+  color: #F59E0B
+}
+
+.vita-home-page .feat.hl .feat-icon {
+  background: rgba(255, 255, 255, .15);
+  color: #fff
+}
+
+.vita-home-page .feat-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -.01em
+}
+
+.vita-home-page .feat.hl .feat-label {
+  color: #fff
+}
+
+.vita-home-page .feat-desc {
+  font-size: 12px;
+  color: #9CA3AF;
+  line-height: 1.55
+}
+
+.vita-home-page .feat.hl .feat-desc {
+  color: rgba(255, 255, 255, .7)
+}
+
+.vita-home-page .feat-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3B9D5E;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto
+}
+
+.vita-home-page .feat.hl .feat-link {
+  color: #86EFAC
+}
+
+.vita-home-page .live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #FEE2E2;
+  border-radius: 24px;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #B91C1C;
+  letter-spacing: .06em;
+  width: fit-content
+}
+
+.vita-home-page .live-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #EF4444;
+  display: block
+}
+
+/* CATEGORY ROW (TABS) */
+.vita-home-page .cat-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px 10px 0px 0px;
+  margin: 0 0 0px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .cat {
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  cursor: pointer;
+  transition: background .18s;
+  user-select: none;
+  background: transparent;
+  border-top: none;
+  border-left: none
+}
+
+.vita-home-page .cat:last-child {
+  border-right: none
+}
+
+.vita-home-page .cat:hover {
+  background: #F0FAF4
+}
+
+.vita-home-page .cat.on {
+  background: #F0FAF4;
+  border-bottom: 3px solid #1E6E3A
+}
+
+.vita-home-page .cat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px
+}
+
+.vita-home-page .cat-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827
+}
+
+.vita-home-page .cat-sub {
+  font-size: 11px;
+  color: #9CA3AF
+}
+
+/* ARTICLES + SIDEBAR */
+.vita-home-page .main-cols {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 0;
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 0px 0 10px 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-top: 0;
+}
+
+.vita-home-page .articles-col {
+  border-right: 1px solid rgba(17, 24, 39, .08)
+}
+
+.vita-home-page .art-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0
+}
+
+.vita-home-page .acard {
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  cursor: pointer;
+  transition: background .18s
+}
+
+.vita-home-page .acard:nth-child(2n) {
+  border-right: none
+}
+
+.vita-home-page .acard:nth-last-child(-n+2) {
+  border-bottom: none
+}
+
+.vita-home-page .acard:hover {
+  background: #F9FAFB
+}
+
+.vita-home-page .acard-img {
+  height: 120px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px
+}
+
+.vita-home-page .ai-grn {
+  background: #F0FAF4
+}
+
+.vita-home-page .ai-blue {
+  background: #EFF6FF
+}
+
+.vita-home-page .ai-amber {
+  background: #FFFBEB
+}
+
+.vita-home-page .ai-coral {
+  background: #FFF1F2
+}
+
+.vita-home-page .ai-purple {
+  background: #F5F3FF
+}
+
+.vita-home-page .ai-teal {
+  background: #F0FDFA
+}
+
+.vita-home-page .tag-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 24px;
+  width: fit-content
+}
+
+.vita-home-page .tp-grn {
+  background: #F0FAF4;
+  color: #1E6E3A
+}
+
+.vita-home-page .tp-blue {
+  background: #EFF6FF;
+  color: #1E40AF
+}
+
+.vita-home-page .tp-amber {
+  background: #FFFBEB;
+  color: #92400E
+}
+
+.vita-home-page .tp-coral {
+  background: #FFF1F2;
+  color: #9F1239
+}
+
+.vita-home-page .tp-purple {
+  background: #F5F3FF;
+  color: #4C1D95
+}
+
+.vita-home-page .tp-teal {
+  background: #F0FDFA;
+  color: #134E4A
+}
+
+.vita-home-page .acard-h {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.35;
+  letter-spacing: -.01em
+}
+
+.vita-home-page .acard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(17, 24, 39, .06)
+}
+
+.vita-home-page .acard-auth {
+  font-size: 12px;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 500
+}
+
+.vita-home-page .auth-av {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #C8EDD7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #1E6E3A
+}
+
+.vita-home-page .acard-rt {
+  font-size: 11px;
+  background: #F0FAF4;
+  border-radius: 24px;
+  padding: 3px 10px;
+  font-weight: 600;
+  color: #3B9D5E
+}
+
+/* SIDEBAR */
+.vita-home-page .sidebar {
+  padding: 0
+}
+
+.vita-home-page .trend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(17, 24, 39, .06);
+  cursor: pointer;
+  transition: background .18s
+}
+
+.vita-home-page .trend-item:last-child {
+  border-bottom: none
+}
+
+.vita-home-page .trend-item:hover {
+  background: #F9FAFB
+}
+
+.vita-home-page .trend-num {
+  font-size: 22px;
+  font-weight: 900;
+  color: #C8EDD7;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 26px
+}
+
+.vita-home-page .trend-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px
+}
+
+.vita-home-page .trend-h {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  margin-bottom: 4px
+}
+
+.vita-home-page .trend-t {
+  font-size: 11px;
+  color: #9CA3AF
+}
+
+/* PODCAST */
+.vita-home-page .pod-section {
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .pod-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0
+}
+
+.vita-home-page .pod-card {
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  padding: 20px 22px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  cursor: pointer;
+  transition: background .18s
+}
+
+.vita-home-page .pod-card:last-child {
+  border-right: none
+}
+
+.vita-home-page .pod-card:hover {
+  background: #F9FAFB
+}
+
+.vita-home-page .pod-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  border: 1px solid rgba(17, 24, 39, .08)
+}
+
+.vita-home-page .pt-g {
+  background: #F0FAF4
+}
+
+.vita-home-page .pt-b {
+  background: #EFF6FF
+}
+
+.vita-home-page .pt-p {
+  background: #F5F3FF
+}
+
+.vita-home-page .pod-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px
+}
+
+.vita-home-page .pod-ep {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9CA3AF
+}
+
+.vita-home-page .pod-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35
+}
+
+.vita-home-page .pod-dur {
+  font-size: 12px;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px
+}
+
+.vita-home-page .pod-play {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #F0FAF4;
+  border: 2px solid #C8EDD7;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .18s
+}
+
+.vita-home-page .pod-play:hover {
+  background: #C8EDD7
+}
+
+.vita-home-page .play-tri {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent #1E6E3A;
+  margin-left: 3px
+}
+
+/* VIDEO */
+.vita-home-page .vid-section {
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .vid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0
+}
+
+.vita-home-page .vid-card {
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  cursor: pointer;
+  transition: background .18s;
+  overflow: hidden
+}
+
+.vita-home-page .vid-card:last-child {
+  border-right: none
+}
+
+.vita-home-page .vid-card:hover {
+  background: #F9FAFB
+}
+
+.vita-home-page .vid-thumb {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 34px
+}
+
+.vita-home-page .vt-g {
+  background: #F0FAF4
+}
+
+.vita-home-page .vt-b {
+  background: #EFF6FF
+}
+
+.vita-home-page .vt-a {
+  background: #FFFBEB
+}
+
+.vita-home-page .vt-c {
+  background: #FFF1F2
+}
+
+.vita-home-page .vid-dur {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(17, 24, 39, .75);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  padding: 3px 7px
+}
+
+.vita-home-page .vid-info {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px
+}
+
+.vita-home-page .vid-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9CA3AF
+}
+
+.vita-home-page .vid-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35
+}
+
+.vita-home-page .vid-views {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-top: 2px
+}
+
+/* AI + QUIZ */
+.vita-home-page .tools-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+/* AI Chat */
+.vita-home-page .ai-panel {
+  padding: 26px 24px;
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.vita-home-page .ai-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.vita-home-page .ai-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.vita-home-page .ai-orb {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #1E6E3A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px
+}
+
+.vita-home-page .ai-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827
+}
+
+.vita-home-page .ai-sub {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-top: 2px
+}
+
+.vita-home-page .ai-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #F0FAF4;
+  color: #1E6E3A;
+  border-radius: 24px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px
+}
+
+.vita-home-page .ai-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3B9D5E;
+  display: block
+}
+
+.vita-home-page .ai-msgs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto
+}
+
+.vita-home-page .msg {
+  max-width: 88%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.55
+}
+
+.vita-home-page .msg.bot {
+  background: #F3F4F6;
+  color: #374151;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start
+}
+
+.vita-home-page .msg.user {
+  background: #1E6E3A;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  align-self: flex-end
+}
+
+.vita-home-page .msg-cite {
+  font-size: 11px;
+  color: #3B9D5E;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px
+}
+
+.vita-home-page .ai-sugs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap
+}
+
+.vita-home-page .ai-sug {
+  font-size: 12px;
+  color: #374151;
+  background: #F3F4F6;
+  border-radius: 24px;
+  padding: 7px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .15s
+}
+
+.vita-home-page .ai-sug:hover {
+  background: #F0FAF4;
+  color: #1E6E3A;
+  border-color: #C8EDD7
+}
+
+.vita-home-page .ai-input-row {
+  display: flex;
+  background: #F9FAFB;
+  border: 1px solid rgba(17, 24, 39, .12);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color .18s
+}
+
+.vita-home-page .ai-input-row:focus-within {
+  border-color: #1E6E3A;
+  background: #fff
+}
+
+.vita-home-page .ai-inp {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #111827;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  min-width: 0
+}
+
+.vita-home-page .ai-inp::placeholder {
+  color: #9CA3AF
+}
+
+.vita-home-page .ai-send-btn {
+  background: #1E6E3A;
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .04em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: none;
+  font-family: inherit;
+  transition: background .18s
+}
+
+.vita-home-page .ai-send-btn:hover {
+  background: #175A2F
+}
+
+/* Quiz */
+.vita-home-page .quiz-panel {
+  padding: 26px 24px;
+  background: #F9FAFB;
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.vita-home-page .quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.vita-home-page .quiz-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.vita-home-page .quiz-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #F5F3FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px
+}
+
+.vita-home-page .quiz-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827
+}
+
+.vita-home-page .quiz-sub {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-top: 2px
+}
+
+.vita-home-page .quiz-prog-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px
+}
+
+.vita-home-page .quiz-dots {
+  display: flex;
+  gap: 5px
+}
+
+.vita-home-page .qd {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E5E7EB
+}
+
+.vita-home-page .qd.on {
+  background: #8B5CF6
+}
+
+.vita-home-page .qd.done {
+  background: #C4B5FD
+}
+
+.vita-home-page .q-step-lbl {
+  font-size: 11px;
+  color: #9CA3AF;
+  letter-spacing: .06em;
+  font-weight: 600
+}
+
+.vita-home-page .quiz-q {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -.01em;
+  line-height: 1.35
+}
+
+.vita-home-page .quiz-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.vita-home-page .qopt {
+  padding: 13px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all .18s
+}
+
+.vita-home-page .qopt:not(.sel) {
+  background: #fff;
+  border-color: rgba(17, 24, 39, .1);
+  color: #374151
+}
+
+.vita-home-page .qopt:not(.sel):hover {
+  border-color: #C4B5FD;
+  background: #F5F3FF
+}
+
+.vita-home-page .qopt.sel {
+  background: #F5F3FF;
+  border-color: #8B5CF6;
+  color: #4C1D95
+}
+
+.vita-home-page .qopt-ltr {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0
+}
+
+.vita-home-page .qopt:not(.sel) .qopt-ltr {
+  background: #F3F4F6;
+  color: #6B7280
+}
+
+.vita-home-page .qopt.sel .qopt-ltr {
+  background: #8B5CF6;
+  color: #fff
+}
+
+.vita-home-page .quiz-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap
+}
+
+.vita-home-page .quiz-step-txt {
+  font-size: 12px;
+  color: #9CA3AF
+}
+
+.vita-home-page .quiz-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center
+}
+
+.vita-home-page .quiz-btn {
+  background: #8B5CF6;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: 10px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px
+}
+
+.vita-home-page .quiz-btn:hover {
+  background: #7C3AED
+}
+
+.vita-home-page .quiz-btn.quiz-prev {
+  background: #fff;
+  color: #6D28D9;
+  border: 1.5px solid #C4B5FD;
+  padding: 9.5px 18px
+}
+
+.vita-home-page .quiz-btn.quiz-prev:hover {
+  background: #F5F3FF;
+  border-color: #8B5CF6
+}
+
+.vita-home-page .quiz-btn.quiz-submit {
+  background: #1E6E3A
+}
+
+.vita-home-page .quiz-btn.quiz-submit:hover {
+  background: #175A2F
+}
+
+.vita-home-page .quiz-btn[disabled] {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none
+}
+
+.vita-home-page .quiz-question {
+  display: none;
+  flex-direction: column;
+  gap: 14px
+}
+
+.vita-home-page .quiz-question.active {
+  display: flex;
+  animation: vh-quiz-fade .3s ease
+}
+
+@keyframes vh-quiz-fade {
+  from {
+    opacity: 0;
+    transform: translateX(10px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0)
+  }
+}
+
+/* VITAL SCORE + TRUTH CHECK */
+.vita-home-page .bottom-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .vital-panel {
+  padding: 26px 24px;
+  border-right: 1px solid rgba(17, 24, 39, .08)
+}
+
+.vita-home-page .panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px
+}
+
+.vita-home-page .panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.vita-home-page .panel-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px
+}
+
+.vita-home-page .pi-teal {
+  background: #F0FDFA;
+  color: #0D9488
+}
+
+.vita-home-page .pi-coral {
+  background: #FFF1F2;
+  color: #F43F5E
+}
+
+.vita-home-page .panel-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827
+}
+
+.vita-home-page .panel-sub {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-top: 2px
+}
+
+.vita-home-page .panel-badge {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 24px;
+  padding: 4px 11px
+}
+
+.vita-home-page .pb-teal {
+  background: #F0FDFA;
+  color: #0D9488
+}
+
+.vita-home-page .pb-coral {
+  background: #FFF1F2;
+  color: #F43F5E
+}
+
+.vita-home-page .vital-content {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 16px
+}
+
+.vita-home-page .ring-wrap {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0
+}
+
+.vita-home-page .ring-svg {
+  width: 110px;
+  height: 110px;
+  transform: rotate(-90deg)
+}
+
+.vita-home-page .r-bg {
+  fill: none;
+  stroke: #F3F4F6;
+  stroke-width: 9
+}
+
+.vita-home-page .r-val {
+  fill: none;
+  stroke: #0D9488;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 266;
+  stroke-dashoffset: 67
+}
+
+.vita-home-page .ring-txt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center
+}
+
+.vita-home-page .ring-n {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1
+}
+
+.vita-home-page .ring-of {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-top: 2px
+}
+
+.vita-home-page .dims {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.vita-home-page .dim {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.vita-home-page .dim-lbl {
+  font-size: 12px;
+  color: #6B7280;
+  width: 70px;
+  flex-shrink: 0;
+  font-weight: 500
+}
+
+.vita-home-page .dim-track {
+  flex: 1;
+  height: 6px;
+  background: #F3F4F6;
+  border-radius: 3px;
+  overflow: hidden
+}
+
+.vita-home-page .dim-fill {
+  height: 100%;
+  border-radius: 3px
+}
+
+.vita-home-page .dim-v {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  width: 28px;
+  text-align: right
+}
+
+.vita-home-page .vital-cta {
+  background: #F0FDFA;
+  border: 2px solid #99F6E4;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0D9488;
+  text-align: center;
+  cursor: pointer
+}
+
+/* Truth check */
+.vita-home-page .truth-panel {
+  padding: 26px 24px;
+  background: #FAFAFA
+}
+
+.vita-home-page .claims {
+  display: flex;
+  flex-direction: column;
+  gap: 9px
+}
+
+.vita-home-page .claim {
+  padding: 13px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer
+}
+
+.vita-home-page .claim.myth {
+  background: #FFF1F2;
+  border: 1px solid #FECDD3
+}
+
+.vita-home-page .claim.fact {
+  background: #F0FAF4;
+  border: 1px solid #C8EDD7
+}
+
+.vita-home-page .claim.mixed {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A
+}
+
+.vita-home-page .verdict {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 24px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px
+}
+
+.vita-home-page .v-myth {
+  background: #FECDD3;
+  color: #9F1239
+}
+
+.vita-home-page .v-fact {
+  background: #C8EDD7;
+  color: #1E6E3A
+}
+
+.vita-home-page .v-mixed {
+  background: #FDE68A;
+  color: #92400E
+}
+
+.vita-home-page .claim-txt {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.55
+}
+
+/* EXPERTS */
+.vita-home-page .experts-section {
+  border-bottom: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 10px;
+  margin: 0 0 50px;
+  border: 1px solid rgba(17, 24, 39, .08);
+}
+
+.vita-home-page .experts-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0
+}
+
+.vita-home-page .expert-card {
+  border-right: 1px solid rgba(17, 24, 39, .08);
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: background .18s
+}
+
+.vita-home-page .expert-card:last-child {
+  border-right: none
+}
+
+.vita-home-page .expert-card:hover {
+  background: #F9FAFB
+}
+
+.vita-home-page .exp-ava {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  border: 2px solid #C8EDD7
+}
+
+.vita-home-page .exp-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827
+}
+
+.vita-home-page .exp-role {
+  font-size: 12px;
+  color: #9CA3AF
+}
+
+.vita-home-page .exp-article {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.45
+}
+
+.vita-home-page .exp-link {
+  font-size: 12px;
+  color: #3B9D5E;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto
+}
+
+/* INDIA BAND */
+.vita-home-page .india-band {
+  background: #0F3D1F;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr;
+  border-radius: 10px;
+}
+
+.vita-home-page .idiv {
+  background: rgba(255, 255, 255, .1)
+}
+
+.vita-home-page .india-card {
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
+
+.vita-home-page .i-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #86EFAC;
+  display: flex;
+  align-items: center;
+  gap: 8px
+}
+
+.vita-home-page .i-tag::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: #86EFAC;
+  display: block
+}
+
+.vita-home-page .i-h {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.35;
+  letter-spacing: -.01em
+}
+
+.vita-home-page .i-body {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .65);
+  line-height: 1.65
+}
+
+.vita-home-page .i-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #86EFAC;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  cursor: pointer
+}
+
+.vita-home-page .i-link::after {
+  content: '→'
+}
+
+/* NEWSLETTER */
+.vita-home-page .nl-band {
+  background: #F0FAF4;
+  border-top: 1px solid #C8EDD7;
+  border-bottom: 1px solid #C8EDD7;
+  padding: 50px 36px;
+  margin-top: 50px;
+}
+
+.vita-home-page .nl-band .vh-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center
+}
+
+.vita-home-page .nl-l {
+  display: flex;
+  flex-direction: column;
+  gap: 12px
+}
+
+.vita-home-page .nl-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #3B9D5E
+}
+
+.vita-home-page .nl-h {
+  font-size: 32px;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.15;
+  letter-spacing: -.02em
+}
+
+.vita-home-page .nl-h span {
+  color: #1E6E3A
+}
+
+.vita-home-page .nl-sub {
+  font-size: 14px;
+  color: #6B7280;
+  line-height: 1.65
+}
+
+.vita-home-page .nl-r {
+  display: flex;
+  flex-direction: column;
+  gap: 12px
+}
+
+.vita-home-page .nl-form {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #C8EDD7;
+  background: #fff;
+  transition: border-color .18s
+}
+
+.vita-home-page .nl-form:focus-within {
+  border-color: #1E6E3A
+}
+
+.vita-home-page .nl-inp {
+  flex: 1;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #111827;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  min-width: 0
+}
+
+.vita-home-page .nl-inp::placeholder {
+  color: #9CA3AF
+}
+
+.vita-home-page .nl-btn {
+  background: #1E6E3A;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 26px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .18s;
+  border: none;
+  font-family: inherit
+}
+
+.vita-home-page .nl-btn:hover {
+  background: #175A2F
+}
+
+.vita-home-page .nl-btn.subscribed {
+  background: #0F3D1F
+}
+
+.vita-home-page .nl-trust {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap
+}
+
+.vita-home-page .nl-trust-item {
+  font-size: 12px;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500
+}
+
+.vita-home-page .nl-trust-item::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3B9D5E;
+  display: block
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .vita-home-page .hero {
+    grid-template-columns: 1fr
+  }
+
+  .vita-home-page .hero-h1 {
+    font-size: 42px
+  }
+
+  .vita-home-page .main-cols {
+    grid-template-columns: 1fr
+  }
+
+  .vita-home-page .articles-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(17, 24, 39, .08)
+  }
+
+  .vita-home-page .feat-strip,
+  .vita-home-page .cat-row,
+  .vita-home-page .vid-row,
+  .vita-home-page .experts-row {
+    grid-template-columns: repeat(2, 1fr)
+  }
+
+  .vita-home-page .feat,
+  .vita-home-page .cat,
+  .vita-home-page .vid-card,
+  .vita-home-page .expert-card {
+    border-bottom: 1px solid rgba(17, 24, 39, .08)
+  }
+
+  .vita-home-page .pod-row,
+  .vita-home-page .tools-cols,
+  .vita-home-page .bottom-tools,
+  .vita-home-page .india-band,
+  .vita-home-page .nl-band {
+    grid-template-columns: 1fr
+  }
+
+  .vita-home-page .ai-panel,
+  .vita-home-page .vital-panel {
+    border-right: none;
+    border-bottom: 1px solid rgba(17, 24, 39, .08)
+  }
+
+  .vita-home-page .pod-card {
+    border-right: none;
+    border-bottom: 1px solid rgba(17, 24, 39, .08)
+  }
+
+  .vita-home-page .idiv {
+    display: none
+  }
+}
+
+@media (max-width: 640px) {
+  .vita-home-page .pg {
+    padding: 16px 0
+  }
+
+  .vita-home-page .vh-container {
+    padding: 0 12px
+  }
+
+  .vita-home-page .hero-l {
+    padding: 32px 24px
+  }
+
+  .vita-home-page .hero-h1 {
+    font-size: 32px
+  }
+
+  .vita-home-page .hero-r {
+    padding: 24px
+  }
+
+  .vita-home-page .hero-img-circle {
+    width: 200px;
+    height: 200px;
+    font-size: 80px
+  }
+
+  .vita-home-page .feat-strip,
+  .vita-home-page .cat-row,
+  .vita-home-page .vid-row,
+  .vita-home-page .experts-row,
+  .vita-home-page .art-grid {
+    grid-template-columns: 1fr
+  }
+
+  .vita-home-page .acard {
+    border-right: none
+  }
+
+  .vita-home-page .sec-bar {
+    padding: 20px 18px 10px
+  }
+
+  .vita-home-page .nl-h {
+    font-size: 24px
+  }
+}

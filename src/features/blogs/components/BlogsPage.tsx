@@ -100,7 +100,7 @@ export function BlogsPage(): React.ReactNode {
           <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-green-300">
             Healthcare Blogs
           </p>
-          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-black tracking-tight">
+          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-black tracking-tight text-white">
             Vitalize Blog
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-white/70 leading-relaxed">
