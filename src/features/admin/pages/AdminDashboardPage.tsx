@@ -29,9 +29,14 @@ export function AdminDashboardPage(): React.ReactNode {
     contentType,
   })
 
-  const likes = useMemo(() => {
-    return likesQuery.data ?? []
-  }, [likesQuery.data])
+type Like = {
+  id: number
+  name: string
+}
+
+const likes = useMemo<Like[]>(() => {
+  return (likesQuery.data as Like[]) ?? []
+}, [likesQuery.data])
 
 
   const statsQuery = useAdminStats()
@@ -131,11 +136,11 @@ export function AdminDashboardPage(): React.ReactNode {
           <div className="p-5">
             <ErrorMessage message={getUserFriendlyMessage(articlesQuery.error)} />
           </div>
-         ) : articlesQuery.isLoading ? (
+        ) : articlesQuery.isLoading ? (
           <div className="px-5 py-10 text-center text-sm text-ink-3 animate-pulse">
             Loading…
           </div>
-      ) : recent.length === 0 ? (
+        ) : recent.length === 0 ? (
           <div className="px-5 py-10 text-center text-sm text-ink-3">
             No articles yet.
           </div>
@@ -177,11 +182,10 @@ export function AdminDashboardPage(): React.ReactNode {
                     </td>
                     <td className={`${TABLE_CELL_CLASS} text-right`}>
                       <span
-                        className={`inline-flex items-center gap-1.5 text-[13px] font-bold rounded-full px-3 py-1.5 border ${
-                          a.isPremium
+                        className={`inline-flex items-center gap-1.5 text-[13px] font-bold rounded-full px-3 py-1.5 border ${a.isPremium
                             ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
                             : 'bg-green-50 text-green-700 border-green-100'
-                        }`}
+                          }`}
                       >
                         <i
                           className={`${a.isPremium ? 'fa-solid fa-crown' : 'fa-solid fa-circle-check'} text-[12px]`}
@@ -251,7 +255,7 @@ export function AdminDashboardPage(): React.ReactNode {
         </div>
 
         {/* Table */}
-         {likesQuery.isError ? (
+        {likesQuery.isError ? (
           <div className="px-6 py-5 border-t border-border">
             <ErrorMessage message={getUserFriendlyMessage(likesQuery.error)} />
           </div>
@@ -310,8 +314,7 @@ export function AdminDashboardPage(): React.ReactNode {
                     <td className={TABLE_CELL_CLASS}>
                       <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-ink-2 bg-paper border border-border rounded-full px-3 py-1.5 capitalize">
                         <i
-                          className={`text-[12px] ${
-                            item.contentType === 'article'
+                          className={`text-[12px] ${item.contentType === 'article'
                               ? 'fa-solid fa-newspaper'
                               : item.contentType === 'podcast'
                                 ? 'fa-solid fa-podcast'
@@ -320,7 +323,7 @@ export function AdminDashboardPage(): React.ReactNode {
                                   : item.contentType === 'blog'
                                     ? 'fa-solid fa-blog'
                                     : 'fa-solid fa-circle-dot'
-                          }`}
+                            }`}
                           aria-hidden="true"
                         />
                         {item.contentType}
@@ -329,15 +332,15 @@ export function AdminDashboardPage(): React.ReactNode {
                     <td className={TABLE_CELL_CLASS}>
                       <span className="text-[14px] font-semibold text-ink-2">
                         <p className="text-sm text-ink-3">
-                    {new Date(item.likedAt).toLocaleString('en-IN', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })}
-                  </p>
+                          {new Date(item.likedAt).toLocaleString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}
+                        </p>
                       </span>
                     </td>
                     <td className={`${TABLE_CELL_CLASS} text-right`}>
