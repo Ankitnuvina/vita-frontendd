@@ -1033,14 +1033,14 @@
   background: #F9FAFB
 }
 
-.vita-home-page .vid-thumb {
+/* .vita-home-page .vid-thumb {
   height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   font-size: 34px
-}
+} */
 
 .vita-home-page .vt-g {
   background: #F0FAF4

@@ -424,6 +424,10 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import './HomeePage.css'
+import { LoginDialog } from '@/features/auth/components/LoginDialog'
+import { usePodcasts } from '@/features/podcasts/hooks/usePodcasts'
+import { useExperts } from '@/features/experts/hooks/useExperts'
+import { useAuthStore } from '@/store/auth.store'
 
 /* ============================================================
    STATIC DATA
@@ -488,7 +492,7 @@ interface TabContent {
 
 const TAB_CONTENT: Record<TabKey, TabContent> = {
   mind: {
-    sectionTitle: 'Latest articles',
+    sectionTitle: 'Latest in Mind',
     articles: [
       { imgClass: 'ai-blue', icon: 'ti-brain', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Mind', title: '5 Morning Habits That Improve Mental Clarity', authorInitials: 'NV', authorName: 'Dr. Neha Verma', readTime: '7 min' },
       { imgClass: 'ai-amber', icon: 'ti-salad', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Nutrition', title: 'High Protein Breakfast Ideas for Busy Mornings', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '6 min' },
@@ -597,17 +601,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   },
 }
 
-const PODCASTS = [
-  { thumbClass: 'pt-g', icon: 'ti-brain', iconColor: '#1E6E3A', ep: 'Ep 48 · Mind Architecture', title: 'The Neuroscience of Breaking Bad Habits', dur: '54 min · Dr. Nandini Rao' },
-  { thumbClass: 'pt-b', icon: 'ti-dna-2', iconColor: '#3B82F6', ep: 'Ep 47 · Longevity Lab', title: 'Metformin, NMN & The Longevity Stack', dur: '68 min · Dr. Vikram Tiwari' },
-  { thumbClass: 'pt-p', icon: 'ti-heart-rate-monitor', iconColor: '#8B5CF6', ep: 'Ep 46 · Body Intel', title: 'HRV, VO2 Max & The Metrics That Actually Matter', dur: '41 min · Arjun Shah' },
-]
 
 const VIDEOS = [
-  { thumbClass: 'vt-b', icon: 'ti-moon', iconColor: '#3B82F6', dur: '4:22', cat: 'Sleep', title: 'Why You Wake at 3am — Explained in 4 Min', views: '92k views' },
-  { thumbClass: 'vt-g', icon: 'ti-dna-2', iconColor: '#1E6E3A', dur: '6:10', cat: 'Longevity', title: "Autophagy: Your Body's Self-Clean Mode", views: '78k views' },
-  { thumbClass: 'vt-a', icon: 'ti-salad', iconColor: '#F59E0B', dur: '3:47', cat: 'Nutrition', title: '30 Plants a Week: What That Actually Means', views: '54k views' },
-  { thumbClass: 'vt-c', icon: 'ti-wind', iconColor: '#F43F5E', dur: '2:55', cat: 'Mind', title: 'Box Breathing: The 90-Second Reset', views: '41k views' },
+  { imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80', dur: '7:12', cat: 'Fitness', title: '7-Min Morning Mobility Flow for Stiff Joints', views: '48K views' },
+  { imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&q=80', dur: '6:10', cat: 'Longevity', title: "Autophagy: Your Body's Self-Clean Mode", views: '78k views' },
+  { imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80', dur: '3:47', cat: 'Nutrition', title: '30 Plants a Week: What That Actually Means', views: '54k views' },
+  { imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80', dur: '2:55', cat: 'Mind', title: 'Box Breathing: The 90-Second Reset', views: '41k views' },
 ]
 
 const VITAL_DIMS = [
@@ -625,11 +624,61 @@ const CLAIMS = [
   { type: 'mixed', verdict: 'It depends', text: 'Eating after 8pm causes weight gain — total daily calories matter most, but late eating disrupts insulin sensitivity for some people.' },
 ]
 
-const EXPERTS = [
-  { initials: 'AS', bg: '#F0FAF4', color: '#1E6E3A', name: 'Dr. Ananya Sharma', role: 'Clinical Nutritionist', article: 'The Ultimate Guide to Anti-Inflammatory Diet' },
-  { initials: 'KS', bg: '#EFF6FF', color: '#1E40AF', name: 'Dr. Kabir Singh', role: 'Sleep Specialist', article: 'Why Sleep Quality Matters More Than Hours' },
-  { initials: 'NV', bg: '#F5F3FF', color: '#4C1D95', name: 'Dr. Neha Verma', role: 'Psychologist', article: 'Managing Anxiety in High-Pressure Life' },
-  { initials: 'PR', bg: '#FFF1F2', color: '#9F1239', name: 'Physio Rohit', role: 'Physiotherapist', article: 'Desk Job Problems and Posture Fixes' },
+const STATIC_PODCASTS = [
+  {
+    id: 0,
+    ep: 'Ep 48 · Mind Architecture',
+    title: 'The Neuroscience of Breaking Bad Habits',
+    dur: '54 min',
+    guest: 'Dr. Nandini Rao',
+    thumbClass: 'pt-g',
+    imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&q=80',
+  },
+  {
+    id: 1,
+    ep: 'Ep 47 · Longevity Lab',
+    title: 'Metformin, NMN & The Longevity Stack',
+    dur: '68 min',
+    guest: 'Dr. Vikram Tiwari',
+    thumbClass: 'pt-b',
+    imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&q=80',
+  },
+  {
+    id: 2,
+    ep: 'Ep 46 · Body Intel',
+    title: 'HRV, VO2 Max & The Metrics That Actually Matter',
+    dur: '41 min',
+    guest: 'Arjun Shah',
+    thumbClass: 'pt-p',
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&q=80',
+  },
+]
+
+const STATIC_EXPERTS = [
+  {
+    id: 0, initials: 'AS', bg: '#F0FAF4', color: '#1E6E3A',
+    name: 'Dr. Ananya Sharma', role: 'Clinical Nutritionist',
+    credentials: 'PhD Nutrition · AIIMS Delhi',
+    imageUrl: 'https://thumbs.dreamstime.com/b/female-nutritionist-holding-green-apple-smiling-showing-healthy-vegetables-fruits-her-office-healthcare-diet-90856456.jpg'
+  },
+  {
+    id: 1, initials: 'KS', bg: '#EFF6FF', color: '#1E40AF',
+    name: 'Dr. Kabir Singh', role: 'Sleep Specialist',
+    credentials: 'MD Sleep Medicine · Stanford',
+    imageUrl: 'https://www.shutterstock.com/image-photo/beautiful-young-woman-closed-her-260nw-2641134949.jpg'
+  },
+  {
+    id: 2, initials: 'NV', bg: '#F5F3FF', color: '#4C1D95',
+    name: 'Dr. Neha Verma', role: 'Psychologist',
+    credentials: 'PhD Psychology · Delhi University',
+    imageUrl: 'https://thumbs.dreamstime.com/b/male-psychologist-being-ready-to-take-notes-sitting-couch-31427459.jpg'
+  },
+  {
+    id: 3, initials: 'PR', bg: '#FFF1F2', color: '#9F1239',
+    name: 'Physio Rohit', role: 'Physiotherapist',
+    credentials: 'MPT Sports · Mumbai University',
+    imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80'
+  },
 ]
 
 const INDIA_CARDS = [
@@ -709,13 +758,21 @@ const INITIAL_AI_MESSAGES: AiMessage[] = [
   { role: 'bot', text: 'Yes, but only KSM-66 extract at 300–600mg. 34 RCTs show it lowers cortisol by ~27% and improves sleep onset. Take it at night, not morning.', cite: '3 peer-reviewed sources' },
 ]
 
-const AI_SUGGESTIONS = ['Best time to work out?', 'Fix my sleep', 'Gut health basics']
+const AI_SUGGESTIONS = ['How to manage stress?', 'Best sleep tips', 'Gut health basics']
 
 /* ============================================================
    COMPONENT
    ============================================================ */
 
 export function HomePage(): React.ReactNode {
+
+  const [loginOpen, setLoginOpen] = useState(false)
+  const { data: allPodcasts } = usePodcasts()
+  const latestPodcasts = allPodcasts?.slice(0, 3) ?? []
+
+  const isLoggedIn = useAuthStore((s) => s.isAuthenticated)
+  const expertsQuery = useExperts()
+  const realExperts = (expertsQuery.data ?? []).slice(0, 4)
   /* Tabs */
   const [activeTab, setActiveTab] = useState<TabKey>('mind')
 
@@ -750,7 +807,7 @@ export function HomePage(): React.ReactNode {
     setTimeout(() => {
       setAiMessages((prev) => [
         ...prev,
-        { role: 'bot', text: 'Great question! Let me pull cited research on that and reply shortly…' },
+        { role: 'bot', text: 'Please login to continue Vita AI chat. Great question — fetching trusted research for you...' },
       ])
     }, 600)
   }
@@ -786,513 +843,613 @@ export function HomePage(): React.ReactNode {
   const question = QUIZ_QUESTIONS[currentQ - 1]
 
   return (
-    <div className="vita-home-page">
-      <div className="pg">
+    <>
+      <div className="vita-home-page">
+        <div className="pg">
 
-        {/* TIPS TICKER */}
-        <div className="">
-          <div className="ticker">
-            <div className="tick-lbl">
-              <span className="tick-dot" />
-              Daily tips
-            </div>
-            <div className="tick-track">
-              <div className="tick-content">
-                {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-                  <div className="tick-item" key={i}>{item}</div>
-                ))}
+          {/* TIPS TICKER */}
+          <div className="">
+            <div className="ticker">
+              <div className="tick-lbl">
+                <span className="tick-dot" />
+                Daily tips
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* HERO */}
-        <div className="vh-container">
-          <div className="hero">
-            <div className="hero-l">
-              <div className="hero-eyebrow">
-                <span className="hero-eyebrow-dot" />
-                Cover story · Issue 12 · May 2026
-              </div>
-              <div className="hero-h1">
-                Smarter Health<br />
-                <span>Starts Here</span>
-              </div>
-              <div className="hero-sub">
-                Science-backed wellness insights for modern Indian lifestyles. Every claim cited,
-                every author credentialled.
-              </div>
-              <div className="hero-author">
-                <div className="ava">DR</div>
-                <div className="ava-info">
-                  <span className="ava-name">Dr. Riya Menon</span>
-                  <span className="ava-cred">MD Neurology · AIIMS Delhi</span>
-                </div>
-                <div className="verified-chip">
-                  <i className="ti ti-circle-check" style={{ fontSize: 13 }} aria-hidden="true" />
-                  Expert verified
-                </div>
-              </div>
-              <div className="hero-chips">
-                <div className="h-chip"><i className="ti ti-clock" style={{ fontSize: 14 }} aria-hidden="true" />12 min read</div>
-                <div className="h-chip"><i className="ti ti-eye" style={{ fontSize: 14 }} aria-hidden="true" />48k reads</div>
-                <div className="h-chip"><i className="ti ti-flame" style={{ fontSize: 14, color: '#F43F5E' }} aria-hidden="true" />#1 this month</div>
-              </div>
-              <div className="hero-btns">
-                <button className="btn-p" type="button">Explore articles <i className="ti ti-arrow-right" style={{ fontSize: 14 }} aria-hidden="true" /></button>
-                <button className="btn-s" type="button">Start your journey</button>
-              </div>
-            </div>
-            <div className="hero-r">
-              <div className="hero-img-circle">🧘</div>
-              <div className="stat-cards-row">
-                <div className="stat-card">
-                  <div className="stat-icon si-blue"><i className="ti ti-moon" style={{ fontSize: 18 }} aria-hidden="true" /></div>
-                  <div><div className="stat-val">7h 30m</div><div className="stat-label">Good sleep</div></div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon si-grn"><i className="ti ti-run" style={{ fontSize: 18 }} aria-hidden="true" /></div>
-                  <div><div className="stat-val">7,890</div><div className="stat-label">Steps today</div></div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon si-coral"><i className="ti ti-heart-rate-monitor" style={{ fontSize: 18 }} aria-hidden="true" /></div>
-                  <div><div className="stat-val">85 bpm</div><div className="stat-label">Heart rate</div></div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon si-amber"><i className="ti ti-droplet" style={{ fontSize: 18 }} aria-hidden="true" /></div>
-                  <div><div className="stat-val">2.1 L</div><div className="stat-label">Water today</div></div>
-                </div>
-              </div>
-              <div className="hero-tip-float">
-                <div className="tip-icon"><i className="ti ti-bulb" style={{ fontSize: 18, color: '#1E6E3A' }} aria-hidden="true" /></div>
-                <div>
-                  <div className="tip-label">Daily tip</div>
-                  <div className="tip-text">Hydrate your body — stay energised</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* FEATURE STRIP */}
-        <div className="vh-container">
-          <div className="feat-strip">
-            <div className="feat">
-              <div className="feat-icon fi-g"><i className="ti ti-robot" style={{ fontSize: 22 }} aria-hidden="true" /></div>
-              <div className="feat-label">Vita AI</div>
-              <div className="feat-desc">Ask anything about your health — cited answers, no hallucinations.</div>
-              <div className="feat-link">Chat now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="feat">
-              <div className="feat-icon fi-a"><i className="ti ti-microphone" style={{ fontSize: 22 }} aria-hidden="true" /></div>
-              <div className="live-dot">Live</div>
-              <div className="feat-label">Podcast</div>
-              <div className="feat-desc">Deep conversations with doctors, scientists & founders.</div>
-              <div className="feat-link">Listen now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="feat">
-              <div className="feat-icon fi-b"><i className="ti ti-player-play" style={{ fontSize: 22 }} aria-hidden="true" /></div>
-              <div className="feat-label">Videos</div>
-              <div className="feat-desc">Short expert explainers, protocols and breakdowns.</div>
-              <div className="feat-link">Watch now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="feat hl">
-              <div className="feat-icon"><i className="ti ti-chart-radar" style={{ fontSize: 22 }} aria-hidden="true" /></div>
-              <div className="feat-label">Vital Score Quiz</div>
-              <div className="feat-desc">Monthly wellness assessment across 6 health dimensions.</div>
-              <div className="feat-link">Take the test <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-          </div>
-        </div>
-
-        {/* CATEGORY ROW (TABS) */}
-        <div className="vh-container">
-          <div className="cat-row">
-            {TABS.map((tab) => (
-              <button
-                type="button"
-                key={tab.key}
-                className={`cat${activeTab === tab.key ? ' on' : ''}`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                <div className="cat-icon" style={{ background: tab.iconBg }}>
-                  <i className={`ti ${tab.icon}`} style={{ fontSize: 22, color: tab.iconColor }} aria-hidden="true" />
-                </div>
-                <div className="cat-name">{tab.name}</div>
-                <div className="cat-sub">{tab.sub}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ARTICLES + TRENDING (TAB CONTENT) */}
-        <div className="vh-container">
-          <div className="main-cols">
-            <div className="articles-col">
-              <div className="sec-bar">
-                <div className="sec-title">{content.sectionTitle}</div>
-                <div className="sec-more">View all <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-              </div>
-              <div className="art-grid">
-                {content.articles.map((a, i) => (
-                  <div className="acard" key={`${activeTab}-art-${i}`}>
-                    <div className={`acard-img ${a.imgClass}`}>
-                      <i className={`ti ${a.icon}`} style={{ fontSize: 38, color: a.iconColor }} aria-hidden="true" />
-                    </div>
-                    <div className={`tag-pill ${a.tagClass}`}>{a.tagLabel}</div>
-                    <div className="acard-h">{a.title}</div>
-                    <div className="acard-foot">
-                      <div className="acard-auth">
-                        <div className="auth-av">{a.authorInitials}</div>
-                        {a.authorName}
-                      </div>
-                      <div className="acard-rt">{a.readTime}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="sidebar">
-              <div className="sec-bar" style={{ paddingBottom: 8 }}>
-                <div className="sec-title">Trending now</div>
-              </div>
-              {content.trending.map((t, i) => (
-                <div className="trend-item" key={`${activeTab}-tr-${i}`}>
-                  <div className="trend-num">{i + 1}</div>
-                  <div className={`trend-img ${t.imgClass}`}>
-                    <i className={`ti ${t.icon}`} style={{ fontSize: 22, color: t.iconColor }} aria-hidden="true" />
-                  </div>
-                  <div>
-                    <div className="trend-h">{t.title}</div>
-                    <div className="trend-t">{t.readTime}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* PODCAST */}
-        <div className="vh-container">
-          <div className="pod-section">
-            <div className="sec-bar">
-              <div className="sec-title">Podcast</div>
-              <div className="sec-more">All episodes <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="pod-row">
-              {PODCASTS.map((p, i) => (
-                <div className="pod-card" key={i}>
-                  <div className={`pod-thumb ${p.thumbClass}`}>
-                    <i className={`ti ${p.icon}`} style={{ fontSize: 26, color: p.iconColor }} aria-hidden="true" />
-                  </div>
-                  <div className="pod-meta">
-                    <div className="pod-ep">{p.ep}</div>
-                    <div className="pod-title">{p.title}</div>
-                    <div className="pod-dur">
-                      <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
-                      {p.dur}
-                    </div>
-                  </div>
-                  <div className="pod-play"><div className="play-tri" /></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* VIDEOS */}
-        <div className="vh-container">
-          <div className="vid-section">
-            <div className="sec-bar">
-              <div className="sec-title">Videos</div>
-              <div className="sec-more">All videos <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="vid-row">
-              {VIDEOS.map((v, i) => (
-                <div className="vid-card" key={i}>
-                  <div className={`vid-thumb ${v.thumbClass}`}>
-                    <i className={`ti ${v.icon}`} style={{ fontSize: 34, color: v.iconColor }} aria-hidden="true" />
-                    <div className="vid-dur">{v.dur}</div>
-                  </div>
-                  <div className="vid-info">
-                    <div className="vid-cat">{v.cat}</div>
-                    <div className="vid-title">{v.title}</div>
-                    <div className="vid-views">{v.views}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* AI CHAT + QUIZ */}
-        <div className="vh-container">
-          <div className="tools-cols">
-            {/* AI CHAT */}
-            <div className="ai-panel">
-              <div className="ai-head">
-                <div className="ai-title-row">
-                  <div className="ai-orb"><i className="ti ti-robot" style={{ fontSize: 19, color: '#fff' }} aria-hidden="true" /></div>
-                  <div>
-                    <div className="ai-name">Vita AI</div>
-                    <div className="ai-sub">Ask anything about your health</div>
-                  </div>
-                </div>
-                <div className="ai-badge">Online</div>
-              </div>
-              <div className="ai-msgs" ref={aiMsgsRef}>
-                {aiMessages.map((m, i) => (
-                  <div className={`msg ${m.role}`} key={i}>
-                    {m.text}
-                    {m.cite && (
-                      <div className="msg-cite">
-                        <i className="ti ti-link" style={{ fontSize: 12 }} aria-hidden="true" />
-                        {m.cite}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="ai-sugs">
-                {AI_SUGGESTIONS.map((s) => (
-                  <button
-                    type="button"
-                    className="ai-sug"
-                    key={s}
-                    onClick={() => setAiInput(s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-              <form className="ai-input-row" onSubmit={handleAiSubmit}>
-                <input
-                  type="text"
-                  className="ai-inp"
-                  value={aiInput}
-                  onChange={(e) => setAiInput(e.target.value)}
-                  placeholder="Ask Vita AI anything..."
-                  autoComplete="off"
-                />
-                <button type="submit" className="ai-send-btn">Send</button>
-              </form>
-            </div>
-
-            {/* QUIZ */}
-            <div className="quiz-panel">
-              <div className="quiz-head">
-                <div className="quiz-title-row">
-                  <div className="quiz-icon-box">
-                    <i className="ti ti-chart-radar" style={{ fontSize: 19, color: '#8B5CF6' }} aria-hidden="true" />
-                  </div>
-                  <div>
-                    <div className="quiz-name">Vital Score Quiz</div>
-                    <div className="quiz-sub">Find your wellness gaps in 90 sec</div>
-                  </div>
-                </div>
-              </div>
-              <div className="quiz-prog-wrap">
-                <div className="quiz-dots">
-                  {Array.from({ length: totalQuestions }).map((_, i) => {
-                    const step = i + 1
-                    const cls = step < currentQ ? 'qd done' : step === currentQ ? 'qd on' : 'qd'
-                    return <div className={cls} key={i} />
-                  })}
-                </div>
-                <span className="q-step-lbl">Question {currentQ} of {totalQuestions}</span>
-              </div>
-
-              <div className="quiz-question active" key={currentQ}>
-                <div className="quiz-q">{question.q}</div>
-                <div className="quiz-opts">
-                  {question.opts.map((opt) => (
-                    <div
-                      key={opt.value}
-                      className={`qopt${currentAnswer === opt.value ? ' sel' : ''}`}
-                      onClick={() => handleSelectOption(opt.value)}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          handleSelectOption(opt.value)
-                        }
-                      }}
-                    >
-                      <div className="qopt-ltr">{opt.value}</div>
-                      {opt.label}
-                    </div>
+              <div className="tick-track">
+                <div className="tick-content">
+                  {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+                    <div className="tick-item" key={i}>{item}</div>
                   ))}
                 </div>
               </div>
-
-              <div className="quiz-footer">
-                <div className="quiz-step-txt">No sign-up required</div>
-                <div className="quiz-actions">
-                  {currentQ > 1 && (
-                    <button type="button" className="quiz-btn quiz-prev" onClick={handlePrev}>
-                      ← Previous
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    className={`quiz-btn quiz-next${isLastQ ? ' quiz-submit' : ''}`}
-                    onClick={handleNext}
-                    disabled={!currentAnswer}
-                  >
-                    {isLastQ ? 'Submit ✓' : 'Next question →'}
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
 
-        {/* VITAL SCORE + TRUTH CHECK */}
-        <div className="vh-container">
-          <div className="bottom-tools">
-            <div className="vital-panel">
-              <div className="panel-head">
-                <div className="panel-title-row">
-                  <div className="panel-icon pi-teal"><i className="ti ti-activity" style={{ fontSize: 19 }} aria-hidden="true" /></div>
+          {/* HERO */}
+          <div className="vh-container">
+            <div className="hero">
+              <div className="hero-l">
+                <div className="hero-eyebrow">
+                  <span className="hero-eyebrow-dot" />
+                  Cover story · Issue 12 · May 2026
+                </div>
+                <div className="hero-h1">
+                  Smarter Health<br />
+                  <span>Starts Here</span>
+                </div>
+                <div className="hero-sub">
+                  Science-backed wellness insights for modern Indian lifestyles. Every claim cited,
+                  every author credentialled.
+                </div>
+                <div className="hero-author">
+                  <div className="ava">DR</div>
+                  <div className="ava-info">
+                    <span className="ava-name">Dr. Riya Menon</span>
+                    <span className="ava-cred">MD Neurology · AIIMS Delhi</span>
+                  </div>
+                  <div className="verified-chip">
+                    <i className="ti ti-circle-check" style={{ fontSize: 13 }} aria-hidden="true" />
+                    Expert verified
+                  </div>
+                </div>
+                <div className="hero-chips">
+                  <div className="h-chip"><i className="ti ti-clock" style={{ fontSize: 14 }} aria-hidden="true" />12 min read</div>
+                  <div className="h-chip"><i className="ti ti-eye" style={{ fontSize: 14 }} aria-hidden="true" />48k reads</div>
+                  <div className="h-chip"><i className="ti ti-flame" style={{ fontSize: 14, color: '#F43F5E' }} aria-hidden="true" />#1 this month</div>
+                </div>
+                <div className="hero-btns">
+                  <button className="btn-p" type="button" onClick={() => window.location.href = "/articles"}>Explore articles <i className="ti ti-arrow-right" style={{ fontSize: 14 }} aria-hidden="true" /></button>
+                  <button className="btn-s" type="button" onClick={() => setLoginOpen(true)}>Start your journey</button>
+
+                </div>
+              </div>
+              <div className="hero-r">
+                <div className="hero-img-circle">🧘</div>
+                <div className="stat-cards-row">
+                  <div className="stat-card">
+                    <div className="stat-icon si-blue"><i className="ti ti-moon" style={{ fontSize: 18 }} aria-hidden="true" /></div>
+                    <div><div className="stat-val">7h 30m</div><div className="stat-label">Good sleep</div></div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon si-grn"><i className="ti ti-run" style={{ fontSize: 18 }} aria-hidden="true" /></div>
+                    <div><div className="stat-val">7,890</div><div className="stat-label">Steps today</div></div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon si-coral"><i className="ti ti-heart-rate-monitor" style={{ fontSize: 18 }} aria-hidden="true" /></div>
+                    <div><div className="stat-val">85 bpm</div><div className="stat-label">Heart rate</div></div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon si-amber"><i className="ti ti-droplet" style={{ fontSize: 18 }} aria-hidden="true" /></div>
+                    <div><div className="stat-val">2.1 L</div><div className="stat-label">Water today</div></div>
+                  </div>
+                </div>
+                <div className="hero-tip-float">
+                  <div className="tip-icon"><i className="ti ti-bulb" style={{ fontSize: 18, color: '#1E6E3A' }} aria-hidden="true" /></div>
                   <div>
-                    <div className="panel-name">Your Vital Score</div>
-                    <div className="panel-sub">Monthly wellness check-in across 6 dimensions</div>
+                    <div className="tip-label">Daily tip</div>
+                    <div className="tip-text">Hydrate your body — stay energised</div>
                   </div>
                 </div>
-                <div className="panel-badge pb-teal">May 2026</div>
-              </div>
-              <div className="vital-content">
-                <div className="ring-wrap">
-                  <svg className="ring-svg" viewBox="0 0 110 110">
-                    <circle className="r-bg" cx="55" cy="55" r="42.5" />
-                    <circle className="r-val" cx="55" cy="55" r="42.5" />
-                  </svg>
-                  <div className="ring-txt">
-                    <div className="ring-n">74</div>
-                    <div className="ring-of">/100</div>
-                  </div>
-                </div>
-                <div className="dims">
-                  {VITAL_DIMS.map((d) => (
-                    <div className="dim" key={d.label}>
-                      <div className="dim-lbl">{d.label}</div>
-                      <div className="dim-track">
-                        <div className="dim-fill" style={{ width: `${d.pct}%`, background: d.color }} />
-                      </div>
-                      <div className="dim-v">{d.pct}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="vital-cta">Retake monthly check-in →</div>
-            </div>
-            <div className="truth-panel">
-              <div className="panel-head">
-                <div className="panel-title-row">
-                  <div className="panel-icon pi-coral"><i className="ti ti-microscope" style={{ fontSize: 19 }} aria-hidden="true" /></div>
-                  <div>
-                    <div className="panel-name">Truth Check</div>
-                    <div className="panel-sub">We fact-check 5 viral health claims each week</div>
-                  </div>
-                </div>
-                <div className="panel-badge pb-coral">This week</div>
-              </div>
-              <div className="claims">
-                {CLAIMS.map((c, i) => (
-                  <div className={`claim ${c.type}`} key={i}>
-                    <div className={`verdict v-${c.type}`}>{c.verdict}</div>
-                    <div className="claim-txt">{c.text}</div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* EXPERTS */}
-        <div className="vh-container">
-          <div className="experts-section">
-            <div className="sec-bar">
-              <div className="sec-title">Insights from health experts</div>
-              <div className="sec-more">View all experts <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-            </div>
-            <div className="experts-row">
-              {EXPERTS.map((e) => (
-                <div className="expert-card" key={e.initials + e.name}>
-                  <div className="exp-ava" style={{ background: e.bg, color: e.color }}>{e.initials}</div>
-                  <div className="exp-name">{e.name}</div>
-                  <div className="exp-role">{e.role}</div>
-                  <div className="exp-article">{e.article}</div>
-                  <div className="exp-link">View profile <i className="ti ti-arrow-right" style={{ fontSize: 12 }} aria-hidden="true" /></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* INDIA BAND */}
-        <div className="vh-container">
-          <div className="india-band">
-            {INDIA_CARDS.map((c, i) => (
-              <React.Fragment key={i}>
-                <div className="india-card">
-                  <div className="i-tag">{c.tag}</div>
-                  <div className="i-h">{c.h}</div>
-                  <div className="i-body">{c.body}</div>
-                  <div className="i-link">{c.link}</div>
-                </div>
-                {i < INDIA_CARDS.length - 1 && <div className="idiv" />}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-
-        {/* NEWSLETTER */}
-        <div className="nl-main">         
-          <div className="nl-band">
-          <div className='vh-container'>
-            <div className="nl-l">
-              <div className="nl-eyebrow">Every Tuesday morning</div>
-              <div className="nl-h">
-                Get weekly health insights<br />
-                that <span>actually matter</span>
+          {/* FEATURE STRIP */}
+          <div className="vh-container">
+            <div className="feat-strip">
+              <div className="feat">
+                <div className="feat-icon fi-g"><i className="ti ti-robot" style={{ fontSize: 22 }} aria-hidden="true" /></div>
+                <div className="feat-label">Vita AI</div>
+                <div className="feat-desc">Ask anything about your health — cited answers, no hallucinations.</div>
+                <div className="feat-link" onClick={() => window.location.href = "/ai"}>Chat now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
               </div>
-              <div className="nl-sub">
-                Expert tips, easy habits and the latest health updates — delivered to your inbox.
-                No spam, ever.
+              <div className="feat">
+                <div className="feat-icon fi-a"><i className="ti ti-microphone" style={{ fontSize: 22 }} aria-hidden="true" /></div>
+                <div className="live-dot">Live</div>
+                <div className="feat-label">Podcast</div>
+                <div className="feat-desc">Deep conversations with doctors, scientists & founders.</div>
+                <div className="feat-link" onClick={() => window.location.href = "/podcasts"}>Listen now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
+              </div>
+              <div className="feat">
+                <div className="feat-icon fi-b"><i className="ti ti-player-play" style={{ fontSize: 22 }} aria-hidden="true" /></div>
+                <div className="feat-label">Videos</div>
+                <div className="feat-desc">Short expert explainers, protocols and breakdowns.</div>
+                <div className="feat-link" onClick={() => window.location.href = "/videos"}>Watch now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
+              </div>
+              <div className="feat hl">
+                <div className="feat-icon"><i className="ti ti-chart-radar" style={{ fontSize: 22 }} aria-hidden="true" /></div>
+                <div className="feat-label">Vital Score Quiz</div>
+                <div className="feat-desc">Monthly wellness assessment across 6 health dimensions.</div>
+                <div className="feat-link">Take the test <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
               </div>
             </div>
-            <div className="nl-r">
-              <form className="nl-form" onSubmit={handleNlSubmit}>
-                <input
-                  type="email"
-                  className="nl-inp"
-                  value={nlEmail}
-                  onChange={(e) => setNlEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  autoComplete="email"
-                  disabled={nlSubmitted}
-                  required
-                />
+          </div>
+
+          {/* CATEGORY ROW (TABS) */}
+          <div className="vh-container">
+            <div className="cat-row">
+              {TABS.map((tab) => (
                 <button
-                  type="submit"
-                  className={`nl-btn${nlSubmitted ? ' subscribed' : ''}`}
+                  type="button"
+                  key={tab.key}
+                  className={`cat${activeTab === tab.key ? ' on' : ''}`}
+                  onClick={() => setActiveTab(tab.key)}
                 >
-                  {nlSubmitted ? 'Subscribed ✓' : 'Subscribe'}
+                  <div className="cat-icon" style={{ background: tab.iconBg }}>
+                    <i className={`ti ${tab.icon}`} style={{ fontSize: 22, color: tab.iconColor }} aria-hidden="true" />
+                  </div>
+                  <div className="cat-name">{tab.name}</div>
+                  <div className="cat-sub">{tab.sub}</div>
                 </button>
-              </form>
-              <div className="nl-trust">
-                <div className="nl-trust-item">No spam, ever</div>
-                <div className="nl-trust-item">Unsubscribe anytime</div>
-                <div className="nl-trust-item">Free Starter Guide</div>
+              ))}
+            </div>
+          </div>
+
+          {/* ARTICLES + TRENDING (TAB CONTENT) */}
+          <div className="vh-container">
+            <div className="main-cols">
+              <div className="articles-col">
+                <div className="sec-bar">
+                  <div className="sec-title">{content.sectionTitle}</div>
+                  <div className="sec-more">View all <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
+                </div>
+                <div className="art-grid">
+                  {content.articles.map((a, i) => (
+                    <div className="acard" key={`${activeTab}-art-${i}`}>
+                      <div className={`acard-img ${a.imgClass}`}>
+                        <i className={`ti ${a.icon}`} style={{ fontSize: 38, color: a.iconColor }} aria-hidden="true" />
+                      </div>
+                      <div className={`tag-pill ${a.tagClass}`}>{a.tagLabel}</div>
+                      <div className="acard-h">{a.title}</div>
+                      <div className="acard-foot">
+                        <div className="acard-auth">
+                          <div className="auth-av">{a.authorInitials}</div>
+                          {a.authorName}
+                        </div>
+                        <div className="acard-rt">{a.readTime}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="sidebar">
+                <div className="sec-bar" style={{ paddingBottom: 8 }}>
+                  <div className="sec-title">Trending now</div>
+                </div>
+                {content.trending.map((t, i) => (
+                  <div className="trend-item" key={`${activeTab}-tr-${i}`}>
+                    <div className="trend-num">{i + 1}</div>
+                    <div className={`trend-img ${t.imgClass}`}>
+                      <i className={`ti ${t.icon}`} style={{ fontSize: 22, color: t.iconColor }} aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="trend-h">{t.title}</div>
+                      <div className="trend-t">{t.readTime}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          </div>
-        </div>
 
+          {/* PODCAST */}
+          <div className="vh-container">
+            <div className="pod-section">
+              <div className="sec-bar">
+                <div className="sec-title">Podcasts</div>
+                <div className="sec-more" onClick={() => window.location.href = "/podcasts"}>
+                  All episodes <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" />
+                </div>
+              </div>
+              <div className="pod-row">
+                {isLoggedIn ? (
+                  latestPodcasts.length === 0 ? (
+                    [1, 2, 3].map((i) => (
+                      <div className="pod-card" key={i}>
+                        <div className="pod-thumb pt-g animate-pulse bg-neutral-200" />
+                        <div className="pod-meta">
+                          <div className="h-2 w-24 bg-neutral-200 rounded animate-pulse mb-2" />
+                          <div className="h-3 w-40 bg-neutral-200 rounded animate-pulse mb-2" />
+                          <div className="h-2 w-32 bg-neutral-200 rounded animate-pulse" />
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    latestPodcasts.map((p) => (
+                      <div className="pod-card" key={p.id}>
+                        <div className="pod-thumb pt-g" style={{ padding: 0, overflow: 'hidden' }}>
+                          <video
+                            src={p.videoUrl}
+                            className="w-full h-full object-cover"
+                            playsInline
+                            muted
+                            preload="metadata"
+                          />
+                        </div>
+                        <div className="pod-meta">
+                          <div className="pod-ep">{p.episode} · {p.category}</div>
+                          <div className="pod-title">{p.title}</div>
+                          <div className="pod-dur">
+                            <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
+                            {p.duration} · {p.guest}
+                          </div>
+                        </div>
+                        <div className="pod-play" onClick={() => window.location.href = '/podcasts'}>
+                          <div className="play-tri" />
+                        </div>
+                      </div>
+                    ))
+                  )
+                ) : (
+                  STATIC_PODCASTS.map((p) => (
+                    <div className="pod-card" key={p.id}>
+                      <div className="pod-thumb" style={{ padding: 0, overflow: 'hidden' }}>
+                        <img
+                          src={p.imageUrl}
+                          alt={p.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="pod-meta">
+                        <div className="pod-ep">{p.ep}</div>
+                        <div className="pod-title">{p.title}</div>
+                        <div className="pod-dur">
+                          <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
+                          {p.dur} · {p.guest}
+                        </div>
+                      </div>
+                      <div className="pod-play" onClick={() => setLoginOpen(true)}>
+                        <div className="play-tri" />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* VIDEOS */}
+          <div className="vh-container">
+            <div className="vid-section">
+              <div className="sec-bar">
+                <div className="sec-title">Videos</div>
+                <div className="sec-more" onClick={() => window.location.href = "/videos"}>All videos <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
+              </div>
+              <div className="vid-row">
+                {VIDEOS.map((v, i) => (
+                  <div className="vid-card" key={i}>
+                    <div className="relative h-52 overflow-hidden">
+                      <img
+                        src={v.imageUrl}
+                        alt={v.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="vid-dur">{v.dur}</div>
+                    </div>
+                    <div className="vid-info">
+                      <div className="vid-cat">{v.cat}</div>
+                      <div className="vid-title">{v.title}</div>
+                      <div className="vid-views">{v.views}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* AI CHAT + QUIZ */}
+          <div className="vh-container">
+            <div className="tools-cols">
+              {/* AI CHAT */}
+              <div className="ai-panel">
+                <div className="ai-head">
+                  <div className="ai-title-row">
+                    <div className="ai-orb"><i className="ti ti-robot" style={{ fontSize: 19, color: '#fff' }} aria-hidden="true" /></div>
+                    <div>
+                      <div className="ai-name">Vita AI</div>
+                      <div className="ai-sub">Ask anything about your health</div>
+                    </div>
+                  </div>
+                  <div className="ai-badge">Online</div>
+                </div>
+                <div className="ai-msgs" ref={aiMsgsRef}>
+                  {aiMessages.map((m, i) => (
+                    <div className={`msg ${m.role}`} key={i}>
+                      {m.text}
+                      {m.cite && (
+                        <div className="msg-cite">
+                          <i className="ti ti-link" style={{ fontSize: 12 }} aria-hidden="true" />
+                          {m.cite}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="ai-sugs">
+                  {AI_SUGGESTIONS.map((s) => (
+                    <button
+                      type="button"
+                      className="ai-sug"
+                      key={s}
+                      onClick={() => setAiInput(s)}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+                <form className="ai-input-row" onSubmit={handleAiSubmit}>
+                  <input
+                    type="text"
+                    className="ai-inp"
+                    value={aiInput}
+                    onChange={(e) => setAiInput(e.target.value)}
+                    placeholder="Ask Vita AI anything..."
+                    autoComplete="off"
+                  />
+                  <button type="submit" className="ai-send-btn">Send</button>
+                </form>
+              </div>
+
+              {/* QUIZ */}
+              <div className="quiz-panel">
+                <div className="quiz-head">
+                  <div className="quiz-title-row">
+                    <div className="quiz-icon-box">
+                      <i className="ti ti-chart-radar" style={{ fontSize: 19, color: '#8B5CF6' }} aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="quiz-name">Vital Score Quiz</div>
+                      <div className="quiz-sub">Find your wellness gaps in 90 sec</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="quiz-prog-wrap">
+                  <div className="quiz-dots">
+                    {Array.from({ length: totalQuestions }).map((_, i) => {
+                      const step = i + 1
+                      const cls = step < currentQ ? 'qd done' : step === currentQ ? 'qd on' : 'qd'
+                      return <div className={cls} key={i} />
+                    })}
+                  </div>
+                  <span className="q-step-lbl">Question {currentQ} of {totalQuestions}</span>
+                </div>
+
+                <div className="quiz-question active" key={currentQ}>
+                  <div className="quiz-q">{question.q}</div>
+                  <div className="quiz-opts">
+                    {question.opts.map((opt) => (
+                      <div
+                        key={opt.value}
+                        className={`qopt${currentAnswer === opt.value ? ' sel' : ''}`}
+                        onClick={() => handleSelectOption(opt.value)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            handleSelectOption(opt.value)
+                          }
+                        }}
+                      >
+                        <div className="qopt-ltr">{opt.value}</div>
+                        {opt.label}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="quiz-footer">
+                  <div className="quiz-step-txt">No sign-up required</div>
+                  <div className="quiz-actions">
+                    {currentQ > 1 && (
+                      <button type="button" className="quiz-btn quiz-prev" onClick={handlePrev}>
+                        ← Previous
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className={`quiz-btn quiz-next${isLastQ ? ' quiz-submit' : ''}`}
+                      onClick={handleNext}
+                      disabled={!currentAnswer}
+                    >
+                      {isLastQ ? 'Submit ✓' : 'Next question →'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* VITAL SCORE + TRUTH CHECK */}
+          <div className="vh-container">
+            <div className="bottom-tools">
+              <div className="vital-panel">
+                <div className="panel-head">
+                  <div className="panel-title-row">
+                    <div className="panel-icon pi-teal"><i className="ti ti-activity" style={{ fontSize: 19 }} aria-hidden="true" /></div>
+                    <div>
+                      <div className="panel-name">Your Vital Score</div>
+                      <div className="panel-sub">Monthly wellness check-in across 6 dimensions</div>
+                    </div>
+                  </div>
+                  <div className="panel-badge pb-teal">May 2026</div>
+                </div>
+                <div className="vital-content">
+                  <div className="ring-wrap">
+                    <svg className="ring-svg" viewBox="0 0 110 110">
+                      <circle className="r-bg" cx="55" cy="55" r="42.5" />
+                      <circle className="r-val" cx="55" cy="55" r="42.5" />
+                    </svg>
+                    <div className="ring-txt">
+                      <div className="ring-n">74</div>
+                      <div className="ring-of">/100</div>
+                    </div>
+                  </div>
+                  <div className="dims">
+                    {VITAL_DIMS.map((d) => (
+                      <div className="dim" key={d.label}>
+                        <div className="dim-lbl">{d.label}</div>
+                        <div className="dim-track">
+                          <div className="dim-fill" style={{ width: `${d.pct}%`, background: d.color }} />
+                        </div>
+                        <div className="dim-v">{d.pct}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="vital-cta">Retake monthly check-in →</div>
+              </div>
+              <div className="truth-panel">
+                <div className="panel-head">
+                  <div className="panel-title-row">
+                    <div className="panel-icon pi-coral"><i className="ti ti-microscope" style={{ fontSize: 19 }} aria-hidden="true" /></div>
+                    <div>
+                      <div className="panel-name">Truth Check</div>
+                      <div className="panel-sub">We fact-check 5 viral health claims each week</div>
+                    </div>
+                  </div>
+                  <div className="panel-badge pb-coral">This week</div>
+                </div>
+                <div className="claims">
+                  {CLAIMS.map((c, i) => (
+                    <div className={`claim ${c.type}`} key={i}>
+                      <div className={`verdict v-${c.type}`}>{c.verdict}</div>
+                      <div className="claim-txt">{c.text}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* EXPERTS */}
+          <div className="vh-container">
+            <div className="experts-section">
+              <div className="sec-bar">
+                <div className="sec-title">Insights from health experts</div>
+                <div className="sec-more" onClick={() => window.location.href = '/experts'}>
+                  View all experts <i className="ti ti-arrow-right" style={{ fontSize: 13 }} />
+                </div>
+              </div>
+              <div className="experts-row">
+                {isLoggedIn ? (
+                  expertsQuery.isLoading ? (
+                    [1, 2, 3, 4].map((i) => (
+                      <div className="expert-card" key={i}>
+                        <div className="exp-ava animate-pulse bg-neutral-200" />
+                        <div className="h-3 w-24 bg-neutral-200 rounded animate-pulse mb-2" />
+                        <div className="h-2 w-16 bg-neutral-200 rounded animate-pulse" />
+                      </div>
+                    ))
+                  ) : realExperts.map((e) => {
+                    const initials = e.name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
+                    return (
+                      <div
+                        className="expert-card"
+                        key={e.id}
+                        onClick={() => window.location.href = `/experts/${e.id}`}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {e.imageUrl ? (
+                          <img src={e.imageUrl} alt={e.name} className="exp-ava" style={{ objectFit: 'cover', borderRadius: '50%' }} />
+                        ) : (
+                          <div className="exp-ava" style={{ background: '#F0FAF4', color: '#1E6E3A' }}>{initials}</div>
+                        )}
+                        <div className="exp-name">{e.name}</div>
+                        <div className="exp-role">{e.role}</div>
+                        <div className="exp-article">{e.credentials}</div>
+                        <div className="exp-link">View profile <i className="ti ti-arrow-right" style={{ fontSize: 12 }} /></div>
+                      </div>
+                    )
+                  })
+                ) : (
+                  STATIC_EXPERTS.map((e) => (
+                    <div className="expert-card" key={e.id}>
+                      <img
+                        src={e.imageUrl}
+                        alt={e.name}
+                        className="exp-ava"
+                        style={{ objectFit: 'cover', borderRadius: '50%' }}
+                      />
+                      <div className="exp-name">{e.name}</div>
+                      <div className="exp-role">{e.role}</div>
+                      <div className="exp-article">{e.credentials}</div>
+                      <div
+                        className="exp-link"
+                        onClick={() => setLoginOpen(true)}
+                      >
+                        Login to view profile<i className="ti ti-arrow-right" style={{ fontSize: 12 }} />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* INDIA BAND */}
+          <div className="vh-container">
+            <div className="india-band">
+              {INDIA_CARDS.map((c, i) => (
+                <React.Fragment key={i}>
+                  <div className="india-card">
+                    <div className="i-tag">{c.tag}</div>
+                    <div className="i-h">{c.h}</div>
+                    <div className="i-body">{c.body}</div>
+                    <div className="i-link">{c.link}</div>
+                  </div>
+                  {i < INDIA_CARDS.length - 1 && <div className="idiv" />}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          {/* NEWSLETTER */}
+          <div className="nl-main">
+            <div className="nl-band">
+              <div className='vh-container'>
+                <div className="nl-l">
+                  <div className="nl-eyebrow">Every Tuesday morning</div>
+                  <div className="nl-h">
+                    Get weekly health insights<br />
+                    that <span>actually matter</span>
+                  </div>
+                  <div className="nl-sub">
+                    Expert tips, easy habits and the latest health updates — delivered to your inbox.
+                    No spam, ever.
+                  </div>
+                </div>
+                <div className="nl-r">
+                  <form className="nl-form" onSubmit={handleNlSubmit}>
+                    <input
+                      type="email"
+                      className="nl-inp"
+                      value={nlEmail}
+                      onChange={(e) => setNlEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      autoComplete="email"
+                      disabled={nlSubmitted}
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className={`nl-btn${nlSubmitted ? ' subscribed' : ''}`}
+                    >
+                      {nlSubmitted ? 'Subscribed ✓' : 'Subscribe'}
+                    </button>
+                  </form>
+                  <div className="nl-trust">
+                    <div className="nl-trust-item">No spam, ever</div>
+                    <div className="nl-trust-item">Unsubscribe anytime</div>
+                    <div className="nl-trust-item">Free Starter Guide</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+      <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
+    </>
   )
 }

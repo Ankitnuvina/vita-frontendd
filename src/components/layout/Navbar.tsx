@@ -14,6 +14,12 @@ const NAV_LINKS: { to: string; label: string; end?: boolean }[] = [
   { to: '/ai', label: 'AI' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/subscription', label: 'Subscription' },
+
+  { to: '/mind', label: 'Mind' },
+  { to: '/body', label: 'Body' },
+  { to: '/nutrition', label: 'Nutrition' },
+  { to: '/sleep', label: 'Sleep' },
+  { to: '/experts', label: 'Experts' },
 ]
 
 export function Navbar(): React.ReactNode {
@@ -77,10 +83,9 @@ export function Navbar(): React.ReactNode {
                 end={link.end}
                 role="menuitem"
                 className={({ isActive }) =>
-                  `text-xs xl:text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap transition-colors duration-200 ${
-                    isActive
-                      ? 'text-green-700 font-semibold bg-green-100'
-                      : 'text-ink-3 hover:text-green-600 hover:bg-green-50'
+                  `text-xs xl:text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap transition-colors duration-200 ${isActive
+                    ? 'text-green-700 font-semibold bg-green-100'
+                    : 'text-ink-3 hover:text-green-600 hover:bg-green-50'
                   }`
                 }
               >
@@ -154,19 +159,16 @@ export function Navbar(): React.ReactNode {
             >
               <span className="relative w-5 h-4 inline-block">
                 <span
-                  className={`absolute left-0 right-0 h-0.5 bg-current rounded transition-all duration-300 ${
-                    mobileOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'
-                  }`}
+                  className={`absolute left-0 right-0 h-0.5 bg-current rounded transition-all duration-300 ${mobileOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'
+                    }`}
                 />
                 <span
-                  className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-current rounded transition-opacity duration-200 ${
-                    mobileOpen ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-current rounded transition-opacity duration-200 ${mobileOpen ? 'opacity-0' : 'opacity-100'
+                    }`}
                 />
                 <span
-                  className={`absolute left-0 right-0 h-0.5 bg-current rounded transition-all duration-300 ${
-                    mobileOpen ? 'bottom-1/2 translate-y-1/2 -rotate-45' : 'bottom-0'
-                  }`}
+                  className={`absolute left-0 right-0 h-0.5 bg-current rounded transition-all duration-300 ${mobileOpen ? 'bottom-1/2 translate-y-1/2 -rotate-45' : 'bottom-0'
+                    }`}
                 />
               </span>
             </button>
@@ -176,9 +178,8 @@ export function Navbar(): React.ReactNode {
         {/* Mobile dropdown panel */}
         <div
           id="mobile-menu"
-          className={`lg:hidden overflow-hidden border-t border-border bg-white transition-[max-height,opacity] duration-300 ease-out ${
-            mobileOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
-          }`}
+          className={`lg:hidden overflow-hidden border-t border-border bg-white transition-[max-height,opacity] duration-300 ease-out ${mobileOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="vh-container py-4 flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
@@ -188,10 +189,9 @@ export function Navbar(): React.ReactNode {
                 end={link.end}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${
-                    isActive
-                      ? 'text-green-700 font-semibold bg-green-100'
-                      : 'text-ink-2 hover:text-green-600 hover:bg-green-50'
+                  `text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${isActive
+                    ? 'text-green-700 font-semibold bg-green-100'
+                    : 'text-ink-2 hover:text-green-600 hover:bg-green-50'
                   }`
                 }
               >

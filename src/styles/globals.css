@@ -151,6 +151,27 @@
     text-decoration: none;
   }
 
+  /* ──────────────────────────────────────────────────────────────
+   * Admin section — Quicksand font scope.
+   * Apply Quicksand to the entire admin shell (sidebar + main pane)
+   * while keeping FontAwesome icons untouched.
+   * ────────────────────────────────────────────────────────────── */
+  .admin-shell,
+  .admin-shell *:not(i):not(svg):not(svg *):not([class*="fa-"]) {
+    font-family: 'Quicksand', 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+  }
+
+  /* Headings in admin also use Quicksand (override the global Playfair) */
+  .admin-shell h1,
+  .admin-shell h2,
+  .admin-shell h3,
+  .admin-shell h4,
+  .admin-shell h5,
+  .admin-shell h6 {
+    font-family: 'Quicksand', 'Outfit', system-ui, sans-serif !important;
+    letter-spacing: -0.01em;
+  }
+
   ::selection {
     background: var(--vh-green-200);
     color: var(--vh-ink);

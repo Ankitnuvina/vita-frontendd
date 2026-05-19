@@ -25,9 +25,9 @@ const PodcastsPage = lazy(() =>
 const VideosPage = lazy(() =>
   import('@/features/videos/components/VideosPage').then((m) => ({ default: m.VideosPage }))
 )
-const ExpertDetailPage = lazy(() =>
-  import('@/features/experts/components/ExpertDetailPage').then((m) => ({
-    default: m.ExpertDetailPage,
+const ExpertDetailPageWithArticles = lazy(() =>
+  import('@/features/experts/components/ExpertDetailPageWithArticles').then((m) => ({
+    default: m.ExpertDetailPageWithArticles,
   }))
 )
 const AiPage = lazy(() =>
@@ -41,6 +41,38 @@ const SubscriptionPage = lazy(() =>
     default: m.SubscriptionPage,
   }))
 )
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const MindPage = lazy(() =>
+  import('@/features/mind/components/MindPage').then((m) => ({
+    default: m.MindPage,
+  }))
+)
+
+const ExpertDetailPage = lazy(() =>
+  import('@/features/experts/components/ExpertDetailPage').then((m) => ({
+    default: m.ExpertDetailPage,
+  }))
+)
+
+const BodyPage = lazy(() =>
+  import('@/features/body/components/BodyPage').then((m) => ({
+    default: m.BodyPage,
+  }))
+)
+
+const NutritionPage = lazy(() =>
+  import('@/features/nutrition/components/NutritionPage').then((m) => ({
+    default: m.NutritionPage,
+  }))
+)
+
+const SleepPage = lazy(() =>
+  import('@/features/sleep/components/SleepPage').then((m) => ({
+    default: m.SleepPage,
+  }))
+)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const NotFoundPage = lazy(() =>
   import('@/features/notfound/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
 )
@@ -96,9 +128,15 @@ const routes: RouteObject[] = [
       { path: 'blogs/:slug', element: withSuspense(<BlogDetailPage />) },
       { path: 'podcasts', element: withSuspense(<PodcastsPage />) },
       { path: 'videos', element: withSuspense(<VideosPage />) },
-      { path: 'experts/:expertId', element: withSuspense(<ExpertDetailPage />) },
+      { path: 'experts/:expertId', element: withSuspense(<ExpertDetailPageWithArticles />) },
       { path: 'ai', element: withSuspense(<AiPage />) },
       { path: 'subscription', element: withSuspense(<SubscriptionPage />) },
+
+      { path: 'mind', element: withSuspense(<MindPage />) },
+      { path: 'experts', element: withSuspense(<ExpertDetailPage />) },
+      { path: 'body', element: withSuspense(<BodyPage />) },
+      { path: 'nutrition', element: withSuspense(<NutritionPage />) },
+       { path: 'sleep', element: withSuspense(<SleepPage />) },
       {
         element: <ProtectedRoute />,
         children: [{ path: 'dashboard', element: withSuspense(<DashboardPage />) }],
