@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components -- Router config file: lazy bindings are not React component exports for HMR purposes. */
 import React, { Suspense, lazy } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import { UserLayout } from '@/components/layout/UserLayout'
@@ -125,7 +124,7 @@ const routes: RouteObject[] = [
       { index: true, element: withSuspense(<HomePage />) },
       { path: 'articles', element: withSuspense(<ArticlesPage />) },
       { path: 'blogs', element: withSuspense(<BlogsPage />) },
-      { path: 'blogs/:slug', element: withSuspense(<BlogDetailPage />) },
+      { path: 'blogs/:id', element: withSuspense(<BlogDetailPage />) },
       { path: 'podcasts', element: withSuspense(<PodcastsPage />) },
       { path: 'videos', element: withSuspense(<VideosPage />) },
       { path: 'experts/:expertId', element: withSuspense(<ExpertDetailPageWithArticles />) },
@@ -136,7 +135,7 @@ const routes: RouteObject[] = [
       { path: 'experts', element: withSuspense(<ExpertDetailPage />) },
       { path: 'body', element: withSuspense(<BodyPage />) },
       { path: 'nutrition', element: withSuspense(<NutritionPage />) },
-       { path: 'sleep', element: withSuspense(<SleepPage />) },
+      { path: 'sleep', element: withSuspense(<SleepPage />) },
       {
         element: <ProtectedRoute />,
         children: [{ path: 'dashboard', element: withSuspense(<DashboardPage />) }],
