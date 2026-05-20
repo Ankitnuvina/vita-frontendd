@@ -243,10 +243,6 @@ export function BlogsPage(): React.ReactNode {
     setPage(1)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-    setPage(1)
-  }
 
   return (
     <>
