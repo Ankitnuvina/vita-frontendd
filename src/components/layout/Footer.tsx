@@ -10,12 +10,12 @@ const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Categories',
     links: [
-      { label: 'Mind' },
-      { label: 'Body' },
-      { label: 'Nutrition' },
-      { label: 'Sleep' },
+      { label: 'Mind', to: "/mind" },
+      { label: 'Body', to: "/body"  },
+      { label: 'Nutrition', to: "/nutrition"  },
+      { label: 'Sleep', to: "/sleep"  },
       { label: 'Longevity' },
-       { label: 'India Roots' },
+      { label: 'India Roots' },
     ],
   },
 
@@ -29,7 +29,7 @@ const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
       { label: 'Habit Tracker' },
     ],
   },
-    {
+  {
     title: 'Company',
     links: [
       { label: 'About Us' },
@@ -56,11 +56,11 @@ export function Footer(): React.ReactNode {
             <Link
               to="/"
               className="font-serif text-xl font-bold mb-2.5 inline-flex items-center text-white"
-            >            
+            >
               VIT<span className="text-green-400">A</span>
             </Link>
             <p className="text-xs text-white/40 leading-relaxed max-w-[260px] mb-4 mt-2 font-light">
-          Your trusted destination for science-backed health, wellness and lifestyle insights.
+              Your trusted destination for science-backed health, wellness and lifestyle insights.
             </p>
             <div className="flex flex-wrap gap-1.5" role="list" aria-label="Social media links">
               {SOCIAL_ICONS.map((icon, i) => (
@@ -110,9 +110,9 @@ export function Footer(): React.ReactNode {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <span className="text-[11px] text-white/30 leading-relaxed">
-          © 2026 VITA Health Media. All rights reserved.
+            © 2026 VITA Health Media. All rights reserved.
           </span>
-        
+
         </div>
       </div>
     </footer>

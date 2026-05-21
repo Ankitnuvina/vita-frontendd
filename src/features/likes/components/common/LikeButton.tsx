@@ -1,5 +1,6 @@
 import React from 'react'
 import { useLike } from '@/features/likes/hooks/useLikeBatch'
+import { ThumbsUp } from "lucide-react"
 
 interface LikeButtonProps {
   contentType: 'article' | 'podcast' | 'blog' | 'video'
@@ -28,7 +29,8 @@ export function LikeButton({
         disabled:opacity-50 disabled:cursor-not-allowed`}
     >
       <span className={`transition-transform duration-200 ${liked ? 'scale-125' : 'scale-100'}`}>
-        {liked ? '❤️' : '🤍'}
+        {/* {liked ? '❤️' : '🤍'} */}
+        <ThumbsUp className={`w-4 h-4 ${ liked ? "fill-red-500 text-red-500" : "text-gray-400"}`}/>
       </span>
       <span>{count > 0 ? count : ''}</span>
     </button>

@@ -18,7 +18,7 @@ export function SectionHeader({
   center = false,
 }: SectionHeaderProps): React.ReactNode {
   return (
-    <div className={`mb-6 sm:mb-8 ${center ? 'text-center' : ''}`}>
+    <div className={` ${center ? 'text-center' : ''}`}>
       <div
         className={`flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4 ${
           center ? 'sm:justify-center' : 'sm:justify-between'

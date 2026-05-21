@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Article } from '@/globals/types'
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
+import { X } from 'lucide-react'
 
 interface Props {
     article: Article
@@ -21,7 +22,20 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                             <p className="text-[15px] font-semibold text-neutral-800">{article.title}</p>
                         </div>
                     </div>
+
+                     <div className="bg-white flex justify-end absolute p-0 border-0 right-[10px] top-[10px] bottom-auto">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="text-xs font-semibold text-green-500 border border-green-200 rounded-full hover:bg-neutral-50 transition-colors">
+                        <X className='w-4 h-4' />
+                    </button>
                 </div>
+                </div>
+
+                
+
+
                 {article.imageUrl && (
                     <div className="relative w-full h-56 bg-neutral-100">
                         <img
@@ -152,14 +166,7 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                     )}
                 </div>
                 {/* Footer */}
-                <div className="sticky bottom-0 bg-white border-t border-neutral-200 px-6 py-2 flex justify-end">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="text-xs font-semibold text-green-500 border border-green-200 rounded-full px-4 py-1 hover:bg-neutral-50 transition-colors">
-                        Close
-                    </button>
-                </div>
+               
 
             </div>
         </div>

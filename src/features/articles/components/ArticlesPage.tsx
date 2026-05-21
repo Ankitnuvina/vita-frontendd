@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { useArticles } from '@/features/articles/hooks/useArticles'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Article } from '@/globals/types'
+import { Search } from 'lucide-react'
 
 export function ArticlesPage(): React.ReactNode {
   const [selectedCat, setSelectedCat] = useState('All')
@@ -45,7 +46,7 @@ export function ArticlesPage(): React.ReactNode {
           <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="article-search" className="sr-only">Search articles</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
-              🔍
+              <Search className='w-4 h-4' />
             </span>
             <input
               id="article-search"
@@ -68,26 +69,26 @@ export function ArticlesPage(): React.ReactNode {
           <EmptyState message="No articles available yet." />
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-4xl mb-3" aria-hidden="true">🔍</p>
+            <p className="text-4xl mb-3 text-center" aria-hidden="true"><Search className='m-auto w-8 h-8'/></p>
             <p className="font-serif text-lg font-bold text-ink mb-2">No articles found</p>
             <p className="text-sm text-ink-3">Try a different search term or category.</p>
             <button
               onClick={() => { setSearch(''); setSelectedCat('All') }}
-              className="mt-4 text-xs font-semibold text-green-600 border border-green-200 rounded-full px-4 py-1.5 hover:bg-green-50 transition-colors"
+              className="mt-4 text-xs font-semibold text-green-600 border border-green-200 rounded-full px-4 py-1.5 bg-[#c7e6d5] hover:bg-green-50 transition-colors"
             >
               Clear Filters
             </button>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-[1.7fr_1fr] gap-px bg-border rounded-2xl overflow-hidden mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-[1.7fr_1fr] gap-[16px]  rounded-2xl overflow-hidden mb-4">
               <ArticleCard
                 article={filtered[0]}
                 size="xl"
                 onClick={setViewingArticle}
               />
               {filtered.length > 1 && (
-                <div className="grid gap-px bg-border">
+                <div className="grid gap-[16px]">
                   {filtered.slice(1, 3).map((a) => (
                     <ArticleCard
                       key={a.id}

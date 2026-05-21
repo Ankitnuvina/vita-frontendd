@@ -9,6 +9,7 @@ import type { Podcast } from '@/globals/types'
 
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
 import { UnifiedMediaPlayer } from '@/features/podcasts/media/UnifiedMediaPlayer'
+import { Search } from 'lucide-react'
 
 interface PodcastCardProps {
   podcast: Podcast
@@ -23,61 +24,57 @@ export function PodcastsPage(): React.ReactNode {
   const [expandedPodcastId, setExpandedPodcastId] = useState<number | null>(null)
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null)
   const [search, setSearch] = useState('')
+  const [selectedCat, setSelectedCat] = useState('All')
   const deferredSearch = useDeferredValue(search)
   const isSearching = search !== deferredSearch
+
+  const CATEGORIES = useMemo(
+    () => ['All', ...Array.from(new Set((podcasts ?? []).map((p) => p.category)))],
+    [podcasts]
+  )
 
   const filteredPodcasts = useMemo(() => {
     if (!podcasts) return []
     const query = deferredSearch.trim().toLowerCase()
-    if (!query) return podcasts
     return podcasts.filter((podcast) => {
-      return (
+      const matchCat = selectedCat === 'All' || podcast.category === selectedCat
+      const matchSearch =
+        !query ||
         podcast.title.toLowerCase().includes(query) ||
         podcast.category.toLowerCase().includes(query) ||
         podcast.episode.toLowerCase().includes(query) ||
         podcast.guest.toLowerCase().includes(query)
-      )
+      return matchCat && matchSearch
     })
-  }, [podcasts, deferredSearch])
+  }, [podcasts, deferredSearch, selectedCat])
 
   return (
     <main id="main-content">
-      <section aria-label="Podcasts hero" className="relative bg-neutral-950 text-white py-12 sm:py-16 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900/40 via-neutral-950 to-neutral-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-green-950/30 via-transparent to-transparent" />
-        <div className="relative vh-container text-center">
-          <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-1.5 mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-400">
-              Video Podcast
-            </p>
-          </div>
-          <h1 className="text-white font-serif text-[clamp(28px,5vw,52px)] font-black mb-4 tracking-tight leading-tight">
-            The Vitalize{' '}
-            <em className="text-green-400 not-italic">Podcast</em>
-          </h1>
-          <p className="text-sm sm:text-base text-white/50 max-w-md mx-auto font-light leading-relaxed mb-8">
-            Deep-dive conversations with world-leading health scientists, clinicians and coaches.
-          </p>
-          <div className="flex gap-2 justify-start sm:justify-center flex-nowrap sm:flex-wrap overflow-x-auto scroll-x-clean -mx-4 px-4">
-            {['🧠 Mental Health', '🌿 Longevity', '🧘 Mindfulness', '💪 Fitness'].map((p) => (
-              <button
-                key={p}
-                className="shrink-0 text-xs font-semibold text-white/70 bg-white/[0.08] border border-white/10 rounded-full px-4 py-2 hover:bg-white/15 hover:border-white/20 hover:text-white transition-all duration-200"
-              >
-                {p}
-              </button>
-            ))}
-          </div>
+      {/* ── Sticky category tabs (same style as Articles / Blogs page) ── */}
+      <div className="bg-white/95 backdrop-blur-md border-b border-border py-3 sticky top-14 sm:top-16 z-[98]">
+        <div className="vh-container flex justify-center gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCat(cat)}
+              className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${
+                selectedCat === cat
+                  ? 'bg-green-600 text-white border-green-600 shadow-soft'
+                  : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-      </section>
+      </div>
 
       <div className="vh-container py-10 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
           <SectionHeader eyebrow="Latest Episodes" title="Recent" titleAccent="Shows" />
           <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="podcast-search" className="sr-only">Search podcasts</label>
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400">🔍</span>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400"> <Search className="w-4 h-4" /> </span>
             <input
               id="podcast-search"
               value={search}
@@ -234,7 +231,7 @@ function PodcastCard({
           <div className="relative h-44">
             <video
               src={podcast.videoUrl}
-              className="w-full h-full object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
+              className="w-full h-[50vh] object-contain opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
               playsInline
               muted
               preload="metadata"
