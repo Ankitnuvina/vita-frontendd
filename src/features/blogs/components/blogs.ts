@@ -8,9 +8,9 @@ export interface Blog {
   featured: boolean
   color: string
   textColor: string
-  authorName: string      // ← add
-  specialist: string      // ← add
-  imageUrl: string        // ← add
-  sections?: Array<{ heading: string; items: string[] }>  // ← add
-  createdAt?: string      // ← add
+  authorName: string 
+  specialist: string
+  imageUrl: string 
+  sections?: Array<{ heading: string; items: string[] }> 
+  createdAt?: string
 }

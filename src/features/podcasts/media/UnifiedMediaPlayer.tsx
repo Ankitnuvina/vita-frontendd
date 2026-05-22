@@ -155,12 +155,12 @@ export function UnifiedMediaPlayer({
   return (
     <div className={className}>
       {kind === 'video' ? (
-        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full h-52 rounded-md bg-black object-cover" />
+        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full h-[176px] rounded-md bg-black object-cover" />
       ) : (
         <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
       )}
 
-      <div className="mt-2 rounded-md border border-border bg-white p-2">
+      <div className="mt-2 rounded-md border border-border bg-white p-2 absolute bottom-[10px] left-[2.5%] w-[95%] bg-white/80 border-0">
         <div className="flex items-center gap-3">
           <button
             type="button"

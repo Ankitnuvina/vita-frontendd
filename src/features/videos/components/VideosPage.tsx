@@ -141,26 +141,7 @@ export function VideosPage(): React.ReactNode {
 
   return (
     <main id="main-content">
-      {/* Hero */}
-      <section
-        aria-label="Videos hero"
-        className="bg-gradient-to-br from-ink-2 to-ink py-12 sm:py-14 text-white text-center"
-      >
-        <div className="vh-container">
-          <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-300 mb-3">
-            🎬 Video Library
-          </p>
-          <h1 className="text-white font-serif text-[clamp(28px,5vw,48px)] font-black mb-3 tracking-tight">
-            Health{' '}
-            <em className="text-green-300 not-italic font-light">in Motion</em>
-          </h1>
-          <p className="text-sm sm:text-base text-white/55 max-w-md mx-auto font-light leading-relaxed">
-            Expert-led workouts, masterclasses, and guided practices — all grounded in science.
-          </p>
-        </div>
-      </section>
-
-      {/* Grid */}
+           {/* Grid */}
       <div className="vh-container py-10 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8">
           <SectionHeader eyebrow="Browse" title="All" titleAccent="Videos" />

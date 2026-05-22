@@ -21,16 +21,15 @@ export function LikeButton({
       onClick={(e) => { e.stopPropagation(); void toggle() }}
       disabled={isLoading}
       className={`flex items-center gap-1 rounded-full border transition-all duration-200 font-semibold
-        ${size === 'sm' ? 'text-[10px] px-2.5 py-1' : 'text-xs px-3 py-1.5'}
+        ${size === 'sm' ? 'text-[12px] px-0 py-0' : 'text-xs px-0 py-0'}
         ${liked
-          ? 'bg-red-50 border-red-200 text-red-500 hover:bg-red-100'
-          : 'bg-white border-neutral-200 text-neutral-400 hover:border-red-200 hover:text-red-400'
+
         }
         disabled:opacity-50 disabled:cursor-not-allowed`}
     >
-      <span className={`transition-transform duration-200 ${liked ? 'scale-125' : 'scale-100'}`}>
+      <span className={`transition-transform duration-200 ${liked ? 'scale-100' : 'scale-100'}`}>
         {/* {liked ? '❤️' : '🤍'} */}
-        <ThumbsUp className={`w-4 h-4 ${ liked ? "fill-red-500 text-red-500" : "text-gray-400"}`}/>
+        <ThumbsUp className={`w-4 h-4 ${ liked ? "fill-green-500 text-green-500" : "text-gray-400"}`}/>
       </span>
       <span>{count > 0 ? count : ''}</span>
     </button>

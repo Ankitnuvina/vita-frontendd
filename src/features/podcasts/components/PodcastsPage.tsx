@@ -217,7 +217,7 @@ function PodcastCard({
     <article className="bg-white rounded-2xl overflow-hidden border border-neutral-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col group shadow-sm">
       <div className="relative overflow-hidden bg-neutral-950">
         {isExpanded ? (
-          <div className="p-2 pb-0">
+          <div className="p-0 pb-0">
             <UnifiedMediaPlayer
               mediaId={`podcast-${podcast.id}`}
               title={podcast.title}
@@ -231,7 +231,7 @@ function PodcastCard({
           <div className="relative h-44">
             <video
               src={podcast.videoUrl}
-              className="w-full h-[50vh] object-contain opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
+              className="w-full h-[176px] object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
               playsInline
               muted
               preload="metadata"
