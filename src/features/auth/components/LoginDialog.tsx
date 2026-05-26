@@ -103,7 +103,7 @@ function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNo
               type="button"
               onClick={() => switchMode(m)}
               className={`text-xs font-semibold py-2 rounded-lg transition-colors border-none cursor-pointer ${mode === m
-                  ? 'bg-white text-ink shadow-sm'
+                  ? 'bg-[#1e6e3a] text-white shadow-sm'
                   : 'bg-transparent text-ink-3 hover:text-ink-2'
                 }`}
             >

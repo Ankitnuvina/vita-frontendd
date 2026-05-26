@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useToastStore } from '@/store/toast.store'
+import { useAuthStore } from '@/store/auth.store'
 
 const API = import.meta.env.VITE_API_BASE_URL
 
@@ -72,6 +74,50 @@ function scheduleBatch(contentType: string, contentId: string): Promise<LikeStat
   })
 }
 
+// export function useLike({
+//   contentType,
+//   contentId,
+// }: {
+//   contentType: 'article' | 'podcast' | 'blog' | 'video'
+//   contentId: string | number
+// }) {
+//   const id = String(contentId)
+//   const cacheKey = `${contentType}:${id}`
+
+//   const [liked, setLiked] = useState(() => cache.get(cacheKey)?.liked ?? false)
+//   const [count, setCount] = useState(() => cache.get(cacheKey)?.count ?? 0)
+//   const [isLoading, setIsLoading] = useState(false)
+
+//   useEffect(() => {
+//     // Cache mein hai toh fetch mat karo
+//     if (cache.has(cacheKey)) return
+
+//     void scheduleBatch(contentType, id).then((state) => {
+//       setLiked(state.liked)
+//       setCount(state.count)
+//     })
+//   }, [cacheKey, contentType, id])
+
+//   const toggle = useCallback(async () => {
+//     setIsLoading(true)
+//     try {
+//       const res = await fetch(`${API}/api/likes/${contentType}/${id}`, {
+//         method: 'POST',
+//         credentials: 'include',
+//       })
+//       if (res.ok) {
+//         const data = await res.json() as { liked: boolean; count: number }
+//         setLiked(data.liked)
+//         setCount(data.count)
+//         cache.set(cacheKey, { liked: data.liked, count: data.count })
+//       }
+//     } catch { /* ignore */ }
+//     finally { setIsLoading(false) }
+//   }, [contentType, id, cacheKey])
+
+//   return { liked, count, toggle, isLoading }
+// }
+
 export function useLike({
   contentType,
   contentId,
@@ -81,15 +127,15 @@ export function useLike({
 }) {
   const id = String(contentId)
   const cacheKey = `${contentType}:${id}`
+  const { user } = useAuthStore()   // ← add karo
+   const addToast = useToastStore((s) => s.addToast)
 
   const [liked, setLiked] = useState(() => cache.get(cacheKey)?.liked ?? false)
   const [count, setCount] = useState(() => cache.get(cacheKey)?.count ?? 0)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    // Cache mein hai toh fetch mat karo
     if (cache.has(cacheKey)) return
-
     void scheduleBatch(contentType, id).then((state) => {
       setLiked(state.liked)
       setCount(state.count)
@@ -97,6 +143,12 @@ export function useLike({
   }, [cacheKey, contentType, id])
 
   const toggle = useCallback(async () => {
+   
+   if (!user) {
+      addToast({ type: 'warning', message: 'You need to log in first.' })
+      return
+    }
+
     setIsLoading(true)
     try {
       const res = await fetch(`${API}/api/likes/${contentType}/${id}`, {
@@ -111,7 +163,7 @@ export function useLike({
       }
     } catch { /* ignore */ }
     finally { setIsLoading(false) }
-  }, [contentType, id, cacheKey])
+  }, [contentType, id, cacheKey, user])   // ← user dependency add karo
 
   return { liked, count, toggle, isLoading }
 }

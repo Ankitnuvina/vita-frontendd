@@ -82,9 +82,9 @@ export function Navbar(): React.ReactNode {
                 to={link.to}
                 end={link.end}
                 role="menuitem"
-                className={({ isActive }) =>
+                className={({ isActive }) => 
                   `text-xs xl:text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap transition-colors duration-200 ${isActive
-                    ? 'text-green-700 font-semibold bg-green-100'
+                    ? ' text-white font-semibold bg-[#1e6e3a]'
                     : 'text-ink-3 hover:text-green-600 hover:bg-green-50'
                   }`
                 }

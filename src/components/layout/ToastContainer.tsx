@@ -1,30 +1,31 @@
 import React, { useEffect } from 'react'
 import { useToastStore, type Toast } from '@/store/toast.store'
+import { CircleCheckBig, TriangleAlert, CircleX, BadgeCheck } from 'lucide-react'
 
-const TYPE_STYLES: Record<Toast['type'], { bg: string; border: string; text: string; icon: string }> = {
+const TYPE_STYLES: Record<Toast['type'], { bg: string; border: string; text: string; icon: React.ReactNode }> = {
   success: {
     bg: 'bg-green-50',
     border: 'border-green-200',
     text: 'text-green-700',
-    icon: '✓',
+    icon: <CircleCheckBig className="w-4 h-4" />,
   },
   error: {
     bg: 'bg-red-50',
     border: 'border-red-200',
     text: 'text-red-700',
-    icon: '✕',
+    icon: <CircleX className="w-4 h-4"/>,
   },
   info: {
     bg: 'bg-blue-50',
     border: 'border-blue-200',
     text: 'text-blue-700',
-    icon: 'ℹ',
+    icon: <BadgeCheck className="w-4 h-4"/>,
   },
   warning: {
     bg: 'bg-amber-50',
     border: 'border-amber-200',
     text: 'text-amber-700',
-    icon: '⚠',
+    icon: <TriangleAlert className="w-4 h-4" />,
   },
 }
 

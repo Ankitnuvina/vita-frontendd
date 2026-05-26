@@ -1,18 +1,6 @@
-import React, { useState } from 'react'
-import {
-  useAdminArticles,
-  useCreateArticle,
-  useDeleteArticle,
-  useUpdateArticle,
-  type ArticleInput,
-} from '@/features/admin/hooks/useAdminArticles'
-import {
-  AdminTableShell,
-  ACTION_BUTTON_CLASS_DELETE,
-  ACTION_BUTTON_CLASS_EDIT,
-  TABLE_CELL_CLASS,
-  TABLE_HEADER_CLASS,
-} from '@/features/admin/components/AdminTableShell'
+import React, { useState, useMemo } from 'react'
+import { useAdminArticles, useCreateArticle, useDeleteArticle, useUpdateArticle, type ArticleInput,} from '@/features/admin/hooks/useAdminArticles'
+import { AdminTableShell, ACTION_BUTTON_CLASS_DELETE, ACTION_BUTTON_CLASS_EDIT, TABLE_CELL_CLASS, TABLE_HEADER_CLASS,} from '@/features/admin/components/AdminTableShell'
 import { SlideOver } from '@/features/admin/components/SlideOver'
 import { ConfirmDialog } from '@/features/admin/components/ConfirmDialog'
 import { ArticleForm, type ArticleFormValues } from '@/features/admin/components/ArticleForm'
@@ -20,9 +8,7 @@ import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Article } from '@/globals/types'
 import { X } from 'lucide-react'
 
-
 export function AdminArticlesPage(): React.ReactNode {
-
   const [viewing, setViewing] = useState<Article | null>(null)
 
   const articlesQuery = useAdminArticles()
@@ -60,6 +46,25 @@ export function AdminArticlesPage(): React.ReactNode {
   const isPanelOpen = isCreating || editing !== null
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+  const ARTICLES_PER_PAGE = 10
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    if (!q) return items
+    return items.filter((a) =>
+      a.title?.toLowerCase().includes(q) ||
+      a.author?.toLowerCase().includes(q) ||
+      a.categoryLabel?.toLowerCase().includes(q) ||
+      a.articleStatus?.toLowerCase().includes(q) ||
+      (a.isPremium ? 'premium' : 'free').includes(q)
+    )
+  }, [items, search])
+
+  const totalPages = Math.ceil(filtered.length / ARTICLES_PER_PAGE)
+  const paginated = filtered.slice((page - 1) * ARTICLES_PER_PAGE, page * ARTICLES_PER_PAGE)
+
   return (
     <>
       <AdminTableShell
@@ -75,7 +80,32 @@ export function AdminArticlesPage(): React.ReactNode {
         emptyLabel="No articles yet."
         onCreate={() => setIsCreating(true)}
         createLabel="New Article"
-      >
+      >       
+        <div className="px-6 py-4 border-b border-border flex items-center gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <i className="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-4 text-[12px]" />
+            <input
+              type="text"
+              placeholder="Search by title, author, category, status, access…"
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+              className="w-full h-9 pl-9 pr-4 rounded-full border border-border bg-paper text-[12px] outline-none focus:border-green-500 focus:bg-white transition-colors"
+            />
+          </div>
+          {search && (
+            <button
+              onClick={() => { setSearch(''); setPage(1) }}
+              className="text-[11px] text-ink-3 hover:text-ink transition-colors flex items-center gap-1"
+            >
+              <i className="fa-solid fa-xmark" /> Clear
+            </button>
+          )}
+          {search && (
+            <p className="text-[11px] text-ink-3">
+              {filtered.length} result{filtered.length !== 1 ? 's' : ''} found
+            </p>
+          )}
+        </div>
         <table className="w-full">
           <thead>
             <tr>
@@ -86,21 +116,15 @@ export function AdminArticlesPage(): React.ReactNode {
               <th className={TABLE_HEADER_CLASS}>Articles Status</th>
               <th className={TABLE_HEADER_CLASS}>Access</th>
               <th className={TABLE_HEADER_CLASS}>Publisted Date</th>
-
               <th className={TABLE_HEADER_CLASS}>Sections</th>
               <th className={TABLE_HEADER_CLASS}>Tags</th>
-
-
               <th className={`${TABLE_HEADER_CLASS} text-right`}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((a) => (
+            {paginated.map((a) => (
               <React.Fragment key={a.id}>
-
                 <tr className="hover:bg-green-50 transition-colors">
-
-                  {/* Table for img + title + slug  */}
                   <td className={TABLE_CELL_CLASS}>
                     <div className="flex items-center gap-3">
                       <img
@@ -241,6 +265,44 @@ export function AdminArticlesPage(): React.ReactNode {
             ))}
           </tbody>
         </table>
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-border flex items-center justify-between flex-wrap gap-3">
+            <p className="text-[12px] text-ink-3">
+              Showing {Math.min((page - 1) * ARTICLES_PER_PAGE + 1, filtered.length)}–
+              {Math.min(page * ARTICLES_PER_PAGE, filtered.length)} of {filtered.length} articles
+            </p>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page === 1}
+                className="w-8 h-8 rounded-lg border border-border bg-paper text-ink-3 flex items-center justify-center hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                <i className="fa-solid fa-chevron-left text-[11px]" />
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`w-8 h-8 rounded-lg border text-[12px] font-semibold transition-all ${p === page
+                      ? 'bg-green-600 text-white border-green-600'
+                      : 'border-border bg-paper text-ink-3 hover:border-green-400 hover:text-green-600'
+                    }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page === totalPages}
+                className="w-8 h-8 rounded-lg border border-border bg-paper text-ink-3 flex items-center justify-center hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                <i className="fa-solid fa-chevron-right text-[11px]" />
+              </button>
+            </div>
+          </div>
+        )}
       </AdminTableShell>
 
       {viewing && (
@@ -474,9 +536,7 @@ function ArticleViewModal({ article, onClose }: { article: Article; onClose: () 
               ))}
             </div>
           )}
-
         </div>
-
       </div>
     </div>
   )

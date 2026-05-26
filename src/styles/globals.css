@@ -19,8 +19,8 @@
   --vh-green-200: #AEDABC;
   --vh-green-300: #8EC9A2;
   --vh-green-400: #5FA876;
-  --vh-green-500: #3D8F5A;
-  --vh-green-600: #2D7045;
+  --vh-green-500: #1E6E3A;
+  --vh-green-600: #175A2F;
   --vh-green-700: #1F5331;
 
   --vh-tan-50:  #FDF3EE;
@@ -37,7 +37,7 @@
 
   /* Border / Surfaces */
   --vh-border:    #E4EDE7;
-  --vh-border-2:  #C8D9CE;
+  --vh-border-2:  #1E6E3A;
   --vh-surface:   #FFFFFF;
 
   /* Spacing rhythm (used by container + sections) */

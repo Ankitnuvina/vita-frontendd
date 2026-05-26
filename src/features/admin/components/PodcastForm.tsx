@@ -70,7 +70,7 @@ export function PodcastForm({ initial, onSubmit, onCancel, isSubmitting }: Props
         `${import.meta.env.VITE_API_BASE_URL}/api/admin/upload-video`,
         {
           method: 'POST',
-          credentials: 'include',   // ← yeh missing tha
+          credentials: 'include',
           body: fd,
         }
       )

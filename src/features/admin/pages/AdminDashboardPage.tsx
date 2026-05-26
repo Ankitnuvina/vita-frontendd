@@ -2,11 +2,7 @@ import { useAdminStats } from '@/features/admin/hooks/useAdminStats'
 import { useAdminArticles } from '@/features/admin/hooks/useAdminArticles'
 import { ErrorMessage } from '@/components/common/ErrorMessage'
 import { getUserFriendlyMessage } from '@/lib/errors'
-import {
-  TABLE_CELL_CLASS,
-  TABLE_HEADER_CLASS,
-} from '@/features/admin/components/AdminTableShell'
-
+import { TABLE_CELL_CLASS, TABLE_HEADER_CLASS, } from '@/features/admin/components/AdminTableShell'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLikesAnalytics } from './useLikesAnalytics'
@@ -24,25 +20,37 @@ export function AdminDashboardPage(): React.ReactNode {
   const [searchUser, setSearchUser] = useState('')
   const [contentType, setContentType] = useState('all')
 
+
+
+
+
   const likesQuery = useLikesAnalytics({
     user: searchUser,
     contentType,
   })
 
-type Like = {
-  id: number
-  name: string
-}
+  type Like = {
+    id: number
+    name: string
+  }
 
-const likes = useMemo<Like[]>(() => {
-  return (likesQuery.data as Like[]) ?? []
-}, [likesQuery.data])
+  const likes = useMemo<Like[]>(() => {
+    return (likesQuery.data as Like[]) ?? []
+  }, [likesQuery.data])
 
 
   const statsQuery = useAdminStats()
   const articlesQuery = useAdminArticles()
   const stats = statsQuery.data
   const recent = articlesQuery.data?.data.slice(0, 5) ?? []
+
+  // existing state ke saath yeh add karo
+  const [likesPage, setLikesPage] = useState(1)
+  const LIKES_PER_PAGE = 10
+
+  // likes useMemo ke baad yeh add karo
+  const totalLikesPages = Math.ceil(likes.length / LIKES_PER_PAGE)
+  const paginatedLikes = likes.slice((likesPage - 1) * LIKES_PER_PAGE, likesPage * LIKES_PER_PAGE)
 
   return (
     <div className="space-y-6">
@@ -183,8 +191,8 @@ const likes = useMemo<Like[]>(() => {
                     <td className={`${TABLE_CELL_CLASS} text-right`}>
                       <span
                         className={`inline-flex items-center gap-1.5 text-[13px] font-bold rounded-full px-3 py-1.5 border ${a.isPremium
-                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                            : 'bg-green-50 text-green-700 border-green-100'
+                          ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                          : 'bg-green-50 text-green-700 border-green-100'
                           }`}
                       >
                         <i
@@ -225,7 +233,7 @@ const likes = useMemo<Like[]>(() => {
                 type="text"
                 placeholder="Search by user..."
                 value={searchUser}
-                onChange={(e) => setSearchUser(e.target.value)}
+                onChange={(e) => { setSearchUser(e.target.value); setLikesPage(1) }}
                 className="h-10 pl-9 pr-3.5 rounded-full border border-border bg-paper text-[12px] w-[220px] outline-none focus:border-green-500 focus:bg-white transition-colors"
               />
             </div>
@@ -237,7 +245,7 @@ const likes = useMemo<Like[]>(() => {
               />
               <select
                 value={contentType}
-                onChange={(e) => setContentType(e.target.value)}
+                onChange={(e) => { setContentType(e.target.value); setLikesPage(1) }}
                 className="h-10 pl-9 pr-9 rounded-full border border-border bg-paper text-[12px] font-medium text-ink-2 outline-none focus:border-green-500 focus:bg-white transition-colors appearance-none cursor-pointer min-w-[160px]"
               >
                 <option value="all">All Content</option>
@@ -291,7 +299,7 @@ const likes = useMemo<Like[]>(() => {
                 </tr>
               </thead>
               <tbody>
-                {likes.map((item: any) => (
+                {paginatedLikes.map((item: any) => (
                   <tr
                     key={`${item.userName}-${item.contentId}`}
                     className="hover:bg-paper transition-colors"
@@ -315,14 +323,14 @@ const likes = useMemo<Like[]>(() => {
                       <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-ink-2 bg-paper border border-border rounded-full px-3 py-1.5 capitalize">
                         <i
                           className={`text-[12px] ${item.contentType === 'article'
-                              ? 'fa-solid fa-newspaper'
-                              : item.contentType === 'podcast'
-                                ? 'fa-solid fa-podcast'
-                                : item.contentType === 'video'
-                                  ? 'fa-solid fa-video'
-                                  : item.contentType === 'blog'
-                                    ? 'fa-solid fa-blog'
-                                    : 'fa-solid fa-circle-dot'
+                            ? 'fa-solid fa-newspaper'
+                            : item.contentType === 'podcast'
+                              ? 'fa-solid fa-podcast'
+                              : item.contentType === 'video'
+                                ? 'fa-solid fa-video'
+                                : item.contentType === 'blog'
+                                  ? 'fa-solid fa-blog'
+                                  : 'fa-solid fa-circle-dot'
                             }`}
                           aria-hidden="true"
                         />
@@ -359,6 +367,106 @@ const likes = useMemo<Like[]>(() => {
           </div>
         )}
       </div>
+      {totalLikesPages > 1 && (
+        <div className="px-6 py-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+
+          <p className="text-[12px] text-ink-3">
+            Showing {Math.min((likesPage - 1) * LIKES_PER_PAGE + 1, likes.length)}–
+            {Math.min(likesPage * LIKES_PER_PAGE, likes.length)} of {likes.length} results
+          </p>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+
+            {/* Prev */}
+            <button
+              onClick={() =>
+                setLikesPage((p) => Math.max(p - 1, 1))
+              }
+              disabled={likesPage === 1}
+              className="w-8 h-8 rounded-lg border border-border bg-paper text-ink-3 text-sm flex items-center justify-center hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <i className="fa-solid fa-chevron-left text-[11px]" />
+            </button>
+
+            {/* First Page */}
+            <button
+              onClick={() => setLikesPage(1)}
+              className={`w-8 h-8 rounded-lg border text-[12px] font-semibold transition-all ${likesPage === 1
+                  ? 'bg-green-600 text-white border-green-600'
+                  : 'border-border bg-paper text-ink-3 hover:border-green-400 hover:text-green-600'
+                }`}
+            >
+              1
+            </button>
+
+            {/* Left Dots */}
+            {likesPage > 3 && (
+              <span className="px-1 text-ink-4">
+                ...
+              </span>
+            )}
+
+            {/* Middle Pages */}
+            {Array.from({ length: totalLikesPages })
+              .map((_, i) => i + 1)
+              .filter(
+                (p) =>
+                  p !== 1 &&
+                  p !== totalLikesPages &&
+                  p >= likesPage - 1 &&
+                  p <= likesPage + 1
+              )
+              .map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setLikesPage(p)}
+                  className={`w-8 h-8 rounded-lg border text-[12px] font-semibold transition-all ${p === likesPage
+                      ? 'bg-green-600 text-white border-green-600'
+                      : 'border-border bg-paper text-ink-3 hover:border-green-400 hover:text-green-600'
+                    }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+            {/* Right Dots */}
+            {likesPage < totalLikesPages - 2 && (
+              <span className="px-1 text-ink-4">
+                ...
+              </span>
+            )}
+
+            {/* Last Page */}
+            {totalLikesPages > 1 && (
+              <button
+                onClick={() => setLikesPage(totalLikesPages)}
+                className={`w-8 h-8 rounded-lg border text-[12px] font-semibold transition-all ${likesPage === totalLikesPages
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'border-border bg-paper text-ink-3 hover:border-green-400 hover:text-green-600'
+                  }`}
+              >
+                {totalLikesPages}
+              </button>
+            )}
+
+            {/* Next */}
+            <button
+              onClick={() =>
+                setLikesPage((p) =>
+                  Math.min(p + 1, totalLikesPages)
+                )
+              }
+              disabled={likesPage === totalLikesPages}
+              className="w-8 h-8 rounded-lg border border-border bg-paper text-ink-3 text-sm flex items-center justify-center hover:border-green-400 hover:text-green-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <i className="fa-solid fa-chevron-right text-[11px]" />
+            </button>
+
+          </div>
+        </div>
+      )}
+
+
     </div>
   )
 }

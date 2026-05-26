@@ -112,6 +112,12 @@ const AdminSettingsPage = lazy(() =>
   }))
 )
 
+const AdminUploadsBlogsPage = lazy(() =>
+  import('@/features/admin/pages/AdminUploadsBlogs').then((m) => ({
+    default: m.AdminUploadsBlogsPage,
+  }))
+)
+
 function withSuspense(node: React.ReactNode): React.ReactNode {
   return <Suspense fallback={<PageSkeleton />}>{node}</Suspense>
 }
@@ -163,6 +169,7 @@ const routes: RouteObject[] = [
           { path: 'experts', element: withSuspense(<AdminExpertsPage />) },
           { path: 'tips', element: withSuspense(<AdminTipsPage />) },
           { path: 'settings', element: withSuspense(<AdminSettingsPage />) },
+          { path: 'uploadBlogs', element: withSuspense(<AdminUploadsBlogsPage />) },
         ],
       },
     ],

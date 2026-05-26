@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Blog } from './blogs'
-import { fetchBlogs, uploadBlogDocument } from './blog'
+import { fetchBlogs } from './blog'
 import { SectionHeader } from '@/components/common/SectionHeader'
-import { ChevronRight, ChevronLeft, User, Clock, Calendar, MessageCircle, Upload, Search } from 'lucide-react'
+import { ChevronRight, ChevronLeft, User, Clock, Calendar, MessageCircle, Search } from 'lucide-react'
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
 
 const PER_PAGE = 10
@@ -15,12 +15,12 @@ export function BlogsPage(): React.ReactNode {
 
   const [blogs, setBlogs] = useState<Blog[]>([])
   const [loading, setLoading] = useState(true)
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState<string | null>(null)
+  // const [uploading, setUploading] = useState(false)
+  // const [uploadError, setUploadError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [activeCat, setActiveCat] = useState('All')
   const [page, setPage] = useState(1)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  // const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     fetchBlogs()
@@ -58,26 +58,26 @@ export function BlogsPage(): React.ReactNode {
 
   const handleCat = (cat: string) => { setActiveCat(cat); setPage(1) }
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    setUploadError(null)
-    const formData = new FormData()
-    formData.append('document', file)
-    formData.append('cat', 'General')
-    formData.append('authorName', 'Vitalize Team')
-    formData.append('specialist', 'Health Writer')
-    try {
-      const newBlog = await uploadBlogDocument(formData)
-      setBlogs((prev) => [newBlog, ...prev])
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : 'Upload failed')
-    } finally {
-      setUploading(false)
-      if (fileInputRef.current) fileInputRef.current.value = ''
-    }
-  }
+  // const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0]
+  //   if (!file) return
+  //   setUploading(true)
+  //   setUploadError(null)
+  //   const formData = new FormData()
+  //   formData.append('document', file)
+  //   formData.append('cat', 'General')
+  //   formData.append('authorName', 'Vitalize Team')
+  //   formData.append('specialist', 'Health Writer')
+  //   try {
+  //     const newBlog = await uploadBlogDocument(formData)
+  //     setBlogs((prev) => [newBlog, ...prev])
+  //   } catch (err) {
+  //     setUploadError(err instanceof Error ? err.message : 'Upload failed')
+  //   } finally {
+  //     setUploading(false)
+  //     if (fileInputRef.current) fileInputRef.current.value = ''
+  //   }
+  // }
 
   return (
     <main id="main-content">
@@ -99,10 +99,8 @@ export function BlogsPage(): React.ReactNode {
       </div>
 
       <div className="vh-container py-8 sm:py-10">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
-          <SectionHeader eyebrow="Healthcare Blogs" title="Vitalize" titleAccent="Blog" />
 
-          <div className="flex flex-col sm:flex-row sm:items-start gap-3 shrink-0 w-full sm:w-auto">
+        {/* <div className="flex flex-col sm:flex-row sm:items-start gap-3 shrink-0 w-full sm:w-auto">
             <input
               ref={fileInputRef}
               type="file"
@@ -146,10 +144,27 @@ export function BlogsPage(): React.ReactNode {
                 className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
               />
             </div>
+          </div> */}
+
+
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
+          <SectionHeader eyebrow="Healthcare Blogs" title="Vitalize" titleAccent="Blog" />
+          <div className="relative w-full sm:w-64 shrink-0">
+            <label htmlFor="article-search" className="sr-only"> Search blogs</label>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
+              <Search className='w-4 h-4' />
+            </span>
+            <input
+              id="blog-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search blogs..."
+              className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
+            />
           </div>
         </div>
 
-        {uploadError && (
+        {/* {uploadError && (
           <div
             role="alert"
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 mb-6 w-fit"
@@ -157,7 +172,7 @@ export function BlogsPage(): React.ReactNode {
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
             <p className="text-[11px] font-medium text-red-600">{uploadError}</p>
           </div>
-        )}
+        )} */}
 
         {featuredBlog && (
           <div

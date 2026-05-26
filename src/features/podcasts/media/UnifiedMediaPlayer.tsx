@@ -160,7 +160,7 @@ export function UnifiedMediaPlayer({
         <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
       )}
 
-      <div className="mt-2 rounded-md border border-border bg-white p-2 absolute bottom-[10px] left-[2.5%] w-[95%] bg-white/80 border-0">
+      <div className="mt-2 rounded-md border border-border bg-white p-1 absolute bottom-[10px] left-[2.5%] w-[95%] bg-white/80 border-0">
         <div className="flex items-center gap-3">
           <button
             type="button"

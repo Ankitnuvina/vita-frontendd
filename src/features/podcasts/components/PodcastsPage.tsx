@@ -303,22 +303,11 @@ function PodcastCard({
 
         <div className="h-px bg-neutral-100 mb-3" />
 
-        <div className="flex gap-2">
-          {/* <button
-            type="button"
-            onClick={onTogglePlay}
-            className={`flex-1 text-[12px] font-bold rounded-md py-2 transition-all duration-200 ${isExpanded
-              ? 'text-neutral-600 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200'
-              : 'text-white bg-green-500 hover:bg-green-600 shadow-sm shadow-green-200'
-              }`}
-          >
-            {isExpanded ? '❚❚ Pause' : '▶ Play'}
-          </button> */}
-
+        <div className="flex gap-2">          
           <button
             type="button"
             onClick={onOpenDetails}
-            className="flex-1 text-[12px] font-bold text-neutral-500 bg-white border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-neutral-700 transition-all duration-200"
+            className="flex-1 text-[12px] font-bold text-white bg-green-500 border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-white-700 transition-all duration-200"
           >
             Details
           </button>
