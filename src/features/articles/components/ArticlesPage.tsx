@@ -80,7 +80,7 @@ export function ArticlesPage(): React.ReactNode {
         </div>
 
         {isLoading || isSearching ? (
-          <ArticleCardSkeleton />
+          <ArticleCardSkeleton count={3}/>
         ) : isError ? (
           <ErrorMessage
             message={getUserFriendlyMessage(error)}
