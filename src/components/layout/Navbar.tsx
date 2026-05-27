@@ -63,7 +63,7 @@ export function Navbar(): React.ReactNode {
             className="flex items-center gap-2 shrink-0"
             aria-label="Vitalize Health — go to home"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-green-500 rounded-xl flex items-center justify-center text-white text-base shrink-0 shadow-soft">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-green-500 rounded-lg flex items-center justify-center text-white text-base shrink-0 shadow-soft">
               🌿
             </div>
             <span className="font-serif text-lg sm:text-xl font-bold text-ink tracking-tight">

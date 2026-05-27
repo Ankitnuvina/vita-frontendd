@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { Article } from '@/globals/types'
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
-import { X } from 'lucide-react'
+import { X, Send } from 'lucide-react'
+import { CommentButton } from '@/features/comments/components/CommentButton'
+import { CommentModal } from '@/features/comments/components/CommentModal'
 
 interface Props {
     article: Article
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode {
+    const [openComments, setOpenComments] = useState(false)
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 pt-4"
             onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
@@ -23,17 +27,17 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                         </div>
                     </div>
 
-                     <div className="bg-white flex justify-end absolute p-0 border-0 right-[10px] top-[10px] bottom-auto">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="text-xs font-semibold text-green-500 border border-green-200 rounded-full hover:bg-neutral-50 transition-colors">
-                        <X className='w-4 h-4' />
-                    </button>
-                </div>
+                    <div className="bg-white flex justify-end absolute p-0 border-0 right-[10px] top-[10px] bottom-auto">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-green-400 hover:text-neutral-700 hover:bg-green-100 transition-colors">
+                            <X className='w-4 h-4' />
+                        </button>
+                    </div>
                 </div>
 
-                
+
 
 
                 {article.imageUrl && (
@@ -48,37 +52,45 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                     </div>
                 )}
 
-                <div className="flex flex-wrap items-center gap-2 px-6 py-3 border-b border-neutral-100">
-                    <span
-                        className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border"
-                        style={{
-                            color: article.categoryColor,
-                            borderColor: article.categoryColor,
-                            backgroundColor: `${article.categoryColor}18`,
-                        }}
-                    >
-                        {article.categoryLabel}
-                    </span>
-                    {article.isPremium && (
-                        <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
-                            Premium
+                <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-b border-neutral-100 bg-white">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span
+                            className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border shadow-sm"
+                            style={{
+                                color: article.categoryColor,
+                                borderColor: article.categoryColor,
+                                backgroundColor: `${article.categoryColor}18`,
+                            }}
+                        >
+                            {article.categoryLabel}
                         </span>
-                    )}
-                    <span
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border capitalize ${article.articleStatus === 'published'
-                            ? 'bg-green-50 text-green-700 border-green-200'
-                            : article.articleStatus === 'draft'
-                                ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                : 'bg-blue-50 text-blue-700 border-blue-200'
-                            }`}
-                    >
-                        {article.articleStatus}
-                    </span>
-                    <div className="ml-auto flex items-center">
-                        <LikeButton
-                            contentType="article"
-                            contentId={article.id}
-                        />
+                        {article.isPremium && (
+                            <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 shadow-sm">
+                                Premium
+                            </span>
+                        )}
+                        <span
+                            className={`text-[10px] font-bold px-2.5 py-1 rounded-full border capitalize shadow-sm ${article.articleStatus === 'published'
+                                    ? 'bg-green-50 text-green-700 border-green-200'
+                                    : article.articleStatus === 'draft'
+                                        ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                        : 'bg-blue-50 text-blue-700 border-blue-200'
+                                }`}
+                        >
+                            {article.articleStatus}
+                        </span>
+                    </div>
+                    <div className="flex items-center ml-auto">
+                        <div className="flex items-center justify-center px-2.5 py-1.5 rounded-full hover:bg-neutral-100 transition-all duration-200">
+                            <LikeButton contentType="article" contentId={article.id} />
+                        </div>
+                        <div className="flex items-center justify-center px-2.5 py-1.5 rounded-full hover:bg-neutral-100 transition-all duration-200">
+                            <CommentButton contentType="article" contentId={article.id} onClick={() => setOpenComments(true)}/>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500 hover:text-green-600 hover:bg-green-50 transition-all duration-200 cursor-pointer active:scale-95">
+                            <Send className="h-4 w-4" />
+                            <span className="text-xs font-semibold">0</span>
+                        </div>
                     </div>
                 </div>
 
@@ -166,9 +178,22 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                     )}
                 </div>
                 {/* Footer */}
-               
+
 
             </div>
+            {openComments && (
+                <div
+                    className="border-t border-border bg-neutral-50 p-4"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <CommentModal
+                        contentType="article"
+                        contentId={article.id}
+                        total={0}
+                        onClose={() => setOpenComments(false)}
+                    />
+                </div>
+            )}
         </div>
     )
 }

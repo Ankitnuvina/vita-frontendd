@@ -82,7 +82,7 @@
   font-weight: 700;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: #86EFAC;
+  color: #ffff;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -98,7 +98,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #86EFAC
+  background: #ffff
 }
 
 .vita-home-page .tick-track {

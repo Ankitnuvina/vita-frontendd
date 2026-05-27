@@ -6,10 +6,14 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { usePodcasts } from '@/features/podcasts/hooks/usePodcasts'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Podcast } from '@/globals/types'
+import { PodcastDetailModal } from './PodcastDetailModal'
 
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
+import { CommentButton } from '@/features/comments/components/CommentButton'
+import { CommentModal } from '@/features/comments/components/CommentModal'
+
 import { UnifiedMediaPlayer } from '@/features/podcasts/media/UnifiedMediaPlayer'
-import { Search } from 'lucide-react'
+import { Search, Send } from 'lucide-react'
 
 interface PodcastCardProps {
   podcast: Podcast
@@ -20,6 +24,7 @@ interface PodcastCardProps {
 
 // Podcasts static uper part and rating part
 export function PodcastsPage(): React.ReactNode {
+
   const { data: podcasts, isLoading, isError, error, refetch } = usePodcasts()
   const [expandedPodcastId, setExpandedPodcastId] = useState<number | null>(null)
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null)
@@ -49,6 +54,7 @@ export function PodcastsPage(): React.ReactNode {
   }, [podcasts, deferredSearch, selectedCat])
 
   return (
+    <>
     <main id="main-content">
       {/* ── Sticky category tabs (same style as Articles / Blogs page) ── */}
       <div className="bg-white/95 backdrop-blur-md border-b border-border py-3 sticky top-14 sm:top-16 z-[98]">
@@ -57,11 +63,10 @@ export function PodcastsPage(): React.ReactNode {
             <button
               key={cat}
               onClick={() => setSelectedCat(cat)}
-              className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${
-                selectedCat === cat
-                  ? 'bg-green-600 text-white border-green-600 shadow-soft'
-                  : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
-              }`}
+              className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${selectedCat === cat
+                ? 'bg-green-600 text-white border-green-600 shadow-soft'
+                : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
+                }`}
             >
               {cat}
             </button>
@@ -127,83 +132,16 @@ export function PodcastsPage(): React.ReactNode {
           ))}
         </div>
       </div>
-      {selectedPodcast && (
+     
+    </main>
+     {selectedPodcast && (
         <PodcastDetailModal podcast={selectedPodcast} onClose={() => setSelectedPodcast(null)} />
       )}
-    </main>
+      </>
   )
 }
 
-// Detail modal part 
-interface PodcastDetailModalProps {
-  podcast: Podcast
-  onClose: () => void
-}
-function PodcastDetailModal({ podcast, onClose }: PodcastDetailModalProps): React.ReactNode {
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
-      }}
-    >
-      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-100 bg-white shadow-2xl animate-zoom-in">
-        <div className="flex items-start justify-between gap-3 px-4 sm:px-6 pt-4 pb-4 border-b border-neutral-100">
-          <div className="flex flex-col gap-2 min-w-0 flex-1">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-green-600">
-              {podcast.episode} · {podcast.category}
-            </p>
-            <h2 className="text-lg sm:text-xl font-bold leading-snug text-neutral-900">
-              {podcast.title}
-              <span className="ml-2 text-sm font-medium text-neutral-500">
-                with
-              </span>
-              <span className="ml-1 text-sm font-semibold text-neutral-600">
-                {podcast.guest}
-              </span>
-            </h2>
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-neutral-500">
-              <span className="flex items-center gap-1">
-                <span className="font-medium text-neutral-700">
-                  EP Duration :
-                </span>
-                {podcast.duration}
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="font-medium text-neutral-700">
-                  Date :
-                </span>
-                {podcast.date}
-              </span>
-              <div>
-                <LikeButton
-                  contentType="podcast"
-                  contentId={podcast.id}
-                />
-              </div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close podcast detail"
-            className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-700 transition-colors text-sm font-bold"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="px-4 sm:px-6 py-5">
-          <UnifiedMediaPlayer
-            mediaId={`podcast-${podcast.id}-detail`}
-            title={podcast.title}
-            sourceUrl={podcast.videoUrl}
-            kind="video"
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
+
 
 
 // Podcast play part
@@ -213,107 +151,120 @@ function PodcastCard({
   onTogglePlay,
   onOpenDetails,
 }: PodcastCardProps): React.ReactNode {
+  const [openComments, setOpenComments] = useState(false)
   return (
-    <article className="bg-white rounded-2xl overflow-hidden border border-neutral-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col group shadow-sm">
-      <div className="relative overflow-hidden bg-neutral-950">
-        {isExpanded ? (
-          <div className="p-0 pb-0">
-            <UnifiedMediaPlayer
-              mediaId={`podcast-${podcast.id}`}
-              title={podcast.title}
-              sourceUrl={podcast.videoUrl}
-              kind="video"
-              className="rounded-2xl overflow-hidden"
-              autoPlay
-            />
-          </div>
-        ) : (
-          <div className="relative h-44">
-            <video
-              src={podcast.videoUrl}
-              className="w-full h-[176px] object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
-              playsInline
-              muted
-              preload="metadata"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute top-1 left-2">
-              <span className="text-[9px] font-black tracking-[0.12em] uppercase text-white/90 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-2.5 py-1">
-                {podcast.episode}
-              </span>
+    <>
+      <article className="bg-white rounded-2xl overflow-hidden border border-neutral-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col group shadow-sm">
+        <div className="relative overflow-hidden bg-neutral-950">
+          {isExpanded ? (
+            <div className="p-0 pb-0">
+              <UnifiedMediaPlayer
+                mediaId={`podcast-${podcast.id}`}
+                title={podcast.title}
+                sourceUrl={podcast.videoUrl}
+                kind="video"
+                className="rounded-2xl overflow-hidden"
+                autoPlay
+              />
             </div>
+          ) : (
+            <div className="relative h-44">
+              <video
+                src={podcast.videoUrl}
+                className="w-full h-[176px] object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
+                playsInline
+                muted
+                preload="metadata"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute top-1 left-2">
+                <span className="text-[9px] font-black tracking-[0.12em] uppercase text-white/90 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-2.5 py-1">
+                  {podcast.episode}
+                </span>
+              </div>
 
-            <div className="absolute top-1 right-2">
-              <span className="text-[9px] font-bold tracking-wide uppercase text-white bg-green-400 backdrop-blur-sm border border-green-500/30 rounded-full px-2.5 py-1">
-                {podcast.category}
-              </span>
+              <div className="absolute top-1 right-2">
+                <span className="text-[9px] font-bold tracking-wide uppercase text-white bg-green-400 backdrop-blur-sm border border-green-500/30 rounded-full px-2.5 py-1">
+                  {podcast.category}
+                </span>
+              </div>
+
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={onTogglePlay}
+                  aria-label={`Play ${podcast.title}`}
+                  className="w-10 h-10 bg-white active:scale-95 rounded-full flex items-center justify-center text-green-500 shadow-lg shadow-green-500/40 transition-all duration-200"
+                >
+                  <span className="text-sm pl-0.5">▶</span>
+                </button>
+              </div>
+
             </div>
+          )}
+        </div>
 
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button
-                type="button"
-                onClick={onTogglePlay}
-                aria-label={`Play ${podcast.title}`}
-                className="w-10 h-10 bg-white active:scale-95 rounded-full flex items-center justify-center text-green-500 shadow-lg shadow-green-500/40 transition-all duration-200"
-              >
-                <span className="text-sm pl-0.5">▶</span>
-              </button>
+        <div className="p-4 flex flex-col flex-1">
+          {isExpanded && (
+            <span className="text-[9px] font-black tracking-[0.12em] uppercase text-green-600 mb-2">
+              {podcast.category}
+            </span>
+          )}
+          <div className="flex items-start justify-between gap-4 mb-2">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-serif text-[15px] font-bold text-neutral-900 leading-snug line-clamp-2 truncate">{podcast.title}</h3>
+              <p className="mt-1.5 text-[11px] text-neutral-400 truncate">with{' '}<span className="text-neutral-700 font-semibold">{podcast.guest}</span></p>
             </div>
-
+            <div className="flex items-center gap-3 shrink-0 text-neutral-500 text-xs">
+              <LikeButton contentType="podcast" contentId={podcast.id} />
+              <div className="flex items-center gap-1 hover:text-green-600 transition-colors cursor-pointer">              
+                <CommentButton contentType="podcast" contentId={podcast.id} onClick={() => setOpenComments(true)} />
+              </div>
+              <div className="flex items-center gap-1 hover:text-green-600 transition-colors cursor-pointer">
+                <Send className="w-4 h-4" />
+              </div>
+            </div>
           </div>
-        )}
-      </div>
 
-      <div className="p-4 flex flex-col flex-1">
-        {isExpanded && (
-          <span className="text-[9px] font-black tracking-[0.12em] uppercase text-green-600 mb-2">
-            {podcast.category}
-          </span>
-        )}
-        <div className="flex items-start justify-between gap-3 mb-1">
-          <div className="flex-1 min-w-0">
-            <h3 className="font-serif text-sm font-bold text-neutral-900 leading-snug line-clamp-2 truncate ">
-              {podcast.title}
-            </h3>
-            <p className="mt-1 text-[11px] text-neutral-400 truncate">
-              with{' '}
-              <span className="text-neutral-600 font-medium">
-                {podcast.guest}
-              </span>
-            </p>
+          <div className="flex items-center justify-between mb-3 mt-2">
+            <span className="flex items-center gap-1 text-[10px] text-neutral-400 font-medium">
+              <span className="text-green-500">▶</span>
+              {podcast.duration}
+            </span>
+
+            <span className="text-[10px] text-neutral-400 font-medium">
+              {podcast.date}
+            </span>
           </div>
-          <div className="shrink-0">
-            <LikeButton
-              contentType="podcast"
-              contentId={podcast.id}
-            />
+
+          <div className="h-px bg-neutral-100 mb-3" />
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onOpenDetails}
+              className="flex-1 text-[12px] font-bold text-white bg-green-500 border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-white-700 transition-all duration-200"
+            >
+              Details
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between mb-3 mt-2">
-          <span className="flex items-center gap-1 text-[10px] text-neutral-400 font-medium">
-            <span className="text-green-500">▶</span>
-            {podcast.duration}
-          </span>
-
-          <span className="text-[10px] text-neutral-400 font-medium">
-            {podcast.date}
-          </span>
+      </article>
+      {openComments && (
+        <div
+          className="border-t border-border bg-neutral-50 p-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <CommentModal
+            contentType="podcast"
+            contentId={podcast.id}
+            total={0}
+            onClose={() => setOpenComments(false)}
+          />
         </div>
-
-        <div className="h-px bg-neutral-100 mb-3" />
-
-        <div className="flex gap-2">          
-          <button
-            type="button"
-            onClick={onOpenDetails}
-            className="flex-1 text-[12px] font-bold text-white bg-green-500 border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-white-700 transition-all duration-200"
-          >
-            Details
-          </button>
-        </div>
-      </div>
-    </article>
+      )}
+    </>
   )
 }
 

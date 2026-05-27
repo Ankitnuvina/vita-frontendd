@@ -81,6 +81,11 @@
     scroll-behavior: smooth;
     /* clip (not hidden) prevents horizontal scroll WITHOUT breaking position:sticky */
     overflow-x: clip;
+    /* Reserve scrollbar gutter ALWAYS so that toggling body overflow (e.g. when
+       a modal locks scroll) never causes the page to shift sideways — which
+       on Windows reads as a violent "blink" when the modal opens/closes and
+       again as the cursor moves and the GPU recomposes the un-shifted layers. */
+    scrollbar-gutter: stable;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -438,4 +443,29 @@
   nav, footer, button, .no-print { display: none !important; }
   body { background: #fff; color: #000; }
   a { text-decoration: underline; }
+}
+
+
+.comments_text_main {
+    max-height: 70px;
+    border: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.comments_text_main textarea.comments_text {
+    max-height: 70px !important;
+    border: 1px solid green;
+    border-radius: 5px;
+    min-height: 45px !important;
+    padding: 10px 10px;
+    overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+}
+
+.comments_text_main textarea::-webkit-scrollbar {
+  display: none;
 }

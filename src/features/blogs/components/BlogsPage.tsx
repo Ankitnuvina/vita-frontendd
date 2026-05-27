@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import type { Blog } from './blogs'
 import { fetchBlogs } from './blog'
 import { SectionHeader } from '@/components/common/SectionHeader'
-import { ChevronRight, ChevronLeft, User, Clock, Calendar, MessageCircle, Search } from 'lucide-react'
+import { ChevronRight, ChevronLeft, User, Clock, Calendar, Search, Send } from 'lucide-react'
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
+import { CommentButton } from '@/features/comments/components/CommentButton'
+import { CommentModal } from '@/features/comments/components/CommentModal'
 
 const PER_PAGE = 10
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3005'
@@ -15,12 +17,9 @@ export function BlogsPage(): React.ReactNode {
 
   const [blogs, setBlogs] = useState<Blog[]>([])
   const [loading, setLoading] = useState(true)
-  // const [uploading, setUploading] = useState(false)
-  // const [uploadError, setUploadError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [activeCat, setActiveCat] = useState('All')
   const [page, setPage] = useState(1)
-  // const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     fetchBlogs()
@@ -58,26 +57,9 @@ export function BlogsPage(): React.ReactNode {
 
   const handleCat = (cat: string) => { setActiveCat(cat); setPage(1) }
 
-  // const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0]
-  //   if (!file) return
-  //   setUploading(true)
-  //   setUploadError(null)
-  //   const formData = new FormData()
-  //   formData.append('document', file)
-  //   formData.append('cat', 'General')
-  //   formData.append('authorName', 'Vitalize Team')
-  //   formData.append('specialist', 'Health Writer')
-  //   try {
-  //     const newBlog = await uploadBlogDocument(formData)
-  //     setBlogs((prev) => [newBlog, ...prev])
-  //   } catch (err) {
-  //     setUploadError(err instanceof Error ? err.message : 'Upload failed')
-  //   } finally {
-  //     setUploading(false)
-  //     if (fileInputRef.current) fileInputRef.current.value = ''
-  //   }
-  // }
+
+  const [openComments, setOpenComments] = useState(false)
+  const [selectedBlogId, setSelectedBlogId] = useState<string | number | null>(null)
 
   return (
     <main id="main-content">
@@ -100,52 +82,6 @@ export function BlogsPage(): React.ReactNode {
 
       <div className="vh-container py-8 sm:py-10">
 
-        {/* <div className="flex flex-col sm:flex-row sm:items-start gap-3 shrink-0 w-full sm:w-auto">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.docx,.xlsx,.txt"
-              className="hidden"
-              onChange={handleUpload}
-            />
-            <div className="flex flex-col items-start gap-1 shrink-0">
-              <button style={{ width: '100%' }}
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs font-semibold text-white bg-green-600 hover:bg-green-700 border border-green-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-auto"
-              >
-                {uploading ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Parsing document…</span>
-                  </>
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4" />
-                    <span>Upload</span>
-                  </>
-                )}
-              </button>
-              <p className="text-[10px] text-ink-4 font-medium tracking-wide">
-                Supports: PDF, DOCX, TXT
-              </p>
-            </div>
-
-            <div className="relative w-full sm:w-64 shrink-0">
-              <label htmlFor="blog-search" className="sr-only">Search blogs</label>
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
-                <Search className="w-4 h-4" />
-              </span>
-              <input
-                id="blog-search"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-                placeholder="Search blogs…"
-                className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
-              />
-            </div>
-          </div> */}
-
 
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
           <SectionHeader eyebrow="Healthcare Blogs" title="Vitalize" titleAccent="Blog" />
@@ -163,16 +99,6 @@ export function BlogsPage(): React.ReactNode {
             />
           </div>
         </div>
-
-        {/* {uploadError && (
-          <div
-            role="alert"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 mb-6 w-fit"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            <p className="text-[11px] font-medium text-red-600">{uploadError}</p>
-          </div>
-        )} */}
 
         {featuredBlog && (
           <div
@@ -259,50 +185,55 @@ export function BlogsPage(): React.ReactNode {
                 </div>
 
                 <div className="flex flex-col flex-1 p-4 gap-2">
-                  <h3 className="text-sm font-semibold text-gray-900 leading-snug group-hover:text-emerald-700 transition-colors duration-200 truncate">
-                    {blog.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 flex-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-sm font-semibold text-gray-900 leading-snug group-hover:text-emerald-700 transition-colors duration-200 line-clamp-2 flex-1">
+                      {blog.title}
+                    </h3>
+                    <div className="flex items-center gap-3 shrink-0 pt-0.5" onClick={(e) => e.stopPropagation()}>
+                      <LikeButton contentType="blog" contentId={blog.id} />
+                      <CommentButton
+                        contentType="blog"
+                        contentId={blog.id}
+                        onClick={() => {
+                          setSelectedBlogId(blog.id)
+                          setOpenComments(true)
+                        }}
+                      />
+                      <button className="flex items-center text-gray-400 hover:text-emerald-600 transition-colors">
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
                     {blog.desc}
                   </p>
-
-                  <div className="border-t border-gray-100 mt-1 pt-3 flex items-center justify-between">
+                  <div className="border-t border-gray-100 mt-auto pt-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: blog.color }}>
-                        <User size={13} style={{ color: blog.textColor }} />
+                      <div
+                        className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: blog.color }}
+                      >
+                        <User size={12} style={{ color: blog.textColor }} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-medium text-gray-700 leading-none">{blog.authorName}</p>
-                        <p className="text-[10px] text-gray-400 leading-none mt-0.5">{blog.specialist}</p>
+                        <p className="text-[11px] font-medium text-gray-700 leading-none truncate max-w-[140px]">
+                          {blog.authorName}
+                        </p>
+                        <p className="text-[10px] text-gray-400 leading-none mt-0.5 truncate max-w-[140px]">
+                          {blog.specialist}
+                        </p>
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-0.5">
-                      <span className="flex items-center gap-1 text-[10px] text-gray-400"><Clock size={10} /> {blog.read}</span>
-                      <span className="flex items-center gap-1 text-[10px] text-gray-400"><Calendar size={10} /> {blog.date}</span>
+                      <span className="flex items-center gap-1 text-[10px] text-gray-400">
+                        <Clock size={10} /> {blog.read}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] text-gray-400">
+                        <Calendar size={10} /> {blog.date}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="border-t border-[#cccccc85] pt-[10px] flex items-center justify-between">
-                    <button
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-1 text-[13px] text-black/60 hover:text-emerald-600 transition-colors"
-                    >
-                      <LikeButton contentType="blog" contentId={blog.id} /> Like
-
-                    </button>
-                    <button
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-1 text-[13px] text-black/60 hover:text-emerald-600 transition-colors"
-                    >
-                      <MessageCircle className="w-4 h-4" /> Comment
-                    </button>
-                    <button
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-1 text-[13px] text-black/60 hover:text-emerald-600 transition-colors"
-                    >
-                      <i className="fa-solid fa-share text-[14px]" /> Share
-                    </button>
-                  </div>
                 </div>
               </div>
             ))}
@@ -351,6 +282,23 @@ export function BlogsPage(): React.ReactNode {
           )}
         </div>
       </div>
+
+      {openComments && selectedBlogId && (
+        <div
+          className="border-t border-border bg-neutral-50 p-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <CommentModal
+            contentType="blog"
+            contentId={selectedBlogId}
+            total={0}
+            onClose={() => {
+              setOpenComments(false)
+              setSelectedBlogId(null)
+            }}
+          />
+        </div>
+      )}
     </main>
   )
 }

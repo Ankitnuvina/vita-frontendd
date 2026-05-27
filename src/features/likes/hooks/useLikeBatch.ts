@@ -70,53 +70,11 @@ function scheduleBatch(contentType: string, contentId: string): Promise<LikeStat
           currentResolvers.get(id)?.forEach((r) => r(state))
         }
       }
-    }, 50) // 50ms debounce — saare cards render hone ka wait
+    }, 50)
   })
 }
 
-// export function useLike({
-//   contentType,
-//   contentId,
-// }: {
-//   contentType: 'article' | 'podcast' | 'blog' | 'video'
-//   contentId: string | number
-// }) {
-//   const id = String(contentId)
-//   const cacheKey = `${contentType}:${id}`
 
-//   const [liked, setLiked] = useState(() => cache.get(cacheKey)?.liked ?? false)
-//   const [count, setCount] = useState(() => cache.get(cacheKey)?.count ?? 0)
-//   const [isLoading, setIsLoading] = useState(false)
-
-//   useEffect(() => {
-//     // Cache mein hai toh fetch mat karo
-//     if (cache.has(cacheKey)) return
-
-//     void scheduleBatch(contentType, id).then((state) => {
-//       setLiked(state.liked)
-//       setCount(state.count)
-//     })
-//   }, [cacheKey, contentType, id])
-
-//   const toggle = useCallback(async () => {
-//     setIsLoading(true)
-//     try {
-//       const res = await fetch(`${API}/api/likes/${contentType}/${id}`, {
-//         method: 'POST',
-//         credentials: 'include',
-//       })
-//       if (res.ok) {
-//         const data = await res.json() as { liked: boolean; count: number }
-//         setLiked(data.liked)
-//         setCount(data.count)
-//         cache.set(cacheKey, { liked: data.liked, count: data.count })
-//       }
-//     } catch { /* ignore */ }
-//     finally { setIsLoading(false) }
-//   }, [contentType, id, cacheKey])
-
-//   return { liked, count, toggle, isLoading }
-// }
 
 export function useLike({
   contentType,
@@ -127,7 +85,7 @@ export function useLike({
 }) {
   const id = String(contentId)
   const cacheKey = `${contentType}:${id}`
-  const { user } = useAuthStore()   // ← add karo
+  const { user } = useAuthStore()
    const addToast = useToastStore((s) => s.addToast)
 
   const [liked, setLiked] = useState(() => cache.get(cacheKey)?.liked ?? false)
@@ -163,7 +121,7 @@ export function useLike({
       }
     } catch { /* ignore */ }
     finally { setIsLoading(false) }
-  }, [contentType, id, cacheKey, user])   // ← user dependency add karo
+  }, [contentType, id, cacheKey, user])
 
   return { liked, count, toggle, isLoading }
 }
