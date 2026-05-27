@@ -150,7 +150,6 @@ export function ArticlesPage(): React.ReactNode {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {/* First Page */}
                 <button
                   onClick={() => setPage(1)}
                   className={`w-8 h-8 rounded-md text-xs font-semibold transition-colors ${page === 1
