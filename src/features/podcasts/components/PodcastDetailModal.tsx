@@ -17,10 +17,10 @@ export function PodcastDetailModal({ podcast, onClose }: PodcastDetailModalProps
     return (
         <>
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+                className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
                 onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
             >
-                <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl border border-neutral-100 animate-zoom-in">
+                <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto overflow-hidden rounded-md bg-white shadow-2xl border border-neutral-100 animate-zoom-in">
 
                     {/* ── Header ── */}
                     <div className="flex items-start justify-between gap-3 px-5 sm:px-6 pt-5 pb-4 border-b border-neutral-100">
@@ -89,15 +89,16 @@ export function PodcastDetailModal({ podcast, onClose }: PodcastDetailModalProps
                             type="button"
                             onClick={onClose}
                             aria-label="Close podcast detail"
-                            className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-800 transition-colors mt-0.5"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-green-400 hover:text-neutral-700 hover:bg-green-100 transition-colors"
                         >
                             <X className="w-4 h-4" />
                         </button>
                     </div>
 
                     {/* ── Video Player ── */}
-                    <div className="px-5 sm:px-6 py-5">
-                        <div className="rounded-xl overflow-hidden bg-neutral-950">
+                    <div className="px-5 sm:px-6 pb-5 pt-2">
+                        {/* rounded-xl overflow-hidden bg-neutral-950 → sirf rounded-xl overflow-hidden */}
+                        <div className="rounded-xl overflow-hidden">
                             <UnifiedMediaPlayer
                                 mediaId={`podcast-${podcast.id}-detail`}
                                 title={podcast.title}

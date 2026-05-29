@@ -33,12 +33,12 @@ export function ExpertForm({ initial, onSubmit, onCancel, isSubmitting }: Props)
   const [values, setValues] = useState<ExpertFormValues>(() =>
     initial
       ? {
-          name: initial.name,
-          role: initial.role,
-          credentials: initial.credentials,
-          articleCount: initial.articleCount,
-          imageUrl: initial.imageUrl,
-        }
+        name: initial.name,
+        role: initial.role,
+        credentials: initial.credentials,
+        articleCount: initial.articleCount,
+        imageUrl: initial.imageUrl,
+      }
       : EMPTY
   )
   const [errors, setErrors] = useState<Partial<Record<keyof ExpertFormValues, string>>>({})
@@ -99,16 +99,7 @@ export function ExpertForm({ initial, onSubmit, onCancel, isSubmitting }: Props)
         />
       </Field>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Article Count" error={errors.articleCount} required>
-          <input
-            type="number"
-            min={0}
-            value={values.articleCount}
-            onChange={(e) => setField('articleCount', Number(e.target.value))}
-            className={INPUT_CLASS}
-          />
-        </Field>
+      <div className="grid grid-cols-2 gap-3">       
         <Field label="Image URL" error={errors.imageUrl} required>
           <input
             type="url"

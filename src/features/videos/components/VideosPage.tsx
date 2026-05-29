@@ -3,6 +3,7 @@ import { SectionHeader } from '@/components/common/SectionHeader'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ArticleCardSkeleton } from '@/components/common/ArticleCardSkeleton'
 import { UnifiedMediaPlayer } from '@/features/podcasts/media/UnifiedMediaPlayer'
+import { Search } from 'lucide-react'
 
 const VIDEOS = [
   {
@@ -147,13 +148,15 @@ export function VideosPage(): React.ReactNode {
           <SectionHeader eyebrow="Browse" title="All" titleAccent="Videos" />
           <div className="relative w-full sm:w-64 shrink-0">
             <label htmlFor="video-search" className="sr-only">Search videos</label>
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40">🔍</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
+              <Search className='w-4 h-4' />
+            </span>
             <input
               id="video-search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search videos..."
-              className="w-full rounded-full border border-border bg-white py-2 pl-8 pr-4 text-xs text-ink outline-none transition-colors focus:border-green-400"
+              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
             />
           </div>
         </div>

@@ -153,46 +153,81 @@ export function UnifiedMediaPlayer({
   }
 
   return (
-    <div className={className}>
-      {kind === 'video' ? (
-        <video ref={mediaRef} src={sourceUrl} poster={posterUrl} autoPlay={autoPlay} className="w-full h-[176px] rounded-md bg-black object-cover" />
-      ) : (
-        <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
-      )}
+    <div className={`relative ${className ?? ''}`}>
+    {/* ── Media element ── */}
+    {kind === 'video' ? (
+      <video
+        ref={mediaRef}
+        src={sourceUrl}
+        poster={posterUrl}
+        autoPlay={autoPlay}
+        className="w-full aspect-video rounded-t-xl bg-black object-cover block"
+      />
+    ) : (
+      <audio ref={mediaRef} src={sourceUrl} preload="metadata" />
+    )}
 
-      <div className="mt-2 rounded-md border border-border bg-white p-1 absolute bottom-[10px] left-[2.5%] w-[95%] bg-white/80 border-0">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => void togglePlayPause()}
-            aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`}
-            className="h-8 min-w-10 rounded-md bg-green-500 px-3 text-xs font-bold text-white transition-colors hover:bg-green-600"
-          >
-            {isPlaying ? 'Pause' : 'Play'}
-          </button>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-semibold text-ink">{title}</p>
+    {/* ── Controls bar ── */}
+    <div className="bg-neutral-900 rounded-b-xl px-4 py-3 flex flex-col gap-2">
 
-            <div className="mt-2 flex items-center gap-2">
-              <span className="shrink-0 text-[10px] text-ink-4 tabular-nums">
-                {formatTime(currentTime)}
-              </span>
-              <input
-                type="range"
-                min={0}
-                max={Math.max(duration, 0)}
-                step={0.1}
-                value={Math.min(currentTime, duration || 0)}
-                onChange={(e) => handleSeek(Number(e.target.value))}
-                className="h-1 min-w-0 flex-1 accent-green-500 cursor-pointer"
-              />
-              <span className="shrink-0 text-right text-[10px] text-ink-4 tabular-nums">
-                {formatTime(duration)}
-              </span>
-            </div>
-          </div>
+      {/* Progress row */}
+      <div className="flex items-center gap-2.5">
+        <span className="text-[11px] text-neutral-400 tabular-nums w-9 text-right shrink-0">
+          {formatTime(currentTime)}
+        </span>
+        <div className="relative flex-1 h-1.5 group">
+          <div className="absolute inset-0 rounded-full bg-neutral-700" />
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-green-500 transition-all"
+            style={{ width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' }}
+          />
+          <input
+            type="range"
+            min={0}
+            max={Math.max(duration, 0)}
+            step={0.1}
+            value={Math.min(currentTime, duration || 0)}
+            onChange={(e) => handleSeek(Number(e.target.value))}
+            className="absolute inset-0 w-full opacity-0 cursor-pointer h-full"
+          />
         </div>
+        <span className="text-[11px] text-neutral-400 tabular-nums w-9 shrink-0">
+          {formatTime(duration)}
+        </span>
+      </div>
+
+      {/* Buttons row */}
+      <div className="flex items-center justify-between">
+
+        {/* Title */}
+        <p className="text-xs font-medium text-neutral-300 truncate max-w-[60%]">
+          {title}
+        </p>
+
+        {/* Play / Pause */}
+        <button
+          type="button"
+          onClick={() => void togglePlayPause()}
+          aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`}
+          className="flex items-center gap-1.5 bg-green-500 hover:bg-green-400 active:scale-95 transition-all text-white text-[11px] font-bold px-4 py-1.5 rounded-full"
+        >
+          {isPlaying ? (
+            <>
+              <span className="flex gap-[3px] items-center">
+                <span className="w-[3px] h-3 bg-white rounded-full" />
+                <span className="w-[3px] h-3 bg-white rounded-full" />
+              </span>
+              Pause
+            </>
+          ) : (
+            <>
+              <span className="text-white text-[10px] pl-px">▶</span>
+              Play
+            </>
+          )}
+        </button>
       </div>
     </div>
+  </div>
   )
 }

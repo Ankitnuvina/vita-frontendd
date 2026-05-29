@@ -85,7 +85,7 @@ export function PodcastsPage(): React.ReactNode {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search episodes..."
-              className="w-full rounded-2xl border border-neutral-200 bg-white py-2.5 pl-9 pr-4 text-xs text-neutral-800 outline-none transition-all focus:border-green-400 focus:ring-2 focus:ring-green-100 placeholder:text-neutral-400"
+              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
             />
           </div>
         </div>

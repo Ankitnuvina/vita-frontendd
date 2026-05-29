@@ -1,18 +1,8 @@
 import React, { useState } from 'react'
-import {
-  useAdminTips,
-  useCreateTip,
-  useDeleteTip,
-  useUpdateTip,
+import { useAdminTips, useCreateTip, useDeleteTip, useUpdateTip,
   type TipInput,
 } from '@/features/admin/hooks/useAdminTips'
-import {
-  AdminTableShell,
-  ACTION_BUTTON_CLASS_DELETE,
-  ACTION_BUTTON_CLASS_EDIT,
-  TABLE_CELL_CLASS,
-  TABLE_HEADER_CLASS,
-} from '@/features/admin/components/AdminTableShell'
+import { AdminTableShell, ACTION_BUTTON_CLASS_DELETE, ACTION_BUTTON_CLASS_EDIT, TABLE_CELL_CLASS, TABLE_HEADER_CLASS,} from '@/features/admin/components/AdminTableShell'
 import { SlideOver } from '@/features/admin/components/SlideOver'
 import { ConfirmDialog } from '@/features/admin/components/ConfirmDialog'
 import { TipForm, type TipFormValues } from '@/features/admin/components/TipForm'

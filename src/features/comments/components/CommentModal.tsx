@@ -73,8 +73,8 @@ export function CommentModal({
         onClick={(e) => e.stopPropagation()}
         style={{ willChange: 'transform' }}
         className={[
-          'relative z-10 w-full sm:max-w-xl bg-white shadow-2xl flex flex-col',
-          'rounded-t-3xl sm:rounded-3xl',
+          'relative z-10 w-full sm:max-w-xl bg-white shadow-2xl flex flex-col ',
+          'overflow-hidden rounded-md',
           'h-[88vh] sm:h-auto sm:max-h-[60vh]',
           'animate-fade-up sm:animate-zoom-in',
           'border border-gray-100',
@@ -86,7 +86,7 @@ export function CommentModal({
         </div>
 
         {/* Header — solid white, no backdrop-blur */}
-        <header className="flex items-center justify-between px-5 sm:px-6 py-3.5 sm:py-4 border-b border-gray-100 shrink-0 bg-white sticky top-0 rounded-t-3xl">
+        <header className="flex items-center justify-between px-5 sm:px-6 py-3.5 sm:py-4 border-b border-gray-100 shrink-0 bg-white sticky top-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-[var(--vh-green-50)] border border-[var(--vh-green-100)] flex items-center justify-center">
               <MessageCircleMore className="w-4 h-4 text-[var(--vh-green-500)]" strokeWidth={2.25} />
@@ -104,10 +104,11 @@ export function CommentModal({
             type="button"
             onClick={onClose}
             aria-label="Close comments"
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-800 active:scale-95"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-green-400 hover:text-neutral-700 hover:bg-green-100 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
+          
         </header>
 
         {/* Scrollable comments body */}
@@ -123,7 +124,7 @@ export function CommentModal({
         </div>
 
         {/* Sticky input footer — solid white, no backdrop-blur */}
-        <footer className="shrink-0 border-t border-gray-100 bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-b-3xl">
+        <footer className="shrink-0 border-t border-gray-100 bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-md">
           {user ? (
             <CommentInput
               onSubmit={addComment}

@@ -235,7 +235,7 @@ const STATIC_EXPERTS = [
     id: 0, initials: 'AS', bg: '#F0FAF4', color: '#1E6E3A',
     name: 'Dr. Ananya Sharma', role: 'Clinical Nutritionist',
     credentials: 'PhD Nutrition · AIIMS Delhi',
-    imageUrl: 'https://thumbs.dreamstime.com/b/female-nutritionist-holding-green-apple-smiling-showing-healthy-vegetables-fruits-her-office-healthcare-diet-90856456.jpg'
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzvjtEpO2xRigInDboJp7hPiC2KBWLbjRA-w&s'
   },
   {
     id: 1, initials: 'KS', bg: '#EFF6FF', color: '#1E40AF',

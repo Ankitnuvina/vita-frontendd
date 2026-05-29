@@ -92,7 +92,7 @@ export function ExpertDetailPageWithArticles(): React.ReactNode {
         {expertArticles.length === 0 ? (
           <EmptyState message="No articles from this expert yet." icon="📝" />
         ) : (
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3 mt-8">
             {expertArticles.map((article) => (
               <ArticleCard key={article.id} article={article} size="md" />
             ))}

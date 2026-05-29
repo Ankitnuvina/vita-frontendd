@@ -37,9 +37,6 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                     </div>
                 </div>
 
-
-
-
                 {article.imageUrl && (
                     <div className="relative w-full h-56 bg-neutral-100">
                         <img
@@ -71,10 +68,10 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                         )}
                         <span
                             className={`text-[10px] font-bold px-2.5 py-1 rounded-full border capitalize shadow-sm ${article.articleStatus === 'published'
-                                    ? 'bg-green-50 text-green-700 border-green-200'
-                                    : article.articleStatus === 'draft'
-                                        ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                        : 'bg-blue-50 text-blue-700 border-blue-200'
+                                ? 'bg-green-50 text-green-700 border-green-200'
+                                : article.articleStatus === 'draft'
+                                    ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                    : 'bg-blue-50 text-blue-700 border-blue-200'
                                 }`}
                         >
                             {article.articleStatus}
@@ -85,7 +82,7 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                             <LikeButton contentType="article" contentId={article.id} />
                         </div>
                         <div className="flex items-center justify-center px-2.5 py-1.5 rounded-full hover:bg-neutral-100 transition-all duration-200">
-                            <CommentButton contentType="article" contentId={article.id} onClick={() => setOpenComments(true)}/>
+                            <CommentButton contentType="article" contentId={article.id} onClick={() => setOpenComments(true)} />
                         </div>
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500 hover:text-green-600 hover:bg-green-50 transition-all duration-200 cursor-pointer active:scale-95">
                             <Send className="h-4 w-4" />
@@ -177,8 +174,6 @@ export function ArticleDetailModal({ article, onClose }: Props): React.ReactNode
                         </div>
                     )}
                 </div>
-                {/* Footer */}
-
 
             </div>
             {openComments && (

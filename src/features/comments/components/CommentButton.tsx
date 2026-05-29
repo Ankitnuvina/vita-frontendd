@@ -34,7 +34,7 @@ export function CommentButton({
     >
       <span className="relative inline-flex items-center justify-center">
         <MessageCircleMore
-          className="w-[18px] h-[18px] transition-transform duration-200 group-hover:-translate-y-0.5 group-active:scale-90"
+          className="w-[18px] h-[18px] transition-transform duration-200"
           strokeWidth={2}
         />
       </span>

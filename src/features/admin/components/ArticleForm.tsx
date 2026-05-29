@@ -279,18 +279,6 @@ export function ArticleForm({ initial, onSubmit, onCancel, isSubmitting }: Props
 
       {/* Articles Author & Slug  */}
       <div className="grid grid-cols-2 gap-3">
-        {/* <Field label="Author" error={errors.author} required>
-          <input
-            type="text"
-            value={values.author}
-            onChange={(e) => setField('author', e.target.value)}
-            className={INPUT_CLASS}
-            maxLength={120}
-          />
-          <div className="text-right text-xs text-neutral-400">
-            {values.author.length}/120
-          </div>
-        </Field> */}
         <Field label="Author" error={errors.author} required>
           <select
             value={values.expertId ?? 'normal'}

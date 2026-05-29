@@ -254,7 +254,7 @@ function HeroSection() {
       </div>
 
       <div className="relative max-w-[1100px] mx-auto px-5 py-16 md:py-24">
-        <div className="max-w-2xl">
+        {/* <div className="max-w-2xl">
           <span className="inline-block mb-4 rounded-full bg-amber-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700">
             Nutrition Science
           </span>
@@ -284,7 +284,7 @@ function HeroSection() {
           </div>
         </div>
 
-        {/* Floating food chips */}
+        
         <div className="absolute right-8 top-14 hidden lg:flex flex-col gap-3">
           {['Whole Foods 🥦', 'Gut Health 🦠', 'Blood Sugar 🩸', 'Anti-Inflame 🌿'].map((chip) => (
             <span
@@ -294,7 +294,7 @@ function HeroSection() {
               {chip}
             </span>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   )

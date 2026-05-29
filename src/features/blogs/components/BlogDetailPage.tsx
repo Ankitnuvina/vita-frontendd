@@ -43,7 +43,7 @@ function RenderItem({ item }: { item: SectionItem }) {
 
   if (item.type === 'table') {
     return (
-      <div className="overflow-x-auto rounded-xl border border-gray-100 my-2">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 my-2">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="bg-emerald-50">
@@ -61,7 +61,7 @@ function RenderItem({ item }: { item: SectionItem }) {
             {item.rows.map((row, ri) => (
               <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
                 {row.map((cell, ci) => (
-                  <td key={ci} className="px-4 py-2.5 text-gray-600 border-b border-gray-100 text-sm">
+                  <td key={ci} className="px-4 py-2.5 text-gray-600 border-b border-gray-200 text-sm">
                     {cell}
                   </td>
                 ))}
@@ -160,14 +160,14 @@ export function BlogDetailPage(): React.ReactNode {
       <div className="max-w-3xl mx-auto px-4">
         <button
           onClick={() => navigate('/blogs')}
-          className="flex items-center gap-1.5 text-xs mb-6 opacity-70 hover:opacity-100 transition-opacity"
+          className="flex items-center gap-.5 text-[14px] mb-3 opacity-70 hover:opacity-100 transition-opacity"
           style={{ color: blog.textColor }}
         >
           <ChevronLeft size={14} /> Back to blogs
         </button>
 
         <span
-          className="inline-block text-xs font-semibold tracking-widest px-3 py-1 rounded-full mb-4"
+          className="inline-block text-xs font-semibold tracking-widest py-1 rounded-full mb-4"
           style={{ background: 'rgba(255,255,255,0.18)', color: blog.textColor }}
         >
           {blog.cat.toUpperCase()}

@@ -5,7 +5,6 @@ import { LikeButton } from '@/features/likes/components/common/LikeButton'
 import { CommentButton } from '@/features/comments/components/CommentButton'
 import { CommentModal } from '@/features/comments/components/CommentModal'
 
-
 type CardSize = 'xl' | 'lg' | 'md'
 
 interface ArticleCardProps {
@@ -14,7 +13,6 @@ interface ArticleCardProps {
   onClick?: (article: Article) => void
 }
 
-/* Responsive image heights per size */
 const IMAGE_HEIGHTS: Record<CardSize, string> = {
   xl: 'h-52 sm:h-64 md:h-72',
   lg: 'h-40 sm:h-32',

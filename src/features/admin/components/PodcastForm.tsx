@@ -11,7 +11,6 @@ const formSchema = z.object({
   guest: z.string().min(1, 'Guest is required').max(120),
   duration: z.string().min(1, 'Duration is required').max(16),
   date: z.string().min(1, 'Date is required').max(32),
-  // imageUrl: z.string().url('Must be a valid URL'),
   videoUrl: z.string().url('Valid video URL required'),
 })
 
@@ -24,7 +23,6 @@ const EMPTY: PodcastFormValues = {
   guest: '',
   duration: '1h 00m',
   date: '',
-  // imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&q=80',
   videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
 }
 
@@ -47,7 +45,6 @@ export function PodcastForm({ initial, onSubmit, onCancel, isSubmitting }: Props
         guest: initial.guest,
         duration: initial.duration,
         date: initial.date,
-        // imageUrl: initial.imageUrl,
         videoUrl: initial.videoUrl,
       }
       : EMPTY

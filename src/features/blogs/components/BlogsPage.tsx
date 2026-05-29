@@ -95,7 +95,7 @@ export function BlogsPage(): React.ReactNode {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search blogs..."
-              className="bg-white border border-border rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
+              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
             />
           </div>
         </div>

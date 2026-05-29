@@ -20,10 +20,6 @@ export function AdminDashboardPage(): React.ReactNode {
   const [searchUser, setSearchUser] = useState('')
   const [contentType, setContentType] = useState('all')
 
-
-
-
-
   const likesQuery = useLikesAnalytics({
     user: searchUser,
     contentType,

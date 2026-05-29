@@ -11,9 +11,9 @@ const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
     title: 'Categories',
     links: [
       { label: 'Mind', to: "/mind" },
-      { label: 'Body', to: "/body"  },
-      { label: 'Nutrition', to: "/nutrition"  },
-      { label: 'Sleep', to: "/sleep"  },
+      { label: 'Body', to: "/body" },
+      { label: 'Nutrition', to: "/nutrition" },
+      { label: 'Sleep', to: "/sleep" },
       { label: 'Longevity' },
       { label: 'India Roots' },
     ],
@@ -51,7 +51,6 @@ export function Footer(): React.ReactNode {
     >
       <div className="vh-container">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 sm:gap-10 pb-10 border-b border-white/[0.07] mb-5">
-          {/* Brand block — full width on mobile */}
           <div className="col-span-2 lg:col-span-1">
             <Link
               to="/"
@@ -77,7 +76,6 @@ export function Footer(): React.ReactNode {
             </div>
           </div>
 
-          {/* Link columns */}
           {FOOTER_COLUMNS.map((col) => (
             <div key={col.title}>
               <h3 className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-400 mb-3.5">

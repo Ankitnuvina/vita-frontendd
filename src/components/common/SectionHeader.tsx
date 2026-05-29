@@ -20,9 +20,8 @@ export function SectionHeader({
   return (
     <div className={` ${center ? 'text-center' : ''}`}>
       <div
-        className={`flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4 ${
-          center ? 'sm:justify-center' : 'sm:justify-between'
-        }`}
+        className={`flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4 ${center ? 'sm:justify-center' : 'sm:justify-between'
+          }`}
       >
         <div className={center ? 'mx-auto' : ''}>
           <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-green-500 mb-1.5">

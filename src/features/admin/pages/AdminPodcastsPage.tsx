@@ -1,18 +1,9 @@
-import React, { useState, useRef  } from 'react'
+import React, { useState, useRef } from 'react'
 import {
-  useAdminPodcasts,
-  useCreatePodcast,
-  useDeletePodcast,
-  useUpdatePodcast,
+  useAdminPodcasts, useCreatePodcast, useDeletePodcast, useUpdatePodcast,
   type PodcastInput,
 } from '@/features/admin/hooks/useAdminPodcasts'
-import {
-  AdminTableShell,
-  ACTION_BUTTON_CLASS_DELETE,
-  ACTION_BUTTON_CLASS_EDIT,
-  TABLE_CELL_CLASS,
-  TABLE_HEADER_CLASS,
-} from '@/features/admin/components/AdminTableShell'
+import { AdminTableShell, ACTION_BUTTON_CLASS_DELETE, ACTION_BUTTON_CLASS_EDIT, TABLE_CELL_CLASS, TABLE_HEADER_CLASS, } from '@/features/admin/components/AdminTableShell'
 import { SlideOver } from '@/features/admin/components/SlideOver'
 import { ConfirmDialog } from '@/features/admin/components/ConfirmDialog'
 import { PodcastForm, type PodcastFormValues } from '@/features/admin/components/PodcastForm'
@@ -116,16 +107,16 @@ export function AdminPodcastsPage(): React.ReactNode {
           <tbody>
             {items.map((p) => (
               <tr key={p.id} className="hover:bg-paper transition-colors">
-               
+
                 <td className={TABLE_CELL_CLASS}>
-  <div className="flex items-center gap-3">
-    <PodcastMiniPlayer videoUrl={p.videoUrl} />
-    <div>
-      <p className="font-semibold text-ink">{p.episode}</p>
-      <p className="text-[10px] text-ink-4">{p.category}</p>
-    </div>
-  </div>
-</td>
+                  <div className="flex items-center gap-3">
+                    <PodcastMiniPlayer videoUrl={p.videoUrl} />
+                    <div>
+                      <p className="font-semibold text-ink">{p.episode}</p>
+                      <p className="text-[10px] text-ink-4">{p.category}</p>
+                    </div>
+                  </div>
+                </td>
                 <td className={TABLE_CELL_CLASS}>
                   <p className="font-semibold text-ink truncate max-w-[260px]">{p.title}</p>
                 </td>

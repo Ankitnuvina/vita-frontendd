@@ -14,7 +14,6 @@ const NAV_LINKS: { to: string; label: string; end?: boolean }[] = [
   { to: '/ai', label: 'AI' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/subscription', label: 'Subscription' },
-
   { to: '/mind', label: 'Mind' },
   { to: '/body', label: 'Body' },
   { to: '/nutrition', label: 'Nutrition' },
@@ -33,7 +32,6 @@ export function Navbar(): React.ReactNode {
   const { data: stats } = useUserStats({ enabled: isAuthenticated })
   const streakCount = stats?.streakCount ?? 0
 
-  // Lock body scroll while mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       const original = document.body.style.overflow
@@ -57,7 +55,6 @@ export function Navbar(): React.ReactNode {
         aria-label="Main navigation"
       >
         <div className="vh-container flex items-center justify-between h-14 sm:h-16 gap-2 sm:gap-4">
-          {/* Brand */}
           <Link
             to="/"
             className="flex items-center gap-2 shrink-0"
@@ -71,7 +68,6 @@ export function Navbar(): React.ReactNode {
             </span>
           </Link>
 
-          {/* Desktop nav links */}
           <div
             className="hidden lg:flex gap-0.5 flex-nowrap items-center flex-1 justify-center"
             role="menubar"
@@ -82,7 +78,7 @@ export function Navbar(): React.ReactNode {
                 to={link.to}
                 end={link.end}
                 role="menuitem"
-                className={({ isActive }) => 
+                className={({ isActive }) =>
                   `text-xs xl:text-sm font-medium px-3 py-2 rounded-lg whitespace-nowrap transition-colors duration-200 ${isActive
                     ? ' text-white font-semibold bg-[#1e6e3a]'
                     : 'text-ink-3 hover:text-green-600 hover:bg-green-50'
@@ -94,7 +90,6 @@ export function Navbar(): React.ReactNode {
             ))}
           </div>
 
-          {/* Right cluster (desktop) */}
           <div className="hidden lg:flex gap-2 items-center shrink-0">
             {isAuthenticated && streakCount > 0 && (
               <Link
@@ -138,7 +133,6 @@ export function Navbar(): React.ReactNode {
             </Link>
           </div>
 
-          {/* Mobile right side: streak + hamburger */}
           <div className="flex lg:hidden items-center gap-2 shrink-0">
             {isAuthenticated && streakCount > 0 && (
               <Link
@@ -175,7 +169,6 @@ export function Navbar(): React.ReactNode {
           </div>
         </div>
 
-        {/* Mobile dropdown panel */}
         <div
           id="mobile-menu"
           className={`lg:hidden overflow-hidden border-t border-border bg-white transition-[max-height,opacity] duration-300 ease-out ${mobileOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
