@@ -89,7 +89,7 @@ export function AdminPodcastsPage(): React.ReactNode {
         }
         onRetry={() => void podcastsQuery.refetch()}
         isEmpty={items.length === 0}
-        emptyLabel="No podcast episodes yet."
+        emptyLabel="Please log in to view our podcasts"
         onCreate={() => setIsCreating(true)}
         createLabel="New Episode"
       >

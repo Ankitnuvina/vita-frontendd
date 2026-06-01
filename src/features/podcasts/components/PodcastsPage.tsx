@@ -22,7 +22,6 @@ interface PodcastCardProps {
   onOpenDetails: () => void
 }
 
-// Podcasts static uper part and rating part
 export function PodcastsPage(): React.ReactNode {
 
   const { data: podcasts, isLoading, isError, error, refetch } = usePodcasts()
@@ -55,89 +54,88 @@ export function PodcastsPage(): React.ReactNode {
 
   return (
     <>
-    <main id="main-content">
-      {/* ── Sticky category tabs (same style as Articles / Blogs page) ── */}
-      <div className="bg-white/95 backdrop-blur-md border-b border-border py-3 sticky top-14 sm:top-16 z-[98]">
-        <div className="vh-container flex justify-center gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCat(cat)}
-              className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${selectedCat === cat
-                ? 'bg-green-600 text-white border-green-600 shadow-soft'
-                : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="vh-container py-10 sm:py-12">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-          <SectionHeader eyebrow="Latest Episodes" title="Recent" titleAccent="Shows" />
-          <div className="relative w-full sm:w-64 shrink-0">
-            <label htmlFor="podcast-search" className="sr-only">Search podcasts</label>
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400"> <Search className="w-4 h-4" /> </span>
-            <input
-              id="podcast-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search episodes..."
-              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
-            />
-          </div>
-        </div>
-        {isLoading || isSearching ? (
-          <PodcastCardSkeleton count={4} />
-        ) : isError ? (
-          <ErrorMessage
-            message={getUserFriendlyMessage(error)}
-            onRetry={() => void refetch()}
-          />
-        ) : !podcasts || podcasts.length === 0 ? (
-          <EmptyState message="No podcast episodes yet." icon="🎧" />
-        ) : filteredPodcasts.length === 0 ? (
-          <EmptyState message="No podcasts match your search." icon="🔎" />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-            {filteredPodcasts.map((p) => (
-              <PodcastCard
-                key={p.id}
-                podcast={p}
-                isExpanded={expandedPodcastId === p.id}
-                onTogglePlay={() =>
-                  setExpandedPodcastId((curr) => {
-                    if (curr === p.id) return null
-                    return p.id
-                  })
-                }
-                onOpenDetails={() => setSelectedPodcast(p)}
-              />
+      <main id="main-content">
+        <div className="bg-white/95 backdrop-blur-md border-b border-border py-3 sticky top-14 sm:top-16 z-[98]">
+          <div className="vh-container flex justify-center gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCat(cat)}
+                className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${selectedCat === cat
+                  ? 'bg-green-600 text-white border-green-600 shadow-soft'
+                  : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
+                  }`}
+              >
+                {cat}
+              </button>
             ))}
           </div>
-        )}
-        <div className="mt-12 sm:mt-14 bg-neutral-950 rounded-3xl p-6 sm:p-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-          {[
-            ['00', 'Episodes'],
-            ['0.0★', 'Avg Rating'],
-            ['0K', 'Listeners'],
-            ['0', 'Categories'],
-          ].map(([val, label]) => (
-            <div key={label} className="flex flex-col items-center gap-1">
-              <p className="font-serif text-2xl sm:text-3xl font-black text-white">{val}</p>
-              <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">{label}</p>
-            </div>
-          ))}
         </div>
-      </div>
-     
-    </main>
-     {selectedPodcast && (
+
+        <div className="vh-container py-10 sm:py-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+            <SectionHeader eyebrow="Latest Episodes" title="Recent" titleAccent="Shows" />
+            <div className="relative w-full sm:w-64 shrink-0">
+              <label htmlFor="podcast-search" className="sr-only">Search podcasts</label>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400"> <Search className="w-4 h-4" /> </span>
+              <input
+                id="podcast-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search episodes..."
+                className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
+              />
+            </div>
+          </div>
+          {isLoading || isSearching ? (
+            <PodcastCardSkeleton count={4} />
+          ) : isError ? (
+            <ErrorMessage
+              message={getUserFriendlyMessage(error)}
+              onRetry={() => void refetch()}
+            />
+          ) : !podcasts || podcasts.length === 0 ? (
+            <EmptyState message="Please log in to view our podcasts" icon="🎧" />
+          ) : filteredPodcasts.length === 0 ? (
+            <EmptyState message="No podcasts match your search." icon="🔎" />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+              {filteredPodcasts.map((p) => (
+                <PodcastCard
+                  key={p.id}
+                  podcast={p}
+                  isExpanded={expandedPodcastId === p.id}
+                  onTogglePlay={() =>
+                    setExpandedPodcastId((curr) => {
+                      if (curr === p.id) return null
+                      return p.id
+                    })
+                  }
+                  onOpenDetails={() => setSelectedPodcast(p)}
+                />
+              ))}
+            </div>
+          )}
+          <div className="mt-12 sm:mt-14 bg-neutral-950 rounded-3xl p-6 sm:p-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            {[
+              ['00', 'Episodes'],
+              ['0.0★', 'Avg Rating'],
+              ['0K', 'Listeners'],
+              ['0', 'Categories'],
+            ].map(([val, label]) => (
+              <div key={label} className="flex flex-col items-center gap-1">
+                <p className="font-serif text-2xl sm:text-3xl font-black text-white">{val}</p>
+                <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </main>
+      {selectedPodcast && (
         <PodcastDetailModal podcast={selectedPodcast} onClose={() => setSelectedPodcast(null)} />
       )}
-      </>
+    </>
   )
 }
 
@@ -217,7 +215,7 @@ function PodcastCard({
             </div>
             <div className="flex items-center gap-3 shrink-0 text-neutral-500 text-xs">
               <LikeButton contentType="podcast" contentId={podcast.id} />
-              <div className="flex items-center gap-1 hover:text-green-600 transition-colors cursor-pointer">              
+              <div className="flex items-center gap-1 hover:text-green-600 transition-colors cursor-pointer">
                 <CommentButton contentType="podcast" contentId={podcast.id} onClick={() => setOpenComments(true)} />
               </div>
               <div className="flex items-center gap-1 hover:text-green-600 transition-colors cursor-pointer">

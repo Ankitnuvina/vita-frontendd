@@ -87,7 +87,7 @@ export function ArticlesPage(): React.ReactNode {
             onRetry={() => void refetch()}
           />
         ) : !articles || articles.length === 0 ? (
-          <EmptyState message="No articles available yet." />
+          <EmptyState message="Please log in to view our articles" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-4xl mb-3 text-center" aria-hidden="true"><Search className='m-auto w-8 h-8' /></p>

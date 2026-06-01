@@ -50,32 +50,13 @@ export function AdminRegisterPage(): React.ReactNode {
 
   return (
     <div className="min-h-screen relative overflow-hidden font-sans bg-[#67E8F9]">
-      {/* =====================================================
-          CARTOON LANDSCAPE BACKGROUND
-          sun · sky · clouds · mountains · rolling green hills · trees · grass
-          ===================================================== */}
       <svg
         aria-hidden="true"
         className="absolute inset-0 w-full h-full"
         viewBox="0 0 1440 900"
         preserveAspectRatio="xMidYMid slice"
       >
-        <defs>
-          {/* Sky gradient (cyan → soft → warm sun horizon) */}
-          {/* <linearGradient id="reg-sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#22D3EE" />
-            <stop offset="35%" stopColor="#67E8F9" />
-            <stop offset="70%" stopColor="#CFFAFE" />
-            <stop offset="100%" stopColor="#FEF9C3" />
-          </linearGradient> */}
-
-          {/* Sun glow (radial) */}
-          {/* <radialGradient id="reg-sun-glow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stopColor="#FEF08A" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#FDE68A" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#FEF3C7" stopOpacity="0" />
-          </radialGradient> */}
-
+        <defs>       
           {/* Soft fluffy cloud */}
           <symbol id="reg-cloud" viewBox="0 0 140 50">
             <ellipse cx="32" cy="32" rx="30" ry="16" fill="white" />
@@ -219,10 +200,7 @@ export function AdminRegisterPage(): React.ReactNode {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.45)_0%,transparent_55%)]"
       />
-
-      {/* ===========================================================
-          REGISTER CARD  (responsive, functionality unchanged)
-          =========================================================== */}
+     
       <div className="relative z-10 min-h-screen flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
         <div className="w-full max-w-5xl bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-[0_30px_80px_-20px_rgba(20,80,40,0.25)] overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[520px] sm:min-h-[600px] border border-white/60 ring-1 ring-[#22C55E]/10">
           {/* LEFT — illustration panel */}
@@ -237,7 +215,7 @@ export function AdminRegisterPage(): React.ReactNode {
             <span className="absolute top-0 right-0 w-56 h-56 rounded-full bg-[#D1FAE5]/70 -translate-y-1/3 translate-x-1/4" />
 
             <div className="relative z-10 max-w-[280px] pt-6">
-              
+
               <h2 className="font-bold text-4xl xl:text-5xl text-[#1F2A33] leading-none tracking-tight">
                 HELLO <span className="text-[#22C55E]">!</span>
               </h2>
@@ -275,9 +253,9 @@ export function AdminRegisterPage(): React.ReactNode {
               <span className="w-8 h-8 sm:w-9 sm:h-9 bg-green-300 rounded-lg flex items-center justify-center text-white text-base shrink-0 shadow-soft">
                 🌿
               </span>
-             <span className="font-serif text-[28px] sm:text-[36px] font-bold tracking-tight">
-  Vita<span className="text-green-500">lize</span>
-</span>
+              <span className="font-serif text-[28px] sm:text-[36px] font-bold tracking-tight">
+                Vita<span className="text-green-500">lize</span>
+              </span>
             </div>
 
             <div className="text-center mb-6">
@@ -387,8 +365,8 @@ export function AdminRegisterPage(): React.ReactNode {
                       minLength={8}
                       autoComplete="new-password"
                       className={`w-full bg-white rounded-md px-4 py-3 pr-11 text-sm text-gray-800 shadow-sm outline-none transition border ${confirm.length > 0 && !passwordsMatch
-                          ? 'border border-red-300 focus:border-red-400 focus:ring-red-200/40'
-                          : 'border-transparent focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20'
+                        ? 'border border-red-300 focus:border-red-400 focus:ring-red-200/40'
+                        : 'border-transparent focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20'
                         }`}
                     />
 
@@ -410,10 +388,10 @@ export function AdminRegisterPage(): React.ReactNode {
 
                   <p
                     className={`flex items-center gap-1.5 pl-1 text-[11px] font-medium transition-colors duration-200 ${confirm.length === 0
-                        ? 'text-gray-400'
-                        : passwordsMatch
-                          ? 'text-[#16A34A]'
-                          : 'text-red-500'
+                      ? 'text-gray-400'
+                      : passwordsMatch
+                        ? 'text-[#16A34A]'
+                        : 'text-red-500'
                       }`}
                   >
                     {confirm.length > 0 && passwordsMatch && (

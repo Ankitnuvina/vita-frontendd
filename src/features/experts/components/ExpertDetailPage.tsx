@@ -73,43 +73,51 @@ export function ExpertDetailPage(): React.ReactNode {
     <>
       <main id="main-content">
         {/* Page header */}
-        <section className="bg-gradient-to-br from-green-50 via-paper to-tan-50 border-b border-border py-10">
-          <div className="max-w-[1100px] mx-auto px-5">
-            <div>
+        <section className="border-b border-green-100 bg-gradient-to-br from-green-50 via-white to-emerald-50/40 py-12 sm:py-16">
+          <div className="mx-auto max-w-[1100px] px-5">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+
               <div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-green-600">
-              Meet the Team
-            </p>
-            <h1 className="font-serif text-[clamp(28px,4vw,44px)] font-black tracking-tight text-ink">
-              Our Experts
-            </h1>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-3">
-              Science-backed health wisdom from doctors, nutritionists, and wellness specialists.
-            </p>
-            </div>
+                <p className="mb-3 inline-flex rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-green-700">
+                  Meet the Team
+                </p>
 
-             <div>
+                <h1 className="font-serif text-[clamp(32px,4vw,48px)] font-black tracking-tight text-ink">
+                  Our Experts
+                </h1>
 
-            <div className="relative w-full sm:w-64 shrink-0">
-              <label htmlFor="expert-search" className="sr-only">Search Experts</label>
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
-                <Search className='w-4 h-4' />
-              </span>
-              <input
-                id="expert-search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search experts..."
-                className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
-              />
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-ink-3 sm:text-[15px]">
+                  Science-backed health wisdom from doctors, nutritionists, and
+                  wellness specialists.
+                </p>
+              </div>
+
+              <div>
+                <div className="relative w-full sm:w-72 shrink-0">
+                  <label htmlFor="expert-search" className="sr-only">
+                    Search Experts
+                  </label>
+
+                  <span
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-green-500"
+                    aria-hidden="true"
+                  >
+                    <Search className="h-4 w-4" />
+                  </span>
+
+                  <input
+                    id="expert-search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search experts..."
+                    className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
+                  />
+                </div>
+              </div>
+
             </div>
           </div>
-            </div>
-
-          </div>
-         
         </section>
-
         {/* Expert grid */}
         <section className="max-w-[1100px] mx-auto px-5 py-12">
           {filteredExperts.length === 0 ? (
@@ -153,18 +161,13 @@ function ExpertCard({ expert, onViewArticles }: ExpertCardProps): React.ReactNod
       <h3 className="font-serif text-lg font-black text-ink">{expert.name}</h3>
       <p className="mt-1 text-xs font-semibold text-green-600">{expert.role}</p>
       <p className="mt-2 text-xs leading-relaxed text-ink-3 line-clamp-3">{expert.credentials}</p>
-
-      {/* <div className="mt-3 flex items-center gap-1.5 text-[11px] text-neutral-500 bg-neutral-50 border border-neutral-100 rounded-full px-3 py-1">
-        <span className="text-green-500 font-bold">{expert.articleCount}</span>
-        <span>{expert.articleCount === 1 ? 'article' : 'articles'}</span>
-      </div> */}
-
+ 
       <button
         type="button"
         onClick={() => onViewArticles(expert)}
-        className="mt-4 w-full text-[12px] font-bold text-white bg-green-500 border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-white-700 transition-all duration-200"
+        className="mt-4 w-full text-[14px] font-bold text-white bg-green-500 border border-neutral-200 rounded-md py-2 hover:border-neutral-400 hover:text-white-700 transition-all duration-200"
       >
-        View Articles          {expert.articleCount}
+        View Articles <span className='ml-2'>( {expert.articleCount} )</span>
       </button>
     </div>
   )
@@ -198,7 +201,7 @@ function ArticleModal({ expert, onClose }: ArticleModalProps): React.ReactNode {
         onClick={onClose}
       >
         <div
-          className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-md bg-white shadow-2xl scrollbar-none"
+          className="relative w-full max-w-3xl max-h-[75vh] overflow-y-auto rounded-md bg-white shadow-2xl scrollbar-none"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
