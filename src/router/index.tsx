@@ -71,7 +71,13 @@ const SleepPage = lazy(() =>
     default: m.SleepPage,
   }))
 )
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const VerifyEmailPage = lazy(() =>
+  import('@/features/auth/pages/VerifyEmailPage').then((m) => ({ default: m.VerifyEmailPage }))
+)
+
+
 const NotFoundPage = lazy(() =>
   import('@/features/notfound/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
 )
@@ -118,6 +124,7 @@ const AdminUploadsBlogsPage = lazy(() =>
   }))
 )
 
+
 function withSuspense(node: React.ReactNode): React.ReactNode {
   return <Suspense fallback={<PageSkeleton />}>{node}</Suspense>
 }
@@ -136,6 +143,8 @@ const routes: RouteObject[] = [
       { path: 'experts/:expertId', element: withSuspense(<ExpertDetailPageWithArticles />) },
       { path: 'ai', element: withSuspense(<AiPage />) },
       { path: 'subscription', element: withSuspense(<SubscriptionPage />) },
+      { path: 'auth/verify-email', element: withSuspense(<VerifyEmailPage />) },
+      
 
       { path: 'mind', element: withSuspense(<MindPage />) },
       { path: 'experts', element: withSuspense(<ExpertDetailPage />) },

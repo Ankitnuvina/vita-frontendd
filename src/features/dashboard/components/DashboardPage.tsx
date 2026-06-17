@@ -41,17 +41,10 @@ export function DashboardPage(): React.ReactNode {
               </em>
             </h1>
           </div>
-          <div className="flex gap-2.5">
-            <Link
-              to="/ai"
-              className="text-xs font-semibold text-green-600 bg-green-50 border border-green-100 rounded-full px-4 py-2 hover:bg-green-100 transition-colors"
-            >
-              🌿 Ask Vita AI
-            </Link>
+          <div className="flex gap-2.5">          
             <Link
               to="/subscription"
-              className="text-xs font-semibold text-white bg-green-500 rounded-full px-4 py-2 hover:bg-green-600 transition-colors border-none"
-            >
+              className="text-xs font-semibold text-white bg-green-500 rounded-full px-4 py-2 hover:bg-green-600 transition-colors border-none">
               Upgrade Plan
             </Link>
           </div>

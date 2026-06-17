@@ -8,9 +8,19 @@ export function NotFoundPage(): React.ReactNode {
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-paper to-tan-50 px-5"
     >
       <div className="text-center max-w-md">
-        <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-500 mb-3">
-          🌿 Vitalize Health
-        </p>
+        <Link
+          to="/"
+          className="flex items-center gap-2 shrink-0"
+          aria-label="Vitalize Health — go to home"
+        >
+          <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+            <img
+              src="/vitalizeLogo/logo.svg"
+              alt="Vitalize Logo"
+              className="h-8 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </Link>
         <h1 className="font-serif text-[clamp(64px,12vw,128px)] font-black text-ink leading-none mb-2">
           404
         </h1>

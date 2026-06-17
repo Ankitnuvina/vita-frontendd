@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchBlogById } from './blog'
 import type { Blog } from './blogs'
-// import type { SectionItem } from './sectionTypes'
-// import type { SectionItem } from './sectionTypes'
 import type { SectionItem } from './sectionTypes'
 import { ChevronLeft, Clock, Calendar, User } from 'lucide-react'
 
@@ -142,7 +140,6 @@ export function BlogDetailPage(): React.ReactNode {
   if (error || !blog) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <p className="text-5xl mb-4">🌿</p>
         <h1 className="text-2xl font-medium text-gray-900 mb-2">Blog not found</h1>
         <p className="text-sm text-gray-500 mb-6">This article does not exist or may have been moved.</p>
         <button

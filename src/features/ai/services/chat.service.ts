@@ -1,7 +1,9 @@
 import { apiClient } from '@/lib/axios'
-import { API_ENDPOINTS, AI_SYSTEM_PROMPT } from '@/globals'
+import { API_ENDPOINTS } from '@/globals'
 import { logger } from '@/lib/logger'
 import { getUserFriendlyMessage } from '@/lib/errors'
+import { ChatRole } from '@/globals/enums'
+import type { ChatMessage } from '@/globals/types'
 import { z } from 'zod'
 
 const chatResponseSchema = z.object({
@@ -14,14 +16,25 @@ const chatResponseSchema = z.object({
   ),
 })
 
-export async function sendChatMessage(userMessage: string): Promise<string> {
+export async function sendChatMessage(
+  userMessage: string,
+  history: ChatMessage[],
+  sessionId: string        // ADD
+): Promise<string> {
   try {
+    const messages = [
+      ...history
+        .filter((m) => m.role !== ChatRole.AI || m.content !== history[0]?.content)
+        .map((m) => ({
+          role: m.role === ChatRole.AI ? 'assistant' : 'user',
+          content: m.content,
+        })),
+      { role: 'user', content: userMessage },
+    ]
+
     const response = await apiClient.post(API_ENDPOINTS.CHAT, {
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: AI_SYSTEM_PROMPT },
-        { role: 'user', content: userMessage },
-      ],
+      messages,
+      sessionId,             // ADD
       max_tokens: 400,
       temperature: 0.7,
     })

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth.store'
 import { UserRole } from '@/globals/enums'
-import { Leaf, ArrowLeft, User, LockKeyhole, KeyRound, Eye, EyeOff, CheckCircle2, } from 'lucide-react'
+import { Leaf, ArrowLeft, User, LockKeyhole, KeyRound, Eye, EyeOff, CheckCircle2, Mail, } from 'lucide-react'
 
 export function AdminRegisterPage(): React.ReactNode {
   const adminRegister = useAuthStore((s) => s.adminRegister)
@@ -14,6 +14,7 @@ export function AdminRegisterPage(): React.ReactNode {
   const navigate = useNavigate()
 
   const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [inviteCode, setInviteCode] = useState('')
@@ -37,8 +38,8 @@ export function AdminRegisterPage(): React.ReactNode {
       setLocalError('Passwords do not match')
       return
     }
-    const result = await adminRegister(username, password, inviteCode)
-    if (result?.role === UserRole.ADMIN) {
+    const result = await adminRegister(username, email, password, inviteCode)
+    if (result) {
       navigate('/admin', { replace: true })
     }
   }
@@ -56,7 +57,7 @@ export function AdminRegisterPage(): React.ReactNode {
         viewBox="0 0 1440 900"
         preserveAspectRatio="xMidYMid slice"
       >
-        <defs>       
+        <defs>
           {/* Soft fluffy cloud */}
           <symbol id="reg-cloud" viewBox="0 0 140 50">
             <ellipse cx="32" cy="32" rx="30" ry="16" fill="white" />
@@ -200,7 +201,7 @@ export function AdminRegisterPage(): React.ReactNode {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.45)_0%,transparent_55%)]"
       />
-     
+
       <div className="relative z-10 min-h-screen flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
         <div className="w-full max-w-5xl bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-[0_30px_80px_-20px_rgba(20,80,40,0.25)] overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[520px] sm:min-h-[600px] border border-white/60 ring-1 ring-[#22C55E]/10">
           {/* LEFT — illustration panel */}
@@ -250,12 +251,19 @@ export function AdminRegisterPage(): React.ReactNode {
             </button>
 
             <div className="flex items-center justify-center gap-2 mb-4">
-              <span className="w-8 h-8 sm:w-9 sm:h-9 bg-green-300 rounded-lg flex items-center justify-center text-white text-base shrink-0 shadow-soft">
-                🌿
-              </span>
-              <span className="font-serif text-[28px] sm:text-[36px] font-bold tracking-tight">
-                Vita<span className="text-green-500">lize</span>
-              </span>
+              <Link
+                to="/"
+                className="flex items-center gap-2 shrink-0"
+                aria-label="Vitalize Health — go to home"
+              >
+                <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+                  <img
+                    src="/vitalizeLogo/logo.svg"
+                    alt="Vitalize Logo"
+                    className="h-9 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+              </Link>
             </div>
 
             <div className="text-center mb-6">
@@ -273,6 +281,31 @@ export function AdminRegisterPage(): React.ReactNode {
               className="w-full max-w-md mx-auto"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                   <div className="sm:col-span-2 space-y-2">
+                  <label
+                    htmlFor="ar-invite"
+                    className="flex items-center gap-1.5 text-sm font-semibold text-gray-700"
+                  >
+                    <KeyRound className="h-4 w-4 text-[#22C55E]" />
+                    Admin invite code
+                  </label>
+                  <input
+                    id="ar-invite"
+                    type="text"
+                    value={inviteCode}
+                    onChange={(e) => {
+                      clearError()
+                      setLocalError(null)
+                      setInviteCode(e.target.value)
+                    }}
+                    required
+                    autoComplete="off"
+                    placeholder="Enter admin invite code..."
+                    className="w-full bg-white border border-transparent rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
+                  />
+                </div>
+                
                 <div className="sm:col-span-2 space-y-2">
                   <label
                     htmlFor="ar-user"
@@ -296,6 +329,32 @@ export function AdminRegisterPage(): React.ReactNode {
                       maxLength={32}
                       autoComplete="username"
                       placeholder="Enter your username..."
+                      className="w-full bg-white border border-transparent rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2 space-y-2">
+                  <label
+                    htmlFor="ar-user"
+                    className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-gray-700"
+                  >
+                    <Mail size={16} className="text-[#22C55E]" />
+                    Email
+                  </label>
+                  <div className="relative group">
+                    <input
+                      id="ar-user"
+                      type="text"
+                      value={email}
+                      onChange={(e) => {
+                        clearError()
+                        setLocalError(null)
+                        setEmail(e.target.value)
+                      }}
+                      required
+                      autoComplete="email"
+                      placeholder="Enter your email..."
                       className="w-full bg-white border border-transparent rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
                     />
                   </div>
@@ -404,31 +463,8 @@ export function AdminRegisterPage(): React.ReactNode {
                         ? 'Passwords match'
                         : 'Passwords do not match'}
                   </p>
-                </div>
+                </div>  
 
-                <div className="sm:col-span-2 space-y-2">
-                  <label
-                    htmlFor="ar-invite"
-                    className="flex items-center gap-1.5 text-sm font-semibold text-gray-700"
-                  >
-                    <KeyRound className="h-4 w-4 text-[#22C55E]" />
-                    Admin invite code
-                  </label>
-                  <input
-                    id="ar-invite"
-                    type="text"
-                    value={inviteCode}
-                    onChange={(e) => {
-                      clearError()
-                      setLocalError(null)
-                      setInviteCode(e.target.value)
-                    }}
-                    required
-                    autoComplete="off"
-                    placeholder="Enter admin invite code..."
-                    className="w-full bg-white border border-transparent rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
-                  />
-                </div>
               </div>
 
               {visibleError && (

@@ -12,7 +12,7 @@ const VIDEOS = [
     views: '48K views',
     duration: '7:12',
     category: 'Fitness',
-    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80',
+    imageUrl: 'https://img.magnific.com/free-photo/group-people-exercising-together-outdoors_23-2151061449.jpg?semt=ais_hybrid&w=740&q=80',
     instructor: 'Coach Maya Rivera',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
   },
@@ -22,7 +22,7 @@ const VIDEOS = [
     views: '31K views',
     duration: '10:05',
     category: 'Mindfulness',
-    imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&q=80',
+    imageUrl: 'https://images.unsplash.com/reserve/YEc7WB6ASDydBTw6GDlF_antalya-beach-lulu.jpg?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWluZGZ1bHxlbnwwfHwwfHx8MA%3D%3D',
     instructor: 'Dr. Priya Nair',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
   },
@@ -32,7 +32,7 @@ const VIDEOS = [
     views: '67K views',
     duration: '22:48',
     category: 'Nutrition',
-    imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx9UedZd6I5SECyk2nMktda69NXXh3l5BhiA&s',
     instructor: 'Dr. James Liu',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
   },
@@ -42,7 +42,7 @@ const VIDEOS = [
     views: '29K views',
     duration: '15:30',
     category: 'Fitness',
-    imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80',
+    imageUrl: 'https://img.magnific.com/free-vector/people-exercising-gym-set-young-men-women-training-stretching-man-running-treadmill-girl-cycling_575670-255.jpg',
     instructor: 'Coach Maya Rivera',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
   },
@@ -52,7 +52,7 @@ const VIDEOS = [
     views: '55K views',
     duration: '18:22',
     category: 'Nutrition',
-    imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80',
+    imageUrl: 'https://www.msruas.ac.in/uploads/blogs/M.Sc.%20Food%20Nutrition%20and%20Dietetics.webp',
     instructor: 'Dr. Sarah Okafor',
     videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
   },
@@ -197,10 +197,7 @@ export function VideosPage(): React.ReactNode {
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="flex-1 font-serif text-sm font-bold text-ink leading-snug mb-1.5 truncate ">
                       {v.title}
-                    </h3>
-                    <div className="shrink-0 text-base leading-none">
-                      💖
-                    </div>
+                    </h3>                  
                   </div>
                   <p className="text-[11px] text-ink-3 font-light mb-2">{v.instructor}</p>
                   <div className="flex items-center justify-between text-[10px] text-ink-4">

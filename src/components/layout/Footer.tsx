@@ -54,9 +54,16 @@ export function Footer(): React.ReactNode {
           <div className="col-span-2 lg:col-span-1">
             <Link
               to="/"
-              className="font-serif text-xl font-bold mb-2.5 inline-flex items-center text-white"
+              className="flex items-center gap-2 shrink-0"
+              aria-label="Vitalize Health — go to home"
             >
-              VIT<span className="text-green-400">A</span>
+              <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+                <img
+                  src="/vitalizeLogo/logo.svg"
+                  alt="Vitalize Logo"
+                  className="h-8 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
+                />
+              </div>
             </Link>
             <p className="text-xs text-white/40 leading-relaxed max-w-[260px] mb-4 mt-2 font-light">
               Your trusted destination for science-backed health, wellness and lifestyle insights.

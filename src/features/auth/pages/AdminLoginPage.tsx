@@ -15,7 +15,7 @@ export function AdminLoginPage(): React.ReactNode {
   const clearError = useAuthStore((s) => s.clearError)
   const navigate = useNavigate()
 
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export function AdminLoginPage(): React.ReactNode {
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
-    const result = await adminLogin(username, password)
-    if (result?.role === UserRole.ADMIN) {
+    const result = await adminLogin(email, password)
+    if (result) {
       navigate('/admin', { replace: true })
     }
   }
@@ -237,12 +237,19 @@ export function AdminLoginPage(): React.ReactNode {
               </button>
 
               <div className="flex items-center justify-center gap-2 mb-8 sm:mb-10">
-                <span className="w-8 h-8 sm:w-9 sm:h-9 bg-green-300 rounded-lg flex items-center justify-center text-white text-base shrink-0 shadow-soft">
-                🌿
-                </span>
-                <span className="font-serif text-[28px] sm:text-[36px] font-bold tracking-tight">
-                  Vita<span className="text-green-500">lize</span>
-                </span>
+                <Link
+                  to="/"
+                  className="flex items-center gap-2 shrink-0"
+                  aria-label="Vitalize Health — go to home"
+                >
+                  <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+                    <img
+                      src="/vitalizeLogo/logo.svg"
+                      alt="Vitalize Logo"
+                      className="h-9 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                </Link>
               </div>
 
               <form
@@ -256,20 +263,20 @@ export function AdminLoginPage(): React.ReactNode {
                     className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-gray-700"
                   >
                     <User size={16} className="text-[#22C55E]" />
-                    Username
+                    Email
                   </label>
                   <div className="relative group">
                     <input
                       id="admin-user"
                       type="text"
-                      value={username}
+                      value={email}
                       onChange={(e) => {
                         clearError()
-                        setUsername(e.target.value)
+                        setEmail(e.target.value)
                       }}
                       required
-                      autoComplete="username"
-                      placeholder="Enter your username..."
+                      autoComplete="email"
+                      placeholder="Enter your email..."
                       className="w-full bg-white border border-transparent rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
                     />
                   </div>
@@ -325,7 +332,7 @@ export function AdminLoginPage(): React.ReactNode {
 
                 <button
                   type="submit"
-                  disabled={isLoading || !username || !password}
+                  disabled={isLoading || !email || !password}
                   className="w-full mt-6 py-3 rounded-full text-white font-semibold text-sm bg-gradient-to-r from-[#86EFAC] via-[#4ADE80] to-[#22C55E] shadow-md hover:shadow-lg hover:opacity-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer"
                 >
                   {isLoading ? 'Verifying…' : 'Log in to Admin'}
@@ -354,6 +361,8 @@ export function AdminLoginPage(): React.ReactNode {
           </div>
         </div>
       </div>
+
+
     </div>
   )
 }

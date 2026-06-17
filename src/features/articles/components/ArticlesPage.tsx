@@ -1,7 +1,6 @@
-import React, { useDeferredValue, useMemo, useState } from 'react'
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { ArticleCard } from '@/components/feature/ArticleCard'
 import { ArticleDetailModal } from '@/components/feature/ArticleDetailModal'
-import { CategoryPills } from '@/components/feature/CategoryPills'
 import { SectionHeader } from '@/components/common/SectionHeader'
 import { ArticleCardSkeleton } from '@/components/common/ArticleCardSkeleton'
 import { ErrorMessage } from '@/components/common/ErrorMessage'
@@ -9,7 +8,8 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { useArticles } from '@/features/articles/hooks/useArticles'
 import { getUserFriendlyMessage } from '@/lib/errors'
 import type { Article } from '@/globals/types'
-import { Search, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Search, ChevronRight, ChevronLeft, Filter, ChevronDown } from 'lucide-react'
+import { ARTICLE_CATEGORIES } from '@/globals/constants'
 
 export function ArticlesPage(): React.ReactNode {
   const [selectedCat, setSelectedCat] = useState('All')
@@ -47,40 +47,114 @@ export function ArticlesPage(): React.ReactNode {
     page * ARTICLES_PER_PAGE
   )
 
+  const [showCategories, setShowCategories] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setShowCategories(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
   return (
     <main id="main-content">
-      <CategoryPills
-        selected={selectedCat}
-        onSelect={(cat) => {
-          setSelectedCat(cat)
-          setPage(1)
-        }}
-        sticky
-      />
-
       <div className="vh-container py-8 sm:py-10">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
-          <SectionHeader eyebrow="Library" title="All" titleAccent="Articles" />
-          <div className="relative w-full sm:w-64 shrink-0">
-            <label htmlFor="article-search" className="sr-only">Search articles</label>
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
-              <Search className='w-4 h-4' />
-            </span>
-            <input
-              id="article-search"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value)
-                setPage(1)
-              }}
-              placeholder="Search articles…"
-              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
-            />
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 gap-4">
+          <SectionHeader
+            eyebrow="Library"
+            title="All"
+            titleAccent="Articles"
+          />
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:w-72">
+              <label htmlFor="article-search" className="sr-only">
+                Search articles
+              </label>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <Search className="w-4 h-4" />
+              </span>
+              <input
+                id="article-search"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value)
+                  setPage(1)
+                }}
+                placeholder="Search articles..."
+                className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none shadow-sm transition-all focus:border-green-500
+                focus:ring-4 focus:ring-green-100"/>
+            </div>
+
+            <div ref={filterRef} className="relative shrink-0">
+              <button
+                onClick={() => setShowCategories((prev) => !prev)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border shadow-sm transition-all
+          ${selectedCat !== 'All'
+                    ? 'bg-green-50 border-green-300 text-green-700'
+                    : 'bg-white border-slate-200 hover:border-green-300 hover:bg-green-50'
+                  }
+        `}>
+                <Filter className="w-4 h-4" />
+                <span className="text-sm font-medium max-w-[120px] truncate">
+                  {selectedCat}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${showCategories ? 'rotate-180' : ''
+                    }`}
+                />
+              </button>
+              {showCategories && (
+                <div
+                  className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="px-4 py-3 border-b bg-slate-50">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Categories
+                    </p>
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {ARTICLE_CATEGORIES.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCat(cat)
+                          setPage(1)
+                          setShowCategories(false)
+                        }}
+                        className={`
+                  w-full
+                  flex items-center justify-between
+                  px-4 py-3
+                  text-sm
+                  transition-colors
+                  ${selectedCat === cat
+                            ? 'text-green-500 font-semibold'
+                            : 'text-slate-700 hover:bg-slate-50'
+                          }
+                `}>
+                        <span>{cat}</span>
+                        {selectedCat === cat && (
+                          <span className="w-2 h-2 rounded-full bg-green-500" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {isLoading || isSearching ? (
-          <ArticleCardSkeleton count={3}/>
+          <ArticleCardSkeleton count={3} />
         ) : isError ? (
           <ErrorMessage
             message={getUserFriendlyMessage(error)}
@@ -153,8 +227,8 @@ export function ArticlesPage(): React.ReactNode {
                 <button
                   onClick={() => setPage(1)}
                   className={`w-8 h-8 rounded-md text-xs font-semibold transition-colors ${page === 1
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white border border-border text-ink'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-white border border-border text-ink'
                     }`}
                 >
                   1
@@ -181,8 +255,8 @@ export function ArticlesPage(): React.ReactNode {
                       key={p}
                       onClick={() => setPage(p)}
                       className={`w-8 h-8 rounded-md text-xs font-semibold transition-colors ${page === p
-                          ? 'bg-green-600 text-white'
-                          : 'bg-white border border-border text-ink'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-white border border-border text-ink'
                         }`}
                     >
                       {p}
@@ -201,8 +275,8 @@ export function ArticlesPage(): React.ReactNode {
                   <button
                     onClick={() => setPage(totalPages)}
                     className={`w-8 h-8 rounded-md text-xs font-semibold transition-colors ${page === totalPages
-                        ? 'bg-green-600 text-white'
-                        : 'bg-white border border-border text-ink'
+                      ? 'bg-green-600 text-white'
+                      : 'bg-white border border-border text-ink'
                       }`}
                   >
                     {totalPages}

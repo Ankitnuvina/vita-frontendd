@@ -286,7 +286,7 @@ function HeroSection() {
 
         
         <div className="absolute right-8 top-14 hidden lg:flex flex-col gap-3">
-          {['Whole Foods 🥦', 'Gut Health 🦠', 'Blood Sugar 🩸', 'Anti-Inflame 🌿'].map((chip) => (
+          {['Whole Foods 🥦', 'Gut Health 🦠', 'Blood Sugar 🩸', 'Anti-Inflame 🎫'].map((chip) => (
             <span
               key={chip}
               className="rounded-full border border-border bg-white/80 backdrop-blur px-4 py-1.5 text-xs font-semibold text-ink-3 shadow-sm"

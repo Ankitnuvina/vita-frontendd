@@ -15,7 +15,7 @@ const formSchema = z.object({
 export type TipFormValues = z.infer<typeof formSchema>
 
 const EMPTY: TipFormValues = {
-  icon: '🌿',
+  icon: '❤',
   title: '',
   text: '',
   bg: '#F0F7F2',

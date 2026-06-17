@@ -30,7 +30,7 @@ export function SubscriptionPage(): React.ReactNode {
         className="bg-gradient-to-br from-green-50 via-paper to-tan-50 py-14 text-center"
       >
         <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-green-500 mb-3">
-          🌿 Membership Plans
+          Membership Plans
         </p>
         <h1 className="font-serif text-[clamp(24px,4vw,46px)] font-black text-ink tracking-tight mb-3">
           Invest in your <em className="text-green-500 not-italic font-light">healthspan</em>

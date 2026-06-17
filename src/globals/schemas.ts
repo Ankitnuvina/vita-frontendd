@@ -91,3 +91,9 @@ export function paginatedSchema<T extends z.ZodTypeAny>(item: T) {
     pageSize: z.number(),
   })
 }
+
+
+
+export const registerResponseSchema = z.object({
+  message: z.string(),
+})

@@ -10,22 +10,22 @@ interface CommentItemProps {
   onDelete: (commentId: string) => Promise<void>
 }
 
-const AVATAR_PALETTE = [
-  'from-violet-400 to-purple-500',
-  'from-sky-400 to-indigo-500',
-  'from-emerald-400 to-green-600',
-  'from-orange-400 to-amber-500',
-  'from-pink-400 to-rose-500',
-  'from-teal-400 to-cyan-500',
-  'from-fuchsia-400 to-pink-500',
-  'from-yellow-400 to-orange-500',
-]
+// const AVATAR_PALETTE = [
+//   'from-violet-400 to-purple-500',
+//   'from-sky-400 to-indigo-500',
+//   'from-emerald-400 to-green-600',
+//   'from-orange-400 to-amber-500',
+//   'from-pink-400 to-rose-500',
+//   'from-teal-400 to-cyan-500',
+//   'from-fuchsia-400 to-pink-500',
+//   'from-yellow-400 to-orange-500',
+// ]
 
-function hashSeed(s: string): number {
-  let h = 0
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0
-  return Math.abs(h)
-}
+// function hashSeed(s: string): number {
+//   let h = 0
+//   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0
+//   return Math.abs(h)
+// }
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -70,8 +70,8 @@ export function CommentItem({ comment, onEdit, onDelete }: CommentItemProps): Re
     return () => document.removeEventListener('mousedown', handler)
   }, [menuOpen])
 
-  const avatarColor = AVATAR_PALETTE[hashSeed(comment.userId || comment.userName) % AVATAR_PALETTE.length]
-  const initial = comment.userName?.[0]?.toUpperCase() ?? 'U'
+  // const avatarColor = AVATAR_PALETTE[hashSeed(comment.userId || comment.userName) % AVATAR_PALETTE.length]
+  // const initial = comment.userName?.[0]?.toUpperCase() ?? 'U'
 
   const handleEdit = async (text: string) => {
     setIsSubmitting(true)
@@ -89,12 +89,20 @@ export function CommentItem({ comment, onEdit, onDelete }: CommentItemProps): Re
   return (
     <div className="group flex gap-3 items-start animate-fade-in">
       {/* Avatar */}
-      <div
+      {/* <div
         className={`relative w-9 h-9 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm ring-2 ring-white`}
         aria-hidden
       >
         {initial}
-      </div>
+      </div> */}
+     <img
+  src={comment.avatarUrl || '/vitalizeLogo/defaultUser.png'}
+  alt={comment.userName}
+  className="w-9 h-9 rounded-full object-cover shrink-0 shadow-sm ring-2 ring-white"
+  onError={(e) => {
+    e.currentTarget.src = '/vitalizeLogo/defaultUser.png'
+  }}
+/>
 
       <div className="flex-1 min-w-0">
         {isEditing ? (
@@ -178,23 +186,23 @@ export function CommentItem({ comment, onEdit, onDelete }: CommentItemProps): Re
           {menuOpen && (
             <div
               role="menu"
-              className="absolute right-0 top-9 z-30 bg-white border border-gray-100 rounded-xl shadow-lg py-1 min-w-[140px] animate-zoom-in origin-top-right"
+              className="flex absolute right-0 top-9 z-30 bg-white border border-gray-100 rounded-xl shadow-lg py-1 min-w-[max-content] animate-zoom-in origin-top-right"
             >
               <button
                 type="button"
                 role="menuitem"
                 onClick={() => { setIsEditing(true); setMenuOpen(false) }}
-                className="flex items-center gap-2.5 w-full px-3.5 py-2 text-[12px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2.5 w-auto px-3.5 py-2 text-[12px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <Pencil className="w-3.5 h-3.5" /> Edit
+                <Pencil className="w-3.5 h-3.5" />
               </button>
               <button
                 type="button"
                 role="menuitem"
                 onClick={() => { setMenuOpen(false); setConfirmDelete(true) }}
-                className="flex items-center gap-2.5 w-full px-3.5 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
+                className="flex items-center gap-2.5 w-auto px-3.5 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
               >
-                <Trash2 className="w-3.5 h-3.5" /> Delete
+                <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
           )}

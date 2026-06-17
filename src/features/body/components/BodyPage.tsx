@@ -127,7 +127,7 @@ const NUTRITION_TIPS = [
     color: 'border-l-red-400',
   },
   {
-    icon: '🌿',
+    icon: '🌮',
     title: 'Eat the Rainbow',
     tip: 'Five colours of vegetables per day. Each pigment delivers a different class of antioxidants.',
     color: 'border-l-green-400',

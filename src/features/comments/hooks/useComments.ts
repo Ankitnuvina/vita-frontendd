@@ -14,6 +14,7 @@ export interface CommentRecord {
   text: string
   createdAt: string
   updatedAt?: string
+  avatarUrl: string
 }
 
 interface UseCommentsReturn {

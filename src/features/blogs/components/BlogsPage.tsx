@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Blog } from './blogs'
 import { fetchBlogs } from './blog'
 import { SectionHeader } from '@/components/common/SectionHeader'
-import { ChevronRight, ChevronLeft, User, Clock, Calendar, Search, Send } from 'lucide-react'
+import { ChevronRight, ChevronLeft, User, Clock, Calendar, Search, Send, Filter, ChevronDown } from 'lucide-react'
 import { LikeButton } from '@/features/likes/components/common/LikeButton'
 import { CommentButton } from '@/features/comments/components/CommentButton'
 import { CommentModal } from '@/features/comments/components/CommentModal'
@@ -61,42 +61,100 @@ export function BlogsPage(): React.ReactNode {
   const [openComments, setOpenComments] = useState(false)
   const [selectedBlogId, setSelectedBlogId] = useState<string | number | null>(null)
 
+  const [showCategories, setShowCategories] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setShowCategories(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
     <main id="main-content">
-      <div className="bg-white/95 backdrop-blur-md border-b border-border py-3 sticky top-14 sm:top-16 z-[98]">
-        <div className="vh-container flex justify-center gap-2 overflow-x-auto scroll-x-clean pb-1 -mb-1">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCat(cat)}
-              className={`text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full border-[1.5px] shrink-0 transition-all duration-200 ${activeCat === cat
-                ? 'bg-green-600 text-white border-green-600 shadow-soft'
-                : 'border-border text-ink-3 bg-white hover:border-green-200 hover:text-green-600 hover:bg-green-50'
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="vh-container py-8 sm:py-10">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 gap-4">
+          <SectionHeader
+            eyebrow="Healthcare Blogs"
+            title="Vitalize"
+            titleAccent="Blog"
+          />
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:w-72">
+              <label htmlFor="article-search" className="sr-only">
+                Search blogs
+              </label>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <Search className="w-4 h-4" />
+              </span>
+              <input
+                id="blog-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search blogs..."
+                className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none shadow-sm transition-all focus:border-green-500 focus:ring-4
+                focus:ring-green-100"/>
+            </div>
+            <div ref={filterRef} className="relative">
+              <button
+                onClick={() => setShowCategories(!showCategories)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl shadow-sm hover:border-green-300 hover:bg-green-50 transition-all">
+                <Filter className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  {activeCat}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${showCategories ? 'rotate-180' : ''
+                    }`}
+                />
+              </button>
 
-
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-4">
-          <SectionHeader eyebrow="Healthcare Blogs" title="Vitalize" titleAccent="Blog" />
-          <div className="relative w-full sm:w-64 shrink-0">
-            <label htmlFor="article-search" className="sr-only"> Search blogs</label>
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40" aria-hidden="true">
-              <Search className='w-4 h-4' />
-            </span>
-            <input
-              id="blog-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search blogs..."
-              className="bg-white border border-gray-300 rounded-full pl-8 pr-4 py-2 text-xs text-ink w-full outline-none focus:border-green-400 transition-colors"
-            />
+              {showCategories && (
+                <div
+                  className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-50">
+                  <div className="px-4 py-3 border-b bg-slate-50">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Categories
+                    </p>
+                  </div>
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        handleCat(cat)
+                        setShowCategories(false)
+                      }}
+                      className={`
+                  w-full
+                  flex items-center justify-between
+                  px-4 py-3
+                  text-sm
+                  transition-colors
+                  text-green-500 font-semibold
+                 ${activeCat === cat
+                        ? 'text-green-500 font-semibold'
+                        : 'hover:bg-slate-50 text-slate-700'
+                        }
+              `}>
+                      <span>{cat}</span>
+                      {activeCat === cat && (
+                        <span className="w-2 h-2 rounded-full bg-green-500 " />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

@@ -34,19 +34,22 @@ export function AdminLayout(): React.ReactNode {
         className="text-white w-[250px] shrink-0 flex flex-col py-6"
         style={{ backgroundColor: 'rgb(25 75 43)' }}
       >
-        {/* Brand */}
-        <Link to="/" className="px-5 mb-8 flex items-center gap-3 shrink-0">
-          <div className="w-12 h-12 bg-green-400 rounded-xl flex items-center justify-center text-white text-2xl shrink-0 shadow-soft">
-            🌿
+
+        <Link
+          to="/"
+          className="flex items-center gap-2 shrink-0"
+          aria-label="Vitalize Health — go to home"
+        >
+          <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+            <img
+              src="/vitalizeLogo/logo.svg"
+              alt="Vitalize Logo"
+              className="h-9 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
+            />
           </div>
-          <div className="min-w-0">
-            <p className="font-serif text-[20px] font-black text-white leading-none tracking-tight">
-              Vita<span className="text-green-200">lize</span>
-            </p>
-            <p className="text-[11px] text-white/55 mt-1 tracking-wide">
-              Admin CMS
-            </p>
-          </div>
+          <p className="text-[11px] text-white/55 mt-1 tracking-wide">
+            Admin CMS
+          </p>
         </Link>
 
         {/* Nav */}
@@ -75,12 +78,10 @@ export function AdminLayout(): React.ReactNode {
           ))}
         </nav>
 
-        {/* Bottom: account card */}
         <div className="px-4 pt-4 mt-2 border-t border-white/[0.08]">
           <div
             className="relative overflow-hidden bg-white/[0.07] border border-white/[0.12] rounded-2xl p-3.5 backdrop-blur-sm"
           >
-            {/* subtle gradient accent */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 opacity-50"
@@ -103,7 +104,6 @@ export function AdminLayout(): React.ReactNode {
                 >
                   {getInitial(user?.userId)}
                 </div>
-                {/* Online indicator */}
                 <span
                   aria-hidden="true"
                   className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-300"

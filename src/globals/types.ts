@@ -64,11 +64,29 @@ export interface SubscriptionPlan {
   isPopular: boolean
 }
 
+
+
 export interface ChatMessage {
   role: 'ai' | 'user'
   content: string
   timestamp: number
 }
+export interface ChatSessionMessage {
+  id: string
+  question: string
+  answer: string
+  createdAt: string
+}
+export interface ChatSession {
+  sessionId: string
+  title: string
+  messages: ChatSessionMessage[]
+  createdAt: string
+  pinnedAt?: string | null
+}
+
+
+
 
 export interface VideoItem {
   title: string

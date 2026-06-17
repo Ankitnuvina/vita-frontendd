@@ -46,7 +46,7 @@ export const ARTICLE_CATEGORIES = [
 ] as const
 
 export const AI_DISCLAIMER =
-  'For informational purposes only. Not a substitute for medical advice.'
+  'This response is AI-generated and not provided by a medical expert.'
 
 export const AI_SYSTEM_PROMPT =
   'You are Vita, an expert AI wellness guide for Vitalize Health magazine. Give concise, evidence-based health advice on sleep, stress, nutrition, fitness, and mindfulness. Keep replies under 150 words. Always end with: Warning: General wellness info only - not medical advice.'
