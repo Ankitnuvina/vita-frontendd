@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { X, Camera, Loader2, Trash2 } from 'lucide-react'
+import { X, Camera, Loader2, Trash2, User, Mail, CircleUserRound } from 'lucide-react'
 import type { UserProfile } from '../hook/useUserProfile'
 
 interface AccountSettingsModalProps {
@@ -103,7 +103,7 @@ export function AccountSettingsModal({
                     </button>
                 </div>
 
-                <div className="px-6 py-5">
+                <div className="px-6 py-5 bg-[#fff]">
                     {/* Avatar */}
                     <div className="flex flex-col items-center mb-6">
                         <div className="relative">
@@ -158,38 +158,47 @@ export function AccountSettingsModal({
                     {/* Form */}
                     <form onSubmit={(e) => void handleUpdate(e)}>
                         <div className="mb-4">
-                            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                            {/* <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                                Username
+                            </label> */}
+                            <label htmlFor="login-user" className="flex gap-2 text-xs font-semibold text-ink-2 mb-1.5">
+                                <User className='w-4 h-4 text-[#22C55E]' />
                                 Username
                             </label>
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-gray-800 outline-none focus:border-green-400 transition-colors"
+                                required
+                                autoComplete="username"
+                                placeholder="Enter your username..."
+                                className="w-full bg-white border border-[#ccc] rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
                             />
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                            <label htmlFor="login-email" className="flex gap-2 text-xs font-semibold text-ink-2 mb-1.5">
+                                <Mail className="w-4 h-4 text-[#22C55E]" />
                                 Email
                             </label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-gray-800 outline-none focus:border-green-400 transition-colors"
+                                className="w-full bg-white border border-[#ccc] rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition"
                             />
                         </div>
 
                         <div className="mb-5">
-                            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                           <label htmlFor="login-email" className="flex gap-2 text-xs font-semibold text-ink-2 mb-1.5">
+                                <CircleUserRound className="w-4 h-4 text-[#22C55E]" />
                                 Role
                             </label>
                             <input
                                 type="text"
                                 value={profile.role}
                                 disabled
-                                className="w-full border border-gray-100 rounded-xl px-3.5 py-2.5 text-sm text-gray-400 bg-gray-50 cursor-not-allowed"
+                                className="w-full bg-[#f1f1f1] border border-[#ccc] rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm outline-none focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition cursor-not-allowed"
                             />
                         </div>
 
@@ -204,54 +213,72 @@ export function AccountSettingsModal({
                             </p>
                         )}
 
-                        <button
+                        <div className='flex gap-[10px]'>
+                            <button
                             type="submit"
                             disabled={isUpdating}
-                            className="w-full bg-green-500 text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full bg-green-500 text-white rounded-full py-2.5 text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {isUpdating && <Loader2 size={14} className="animate-spin" />}
                             {isUpdating ? 'Updating…' : 'Update Profile'}
                         </button>
+
+                         <button
+                            type="button"
+                            onClick={() => setShowDeleteConfirm(true)}
+                            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm bg-red-50 font-medium text-red-500 hover:bg-red-100 rounded-full transition-colors"
+                        >
+                            <Trash2 size={15} />
+                            Delete Account
+                        </button>
+                        </div>
                     </form>
 
-                    {/* Delete */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                        {!showDeleteConfirm ? (
-                            <button
-                                type="button"
-                                onClick={() => setShowDeleteConfirm(true)}
-                                className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                            >
-                                <Trash2 size={15} />
-                                Delete Account
-                            </button>
-                        ) : (
-                            <div className="bg-red-50 border border-red-100 rounded-xl p-4">
-                                <p className="text-sm text-red-700 font-medium mb-1">Are you sure?</p>
-                                <p className="text-xs text-red-500 mb-3">
-                                    This action cannot be undone. Your account will be permanently deactivated.
-                                </p>
-                                <div className="flex gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowDeleteConfirm(false)}
-                                        className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 transition-colors"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => void handleDelete()}
-                                        disabled={isDeleting}
-                                        className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
-                                    >
-                                        {isDeleting && <Loader2 size={12} className="animate-spin" />}
-                                        {isDeleting ? 'Deleting…' : 'Yes, Delete'}
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+{/* Delete Confirmation Modal */}
+{showDeleteConfirm && (
+  <div
+    className="fixed inset-0 z-[400] flex items-center justify-center bg-black/10 backdrop-blur-sm p-4"
+    onClick={() => setShowDeleteConfirm(false)}
+  >
+    <div
+      className="bg-white rounded-2xl shadow-2xl w-full max-w-[380px] overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Icon header */}
+      <div className="flex flex-col items-center text-center px-6 pt-7 pb-2">
+        <div className="w-14 h-14 bg-red-50 border border-red-100 rounded-full flex items-center justify-center mb-4">
+          <Trash2 size={22} className="text-red-500" />
+        </div>
+        <h3 className="text-base font-bold text-gray-900 mb-1.5">
+          Delete your account?
+        </h3>
+        <p className="text-sm text-gray-500 leading-relaxed px-2">
+          This action cannot be undone. Your account and all associated data will be permanently deactivated.
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-2.5 px-6 py-5">
+        <button
+          type="button"
+          onClick={() => setShowDeleteConfirm(false)}
+          className="flex-1 py-2.5 text-sm font-semibold rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => void handleDelete()}
+          disabled={isDeleting}
+          className="flex-1 py-2.5 text-sm font-semibold rounded-full bg-red-600 text-white hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
+        >
+          {isDeleting && <Loader2 size={14} className="animate-spin" />}
+          {isDeleting ? 'Deleting…' : 'Yes, Delete'}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
                 </div>
             </div>
         </div>

@@ -66,7 +66,7 @@ export function ExpertDetailPageWithArticles(): React.ReactNode {
             onClick={() => navigate(-1)}
             className="mb-5 rounded-full border border-border bg-white px-4 py-1.5 text-xs font-semibold text-ink-3 hover:border-green-300 hover:text-green-600"
           >
-            ← Back
+            Back
           </button>
           <div className="grid grid-cols-[220px_1fr] items-center gap-8">
             <div className="h-[220px] w-[220px] overflow-hidden rounded-2xl border border-green-100 bg-white">

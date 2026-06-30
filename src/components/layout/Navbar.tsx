@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { useUserStats } from '@/features/dashboard/hooks/useUserStats'
 import { UserRole } from '@/globals/enums'
 import { LoginDialog } from '@/features/auth/components/LoginDialog'
-import { User } from 'lucide-react'
+import { User, UserStar } from 'lucide-react'
 import { useUserProfile } from '@/features/users/hook/useUserProfile'
 import { UserAvatarDropdown } from '@/features/users/components/UserAvatarDropdown'
 import { AccountSettingsModal } from '@/features/users/components/AccountSettingsModal'
@@ -71,8 +71,8 @@ export function Navbar(): React.ReactNode {
     <>
       <nav
         className={`bg-white transition-all duration-300 ${isScrolled
-            ? "sticky top-0 z-[99] navbar-scroll-animation shadow-md"
-            : ""
+          ? "sticky top-0 z-[99] navbar-scroll-animation shadow-md"
+          : ""
           }`}
         role="navigation"
         aria-label="Main navigation"
@@ -83,7 +83,7 @@ export function Navbar(): React.ReactNode {
             className="flex items-center gap-2 shrink-0"
             aria-label="Vitalize Health — go to home"
           >
-            <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+            <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300">
               <img
                 src="/vitalizeLogo/logo.svg"
                 alt="Vitalize Logo"
@@ -116,7 +116,7 @@ export function Navbar(): React.ReactNode {
                   className={({ isActive }) =>
                     `text-xs xl:text-sm px-3 py-1 whitespace-nowrap transition-all duration-200 ${isActive
                       ? 'text-green-600 font-bold underline decoration-2 underline-offset-4'
-                      : 'text-ink-3 font-medium hover:rounded-full hover:text-green-500 hover:bg-green-50'
+                      : 'text-ink-3 font-medium hover:rounded-full hover:text-[#1E6E3A]'
                     }`
                   }
                 >
@@ -129,7 +129,11 @@ export function Navbar(): React.ReactNode {
           {/* Desktop right */}
           <div className="hidden lg:flex gap-2 items-center shrink-0">
             {user?.role === UserRole.ADMIN && (
-              <Link to="/admin" className="vh-btn vh-btn-ghost text-xs">
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-gray-700 transition-all duration-200 hover:border-green-300 hover:bg-green-50 hover:text-green-700 hover:shadow-sm"
+              >
+                <UserStar size={14} strokeWidth={2.2} />
                 Admin
               </Link>
             )}

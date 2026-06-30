@@ -11,7 +11,7 @@ const genId = () => crypto.randomUUID()
 
 const makeInitialMessage = (): ChatMessage => ({
   role: ChatRole.AI,
-  content: "Hi I'm Vita your AI wellness guide.",
+  content: "Hi I'm Vitalize your AI wellness guide.",
   timestamp: Date.now(),
 })
 

@@ -290,7 +290,7 @@ const { profile } = useUserProfile(isAuthenticated)
             >
               {msg.role === ChatRole.AI ? (
                 <img
-                  src="/vitalizeLogo/logo-icon.svg"
+                  src="/vitalizeLogo/bot.png"
                   alt="Vitalize AI"
                   className="w-8 h-8 object-contain"
                 />

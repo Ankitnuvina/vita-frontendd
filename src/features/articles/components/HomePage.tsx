@@ -5,21 +5,24 @@ import { usePodcasts } from '@/features/podcasts/hooks/usePodcasts'
 import { useExperts } from '@/features/experts/hooks/useExperts'
 import { useAuthStore } from '@/store/auth.store'
 import { TypeAnimation } from "react-type-animation";
+import { ChevronLeft, ShieldCheck, User } from 'lucide-react'
 
 /* ============================================================
    STATIC DATA
    ============================================================ */
 
 const TICKER_ITEMS = [
-  'Drink 500ml water before coffee — boosts metabolism by 30%',
-  '10 min morning sun resets your circadian rhythm better than supplements',
-  'Walk 10 min after meals — lowers blood glucose by 22%',
-  'Magnesium glycinate 200mg before bed deepens sleep architecture measurably',
-  'Box breathing 4-4-4-4 activates parasympathetic system in 90 seconds',
-  'Nasal breathing during exercise increases oxygen uptake by 18%',
-  'Eating curd rice is a probiotic powerhouse — Ayurveda got it right',
-  'Zone 2 cardio — you can still hold a conversation — is where longevity happens',
-]
+  'Drink water before your first coffee',
+  'Walk 10 minutes after meals',
+  'Get morning sunlight daily',
+  'Good sleep beats most supplements',
+  'Eat protein with every meal',
+  'Move your body every day',
+  'Slow breathing calms the mind',
+  'Choose real food over packaged food',
+  'Lift weights for strength and longevity',
+  'Avoid screens before bedtime',
+];
 
 type TabKey = 'mind' | 'body' | 'nutrition' | 'sleep' | 'longevity' | 'india'
 
@@ -43,7 +46,8 @@ const TABS: TabDef[] = [
 
 interface ArticleCardData {
   imgClass: string
-  icon: string
+  // icon: string
+  image: string
   iconColor: string
   tagClass: string
   tagLabel: string
@@ -71,12 +75,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   mind: {
     sectionTitle: 'Latest in Mind',
     articles: [
-      { imgClass: 'ai-blue', icon: 'ti-brain', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Mind', title: '5 Morning Habits That Improve Mental Clarity', authorInitials: 'NV', authorName: 'Dr. Neha Verma', readTime: '7 min' },
-      { imgClass: 'ai-amber', icon: 'ti-salad', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Nutrition', title: 'High Protein Breakfast Ideas for Busy Mornings', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '6 min' },
-      { imgClass: 'ai-grn', icon: 'ti-moon', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Sleep', title: 'Why You Feel Tired Even After 8 Hours of Sleep', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '8 min' },
-      { imgClass: 'ai-coral', icon: 'ti-run', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Body', title: 'Desk Job Problems and Simple Posture Fixes', authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '6 min' },
-      { imgClass: 'ai-teal', icon: 'ti-dna-2', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Longevity', title: "What Your Weight Doesn't Tell You About Health", authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '7 min' },
-      { imgClass: 'ai-purple', icon: 'ti-device-mobile', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Lifestyle', title: 'Digital Detox: Reclaim Your Focus and Energy', authorInitials: 'AK', authorName: 'Aarav Khanna', readTime: '5 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Mind', title: '5 Morning Habits That Improve Mental Clarity', authorInitials: 'NV', authorName: 'Dr. Neha Verma', readTime: '7 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Nutrition', title: 'High Protein Breakfast Ideas for Busy Mornings', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '6 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Sleep', title: 'Why You Feel Tired Even After 8 Hours of Sleep', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '8 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Body', title: 'Desk Job Problems and Simple Posture Fixes', authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '6 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Longevity', title: "What Your Weight Doesn't Tell You About Health", authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '7 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Lifestyle', title: 'Digital Detox: Reclaim Your Focus and Energy', authorInitials: 'AK', authorName: 'Aarav Khanna', readTime: '5 min' },
     ],
     trending: [
       { imgClass: 'ai-grn', icon: 'ti-sun', iconColor: '#1E6E3A', title: "Signs of Vitamin D Deficiency You Shouldn't Ignore", readTime: '6 min read' },
@@ -89,12 +93,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   body: {
     sectionTitle: 'Latest in Body',
     articles: [
-      { imgClass: 'ai-coral', icon: 'ti-barbell', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Body', title: 'Strength Training Basics Every Beginner Should Know', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '8 min' },
-      { imgClass: 'ai-amber', icon: 'ti-stretching', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Mobility', title: 'The Truth About Daily Stretching for Flexibility', authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '6 min' },
-      { imgClass: 'ai-blue', icon: 'ti-run', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Cardio', title: 'How to Build Endurance Without Cardio Burnout', authorInitials: 'RK', authorName: 'Coach Rahul K.', readTime: '7 min' },
-      { imgClass: 'ai-grn', icon: 'ti-heart-rate-monitor', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Recovery', title: 'Recovery Routines That Actually Work for Athletes', authorInitials: 'SM', authorName: 'Dr. Suresh M.', readTime: '9 min' },
-      { imgClass: 'ai-purple', icon: 'ti-yoga', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Flexibility', title: "Mobility vs Flexibility — What's the Difference?", authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '5 min' },
-      { imgClass: 'ai-teal', icon: 'ti-shoe', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Running', title: 'Why Your Knees Hurt After Running (And How to Fix It)', authorInitials: 'KS', authorName: 'Dr. Kavya S.', readTime: '7 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Body', title: 'Strength Training Basics Every Beginner Should Know', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '8 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Mobility', title: 'The Truth About Daily Stretching for Flexibility', authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '6 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Cardio', title: 'How to Build Endurance Without Cardio Burnout', authorInitials: 'RK', authorName: 'Coach Rahul K.', readTime: '7 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Recovery', title: 'Recovery Routines That Actually Work for Athletes', authorInitials: 'SM', authorName: 'Dr. Suresh M.', readTime: '9 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Flexibility', title: "Mobility vs Flexibility — What's the Difference?", authorInitials: 'PR', authorName: 'Physio Rohit', readTime: '5 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Running', title: 'Why Your Knees Hurt After Running (And How to Fix It)', authorInitials: 'KS', authorName: 'Dr. Kavya S.', readTime: '7 min' },
     ],
     trending: [
       { imgClass: 'ai-coral', icon: 'ti-barbell', iconColor: '#F43F5E', title: 'The 7 Best Exercises for Better Posture', readTime: '6 min read' },
@@ -107,12 +111,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   nutrition: {
     sectionTitle: 'Latest in Nutrition',
     articles: [
-      { imgClass: 'ai-amber', icon: 'ti-salad', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Diet', title: "Mediterranean Diet: Why It's Backed by Science", authorInitials: 'AS', authorName: 'Dr. Ananya Sharma', readTime: '9 min' },
-      { imgClass: 'ai-coral', icon: 'ti-meat', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Protein', title: 'The Truth About Protein Powders in 2026', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '7 min' },
-      { imgClass: 'ai-grn', icon: 'ti-candy', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Sugar', title: 'Hidden Sugars in "Healthy" Foods You Buy Daily', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '6 min' },
-      { imgClass: 'ai-teal', icon: 'ti-bacteria', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Gut', title: 'How Fiber Transforms Your Gut Microbiome', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '8 min' },
-      { imgClass: 'ai-purple', icon: 'ti-plant', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'India', title: 'Indian Superfoods That Beat Imported Trends', authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '7 min' },
-      { imgClass: 'ai-blue', icon: 'ti-tools-kitchen-2', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Planning', title: 'Meal Prep Sunday: A 4-Hour Weekly System', authorInitials: 'AK', authorName: 'Aarav Khanna', readTime: '6 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Diet', title: "Mediterranean Diet: Why It's Backed by Science", authorInitials: 'AS', authorName: 'Dr. Ananya Sharma', readTime: '9 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Protein', title: 'The Truth About Protein Powders in 2026', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '7 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Sugar', title: 'Hidden Sugars in "Healthy" Foods You Buy Daily', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '6 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Gut', title: 'How Fiber Transforms Your Gut Microbiome', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '8 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'India', title: 'Indian Superfoods That Beat Imported Trends', authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '7 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Planning', title: 'Meal Prep Sunday: A 4-Hour Weekly System', authorInitials: 'AK', authorName: 'Aarav Khanna', readTime: '6 min' },
     ],
     trending: [
       { imgClass: 'ai-coral', icon: 'ti-coffee', iconColor: '#F43F5E', title: 'Is Coffee Actually Bad for Your Heart?', readTime: '6 min read' },
@@ -125,12 +129,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   sleep: {
     sectionTitle: 'Latest in Sleep',
     articles: [
-      { imgClass: 'ai-blue', icon: 'ti-moon', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Sleep', title: 'The Perfect Sleep Schedule for Your Chronotype', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '8 min' },
-      { imgClass: 'ai-purple', icon: 'ti-capsule', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Supplements', title: 'Why Magnesium is the King of Sleep Supplements', authorInitials: 'RM', authorName: 'Dr. Riya Menon', readTime: '7 min' },
-      { imgClass: 'ai-amber', icon: 'ti-sun', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Light', title: 'How Light Exposure Controls Your Sleep Quality', authorInitials: 'NR', authorName: 'Dr. Nandini R.', readTime: '6 min' },
-      { imgClass: 'ai-grn', icon: 'ti-device-watch', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Tracking', title: 'Sleep Tracking: What the Data Really Means', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '9 min' },
-      { imgClass: 'ai-coral', icon: 'ti-zzz', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Insomnia', title: 'Insomnia Protocols From a Sleep Doctor', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '10 min' },
-      { imgClass: 'ai-teal', icon: 'ti-clock', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Science', title: 'The 90-Minute Sleep Cycle Theory Explained', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '7 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Sleep', title: 'The Perfect Sleep Schedule for Your Chronotype', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '8 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Supplements', title: 'Why Magnesium is the King of Sleep Supplements', authorInitials: 'RM', authorName: 'Dr. Riya Menon', readTime: '7 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Light', title: 'How Light Exposure Controls Your Sleep Quality', authorInitials: 'NR', authorName: 'Dr. Nandini R.', readTime: '6 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Tracking', title: 'Sleep Tracking: What the Data Really Means', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '9 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Insomnia', title: 'Insomnia Protocols From a Sleep Doctor', authorInitials: 'KS', authorName: 'Dr. Kabir Singh', readTime: '10 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Science', title: 'The 90-Minute Sleep Cycle Theory Explained', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '7 min' },
     ],
     trending: [
       { imgClass: 'ai-blue', icon: 'ti-bed', iconColor: '#3B82F6', title: 'Should You Nap During the Day?', readTime: '5 min read' },
@@ -143,12 +147,12 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   longevity: {
     sectionTitle: 'Latest in Longevity',
     articles: [
-      { imgClass: 'ai-teal', icon: 'ti-world', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Lifestyle', title: "Blue Zones: 5 Habits of the World's Oldest People", authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '9 min' },
-      { imgClass: 'ai-grn', icon: 'ti-dna-2', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Cellular', title: 'Cellular Aging: Can You Actually Reverse It?', authorInitials: 'VT', authorName: 'Dr. Vikram Tiwari', readTime: '10 min' },
-      { imgClass: 'ai-purple', icon: 'ti-capsule', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Supplements', title: 'The NMN Supplement Debate Settled', authorInitials: 'RM', authorName: 'Dr. Riya Menon', readTime: '8 min' },
-      { imgClass: 'ai-blue', icon: 'ti-heart-rate-monitor', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Cardio', title: 'Why Zone 2 Cardio is the Longevity King', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '7 min' },
-      { imgClass: 'ai-coral', icon: 'ti-flame', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Heat', title: 'Sauna Use & Cardiovascular Health Evidence', authorInitials: 'SM', authorName: 'Dr. Suresh M.', readTime: '8 min' },
-      { imgClass: 'ai-amber', icon: 'ti-chart-line', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Biomarkers', title: 'Telomere Length and Your Real Biological Age', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '9 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Lifestyle', title: "Blue Zones: 5 Habits of the World's Oldest People", authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '9 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Cellular', title: 'Cellular Aging: Can You Actually Reverse It?', authorInitials: 'VT', authorName: 'Dr. Vikram Tiwari', readTime: '10 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Supplements', title: 'The NMN Supplement Debate Settled', authorInitials: 'RM', authorName: 'Dr. Riya Menon', readTime: '8 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Cardio', title: 'Why Zone 2 Cardio is the Longevity King', authorInitials: 'AS', authorName: 'Arjun Shah', readTime: '7 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Heat', title: 'Sauna Use & Cardiovascular Health Evidence', authorInitials: 'SM', authorName: 'Dr. Suresh M.', readTime: '8 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Biomarkers', title: 'Telomere Length and Your Real Biological Age', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '9 min' },
     ],
     trending: [
       { imgClass: 'ai-teal', icon: 'ti-test-pipe', iconColor: '#14B8A6', title: 'The Best Longevity Tests You Can Do at Home', readTime: '7 min read' },
@@ -161,12 +165,14 @@ const TAB_CONTENT: Record<TabKey, TabContent> = {
   india: {
     sectionTitle: 'Latest in India Roots',
     articles: [
-      { imgClass: 'ai-purple', icon: 'ti-apple', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Ayurveda', title: 'Triphala: The 3-Fruit Wonder Backed by Science', authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '8 min' },
-      { imgClass: 'ai-grn', icon: 'ti-yoga', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Yoga', title: 'Yoga vs Modern Exercise — Which Works Better?', authorInitials: 'NR', authorName: 'Dr. Nandini Rao', readTime: '7 min' },
-      { imgClass: 'ai-amber', icon: 'ti-droplet', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Food', title: 'Ghee Reconsidered: The Ayurvedic Superfat', authorInitials: 'AS', authorName: 'Dr. Ananya Sharma', readTime: '6 min' },
-      { imgClass: 'ai-teal', icon: 'ti-massage', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Detox', title: 'How Panchakarma Detoxes Actually Work', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '9 min' },
-      { imgClass: 'ai-coral', icon: 'ti-plant-2', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Herbs', title: 'Tulsi: Adaptogen of the Subcontinent', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '7 min' },
-      { imgClass: 'ai-blue', icon: 'ti-glass-cocktail', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Tradition', title: 'Why Indian Mothers Always Insisted on Haldi Doodh', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '5 min' },
+      { imgClass: 'ai-purple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#8B5CF6', tagClass: 'tp-purple', tagLabel: 'Ayurveda', title: 'Triphala: The 3-Fruit Wonder Backed by Science', authorInitials: 'MI', authorName: 'Dr. Meera Iyer', readTime: '8 min' },
+      { imgClass: 'ai-grn', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#1E6E3A', tagClass: 'tp-grn', tagLabel: 'Yoga', title: 'Yoga vs Modern Exercise — Which Works Better?', authorInitials: 'NR', authorName: 'Dr. Nandini Rao', readTime: '7 min' },
+      { imgClass: 'ai-amber', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F59E0B', tagClass: 'tp-amber', tagLabel: 'Food', title: 'Ghee Reconsidered: The Ayurvedic Superfat', authorInitials: 'AS', authorName: 'Dr. Ananya Sharma', readTime: '6 min' },
+      { imgClass: 'ai-teal', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#14B8A6', tagClass: 'tp-teal', tagLabel: 'Detox', title: 'How Panchakarma Detoxes Actually Work', authorInitials: 'VT', authorName: 'Dr. Vikram T.', readTime: '9 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Herbs', title: 'Tulsi: Adaptogen of the Subcontinent', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '7 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Herbs', title: 'Tulsi: Adaptogen of the Subcontinent', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '7 min' },
+      { imgClass: 'ai-coral', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#F43F5E', tagClass: 'tp-coral', tagLabel: 'Herbs', title: 'Tulsi: Adaptogen of the Subcontinent', authorInitials: 'PJ', authorName: 'Dr. Priya Joshi', readTime: '7 min' },
+      { imgClass: 'ai-blue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBwwEuzcK28RjBgJfsvC29L36oPTMAMs0m2w&s', iconColor: '#3B82F6', tagClass: 'tp-blue', tagLabel: 'Tradition', title: 'Why Indian Mothers Always Insisted on Haldi Doodh', authorInitials: 'RM', authorName: 'Riya Mehta', readTime: '5 min' },
     ],
     trending: [
       { imgClass: 'ai-purple', icon: 'ti-capsule', iconColor: '#8B5CF6', title: 'Ashwagandha Doses That Actually Work', readTime: '7 min read' },
@@ -204,7 +210,8 @@ const CLAIMS = [
 const STATIC_PODCASTS = [
   {
     id: 0,
-    ep: 'Ep 48 · Mind Architecture',
+    ep: 'Ep 48',
+    category: 'Mind Architecture',
     title: 'The Neuroscience of Breaking Bad Habits',
     dur: '54 min',
     guest: 'Dr. Nandini Rao',
@@ -213,7 +220,8 @@ const STATIC_PODCASTS = [
   },
   {
     id: 1,
-    ep: 'Ep 47 · Longevity Lab',
+    ep: 'Ep 47',
+    category: 'Mind Architecture',
     title: 'Metformin, NMN & The Longevity Stack',
     dur: '68 min',
     guest: 'Dr. Vikram Tiwari',
@@ -222,7 +230,8 @@ const STATIC_PODCASTS = [
   },
   {
     id: 2,
-    ep: 'Ep 46 · Body Intel',
+    ep: 'Ep 46',
+    category: 'Body Intel',
     title: 'HRV, VO2 Max & The Metrics That Actually Matter',
     dur: '41 min',
     guest: 'Arjun Shah',
@@ -236,25 +245,25 @@ const STATIC_EXPERTS = [
     id: 0, initials: 'AS', bg: '#F0FAF4', color: '#1E6E3A',
     name: 'Dr. Ananya Sharma', role: 'Clinical Nutritionist',
     credentials: 'PhD Nutrition · AIIMS Delhi',
-    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzvjtEpO2xRigInDboJp7hPiC2KBWLbjRA-w&s'
+    imageUrl: 'https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww'
   },
   {
     id: 1, initials: 'KS', bg: '#EFF6FF', color: '#1E40AF',
     name: 'Dr. Kabir Singh', role: 'Sleep Specialist',
     credentials: 'MD Sleep Medicine · Stanford',
-    imageUrl: 'https://www.shutterstock.com/image-photo/beautiful-young-woman-closed-her-260nw-2641134949.jpg'
+    imageUrl: 'https://png.pngtree.com/thumb_back/fh260/background/20230425/pngtree-doctor-holding-an-heart-and-a-small-stethoscope-image_2554370.jpg'
   },
   {
     id: 2, initials: 'NV', bg: '#F5F3FF', color: '#4C1D95',
     name: 'Dr. Neha Verma', role: 'Psychologist',
     credentials: 'PhD Psychology · Delhi University',
-    imageUrl: 'https://thumbs.dreamstime.com/b/male-psychologist-being-ready-to-take-notes-sitting-couch-31427459.jpg'
+    imageUrl: 'https://thumbs.dreamstime.com/b/child-psychologist-talking-to-girl-kid-office-psychology-psychotherapy-professional-counseling-mental-help-children-196931107.jpg'
   },
   {
     id: 3, initials: 'PR', bg: '#FFF1F2', color: '#9F1239',
     name: 'Physio Rohit', role: 'Physiotherapist',
     credentials: 'MPT Sports · Mumbai University',
-    imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80'
+    imageUrl: 'https://static.vecteezy.com/system/resources/thumbnails/046/836/942/small/young-bangladeshi-male-fitness-trainer-in-modern-gym-environment-suitable-for-health-and-wellness-promotions-exercise-tutorials-and-gym-advertisements-photo.jpg'
   },
 ]
 
@@ -425,31 +434,13 @@ export function HomePage(): React.ReactNode {
         <div className="pg">
 
           {/* TIPS TICKER */}
-          <div className="">
-            <div className="ticker">
-              <div className="tick-lbl">
-                <span className="tick-dot" />
-                Daily tips
-              </div>
-              <div className="tick-track">
-                <div className="tick-content">
-                  {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-                    <div className="tick-item" key={i}>{item}</div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+
 
           {/* HERO */}
           <div className='Hero_main'>
             <div className="vh-container">
               <div className="hero">
                 <div className="hero-l">
-                  <div className="hero-eyebrow">
-                    <span className="hero-eyebrow-dot" />
-                    Cover story · Issue 12 · May 2026
-                  </div>
                   <div className="hero-h1">
                     <TypeAnimation
                       sequence={[
@@ -476,7 +467,8 @@ export function HomePage(): React.ReactNode {
                       <span className="ava-cred">MD Neurology · AIIMS Delhi</span>
                     </div>
                     <div className="verified-chip">
-                      <i className="ti ti-circle-check" style={{ fontSize: 13 }} aria-hidden="true" />
+                      {/* <i className="ti ti-circle-check" style={{ fontSize: 13 }} aria-hidden="true" /> */}
+                      <ShieldCheck className="w-3.5 h-3.5" />
                       Expert verified
                     </div>
                   </div>
@@ -486,9 +478,14 @@ export function HomePage(): React.ReactNode {
                     <div className="h-chip"><i className="ti ti-flame" style={{ fontSize: 14, color: '#F43F5E' }} aria-hidden="true" />#1 this month</div>
                   </div>
                   <div className="hero-btns">
-                    <button className="btn-p" type="button" onClick={() => window.location.href = "/articles"}>Explore articles <i className="ti ti-arrow-right" style={{ fontSize: 14 }} aria-hidden="true" /></button>
+                    <button
+                      className="btn-p"
+                      type="button"
+                      onClick={() => (window.location.href = "/articles")}
+                    >
+                      Explore articles
+                    </button>
                     <button className="btn-s" type="button" onClick={() => setLoginOpen(true)}>Start your journey</button>
-
                   </div>
                 </div>
 
@@ -510,7 +507,7 @@ export function HomePage(): React.ReactNode {
                             <span className="stat-name">Sleep</span>
                             <i
                               className="ti ti-moon stat-icon"
-                              aria-hidden="true" style={{ color: '#4726d6' , fontSize: "20px" }}
+                              aria-hidden="true" style={{ color: '#4726d6', fontSize: "20px" }}
                             />
                           </div>
                         </div>
@@ -548,7 +545,7 @@ export function HomePage(): React.ReactNode {
                           <span className="stat-name">Heart Rate</span>
                           <i
                             className="ti ti-heart-filled"
-                            aria-hidden="true" style={{ color: '#eb1919' , fontSize: "20px" }}
+                            aria-hidden="true" style={{ color: '#eb1919', fontSize: "20px" }}
                           />
                         </div>
                         <div className="stat-big-val">85 bpm</div>
@@ -557,11 +554,11 @@ export function HomePage(): React.ReactNode {
 
                       {/* Water */}
                       <div className="stat-card-new">
-                        <div className="stat-card-header" style={{ marginBottom: 4 }}>                         
+                        <div className="stat-card-header" style={{ marginBottom: 4 }}>
                           <div className="stat-card-title">
-                          <span className="stat-name">Water</span>
-                          <i className="ti ti-droplet" aria-hidden="true" style={{ color: '#3b82f6', fontSize: "20px" }} />
-                        </div>
+                            <span className="stat-name">Water</span>
+                            <i className="ti ti-droplet" aria-hidden="true" style={{ color: '#3b82f6', fontSize: "20px" }} />
+                          </div>
                         </div>
                         <div className="stat-big-val">2.1 L</div>
                         <div className="stat-footer-row" style={{ marginTop: 6 }}>
@@ -593,13 +590,29 @@ export function HomePage(): React.ReactNode {
                 </div>
               </div>
             </div>
+
+            <div className="Dailytipsmain">
+              <div className="ticker">
+                <div className="tick-lbl">
+                  <span className="tick-dot" />
+                  Daily tips
+                </div>
+                <div className="tick-track">
+                  <div className="tick-content">
+                    {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+                      <div className="tick-item" key={i}>{item}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* PODCAST */}
           <div className="vh-container">
             <div className="pod-section">
               <div className="sec-bar">
-                <div className="sec-title">Podc<span>asts</span></div>
+                <div className="sec-title">Pod<span>casts</span></div>
                 <div className="sec-more" onClick={() => window.location.href = "/podcasts"}>
                   All episodes <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" />
                 </div>
@@ -633,11 +646,24 @@ export function HomePage(): React.ReactNode {
                         </div>
                         <div className='pod_meta_play'>
                           <div className="pod-meta">
-                            <div className="pod-ep">{p.episode} · {p.category}</div>
+                            <div className="pod-info">
+                              <div className="pod-ep">
+                                {p.episode} : {p.category}
+                              </div>
+                              <div className="pod-time">
+                                <i
+                                  className="ti ti-clock"
+                                  style={{ fontSize: 13, color: "green" }}
+                                  aria-hidden="true"
+                                />
+                                {p.duration}
+                              </div>
+                            </div>
                             <div className="pod-title">{p.title}</div>
                             <div className="pod-dur">
-                              <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
-                              {p.duration} · {p.guest}
+                              <div className='w-6 h-6 rounded-full bg-green-100 flex items-center justify-center shrink-0'>
+                                <User className='h-3 w-3' />
+                              </div>  <span>{p.guest}</span>
                             </div>
                           </div>
                           <div className="pod-play" onClick={() => window.location.href = '/podcasts'}>
@@ -659,12 +685,26 @@ export function HomePage(): React.ReactNode {
                       </div>
                       <div className='pod_meta_play'>
                         <div className="pod-meta">
-                          <div className="pod-ep">{p.ep}</div>
+                          <div className="pod-info">
+                            <div className="pod-ep">
+                              {p.ep} : {p.category}
+                            </div>
+                            <div className="pod-time">
+                              <i
+                                className="ti ti-clock"
+                                style={{ fontSize: 13, color: "green" }}
+                                aria-hidden="true"
+                              />
+                              {p.dur}
+                            </div>
+                          </div>
                           <div className="pod-title">{p.title}</div>
                           <div className="pod-dur">
-                            <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
-                            {p.dur} · {p.guest}
+                            <div className='w-6 h-6 rounded-full bg-green-100 flex items-center justify-center shrink-0'>
+                              <User className='h-3 w-3' />
+                            </div><span>{p.guest}</span>
                           </div>
+
                         </div>
                         <div className="pod-play" onClick={() => setLoginOpen(true)}>
                           <div className="play-tri" />
@@ -677,7 +717,7 @@ export function HomePage(): React.ReactNode {
             </div>
           </div>
 
-              {/* FEATURE STRIP */}
+          {/* FEATURE STRIP */}
           <div className="vh-container">
             <div className="feat-strip">
               <div className="feat">
@@ -688,7 +728,6 @@ export function HomePage(): React.ReactNode {
               </div>
               <div className="feat">
                 <div className="feat-icon fi-a"><i className="ti ti-microphone" style={{ fontSize: 22 }} aria-hidden="true" /></div>
-                <div className="live-dot">Live</div>
                 <div className="feat-label">Podcast</div>
                 <div className="feat-desc">Deep conversations with doctors, scientists & founders.</div>
                 <div className="feat-link" onClick={() => window.location.href = "/podcasts"}>Listen now <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
@@ -712,7 +751,7 @@ export function HomePage(): React.ReactNode {
           <div className="vh-container">
             <div className="vid-section">
               <div className="sec-bar">
-                <div className="sec-title">Vide<span>os</span></div>
+                <div className="sec-title">Video<span>s</span></div>
                 <div className="sec-more" onClick={() => window.location.href = "/videos"}>All videos <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
               </div>
               <div className="vid-row">
@@ -738,71 +777,76 @@ export function HomePage(): React.ReactNode {
           </div>
 
 
-      
+
 
           {/* CATEGORY ROW (TABS) */}
           <div className="vh-container">
-            <div className="cat-row">
-              {TABS.map((tab) => (
-                <button
-                  type="button"
-                  key={tab.key}
-                  className={`cat${activeTab === tab.key ? ' on' : ''}`}
-                  onClick={() => setActiveTab(tab.key)}
-                >
-                  <div className="cat-icon" style={{ background: tab.iconBg }}>
-                    <i className={`ti ${tab.icon}`} style={{ fontSize: 22, color: tab.iconColor }} aria-hidden="true" />
+            <div className='category_articles'>
+              <div className="cat-row">
+                {TABS.map((tab) => (
+                  <button
+                    type="button"
+                    key={tab.key}
+                    className={`cat${activeTab === tab.key ? ' on' : ''}`}
+                    onClick={() => setActiveTab(tab.key)}
+                  >
+                    <div className="cat-icon" style={{ background: tab.iconBg }}>
+                      <i className={`ti ${tab.icon}`} style={{ fontSize: 22, color: tab.iconColor }} aria-hidden="true" />
+                    </div>
+                    <div className="cat-name">{tab.name}</div>
+                    <div className="cat-sub">{tab.sub}</div>
+                  </button>
+                ))}
+              </div>
+              <div className="main-cols">
+                <div className="articles-col">
+                  <div className="sec-bar">
+                    <div className="sec-title">{content.sectionTitle}</div>
+                    <div className="sec-more">View all <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
                   </div>
-                  <div className="cat-name">{tab.name}</div>
-                  <div className="cat-sub">{tab.sub}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* ARTICLES + TRENDING (TAB CONTENT) */}
-          <div className="vh-container">
-            <div className="main-cols">
-              <div className="articles-col">
-                <div className="sec-bar">
-                  <div className="sec-title">{content.sectionTitle}</div>
-                  <div className="sec-more">View all <i className="ti ti-arrow-right" style={{ fontSize: 13 }} aria-hidden="true" /></div>
-                </div>
-                <div className="art-grid">
-                  {content.articles.map((a, i) => (
-                    <div className="acard" key={`${activeTab}-art-${i}`}>
-                      <div className={`acard-img ${a.imgClass}`}>
-                        <i className={`ti ${a.icon}`} style={{ fontSize: 38, color: a.iconColor }} aria-hidden="true" />
-                      </div>
-                      <div className={`tag-pill ${a.tagClass}`}>{a.tagLabel}</div>
-                      <div className="acard-h">{a.title}</div>
-                      <div className="acard-foot">
-                        <div className="acard-auth">
-                          <div className="auth-av">{a.authorInitials}</div>
-                          {a.authorName}
+                  <div className="art-grid">
+                    {content.articles.map((a, i) => (
+                      <div className="acard" key={`${activeTab}-art-${i}`}>
+                        <div className={`acard-img ${a.imgClass}`}>
+                          <img
+                            src={a.image}
+                            alt={a.title}
+                            className="article-img"
+                          />
                         </div>
-                        <div className="acard-rt">{a.readTime}</div>
+                        <div className='acard_content'>
+                          <div className={`tag-pill ${a.tagClass}`}>{a.tagLabel}</div>
+                          <div className="acard-h">{a.title}</div>
+                          <div className="acard-foot">
+                            <div className="acard-auth">
+                              {/* <div className="auth-av">{a.authorInitials}</div> */}
+                              <i className="ti ti-user" />
+                              {a.authorName}
+                            </div>
+                            <div className="acard-rt"><i className="ti ti-clock" style={{ fontSize: 14 }} aria-hidden="true" />{a.readTime}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="sidebar">
+                  <div className="sec-bar" style={{ paddingBottom: 8 }}>
+                    <div className="sec-title">Trending now</div>
+                  </div>
+                  {content.trending.map((t, i) => (
+                    <div className="trend-item" key={`${activeTab}-tr-${i}`}>
+                      <div className="trend-num">{i + 1}</div>
+                      <div className={`trend-img ${t.imgClass}`}>
+                        <i className={`ti ${t.icon}`} style={{ fontSize: 22, color: t.iconColor }} aria-hidden="true" />
+                      </div>
+                      <div>
+                        <div className="trend-h">{t.title}</div>
+                        <div className="trend-t">{t.readTime}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-              <div className="sidebar">
-                <div className="sec-bar" style={{ paddingBottom: 8 }}>
-                  <div className="sec-title">Trending now</div>
-                </div>
-                {content.trending.map((t, i) => (
-                  <div className="trend-item" key={`${activeTab}-tr-${i}`}>
-                    <div className="trend-num">{i + 1}</div>
-                    <div className={`trend-img ${t.imgClass}`}>
-                      <i className={`ti ${t.icon}`} style={{ fontSize: 22, color: t.iconColor }} aria-hidden="true" />
-                    </div>
-                    <div>
-                      <div className="trend-h">{t.title}</div>
-                      <div className="trend-t">{t.readTime}</div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
@@ -812,13 +856,12 @@ export function HomePage(): React.ReactNode {
           {/* AI CHAT + QUIZ */}
           <div className="vh-container">
             <div className="tools-cols">
-              {/* AI CHAT */}
               <div className="ai-panel">
                 <div className="ai-head">
                   <div className="ai-title-row">
-                    <div className="ai-orb"><i className="ti ti-robot" style={{ fontSize: 19, color: '#fff' }} aria-hidden="true" /></div>
+                    <img src="/vitalizeLogo/bot.png" alt="AI Bot" className="ai-bot-img" />
                     <div>
-                      <div className="ai-name">Vita AI</div>
+                      <div className="ai-name">Vitalize AI</div>
                       <div className="ai-sub">Ask anything about your health</div>
                     </div>
                   </div>
@@ -867,7 +910,7 @@ export function HomePage(): React.ReactNode {
                 <div className="quiz-head">
                   <div className="quiz-title-row">
                     <div className="quiz-icon-box">
-                      <i className="ti ti-chart-radar" style={{ fontSize: 19, color: '#8B5CF6' }} aria-hidden="true" />
+                      <i className="ti ti-chart-radar" style={{ fontSize: 19, color: '#1E6E3A' }} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="quiz-name">Vital Score Quiz</div>
@@ -915,7 +958,7 @@ export function HomePage(): React.ReactNode {
                   <div className="quiz-actions">
                     {currentQ > 1 && (
                       <button type="button" className="quiz-btn quiz-prev" onClick={handlePrev}>
-                        ← Previous
+                        <ChevronLeft className='h-5 w-5' /> Previous
                       </button>
                     )}
                     <button
@@ -924,7 +967,7 @@ export function HomePage(): React.ReactNode {
                       onClick={handleNext}
                       disabled={!currentAnswer}
                     >
-                      {isLastQ ? 'Submit ✓' : 'Next question →'}
+                      {isLastQ ? 'Submit' : 'Next question'}
                     </button>
                   </div>
                 </div>
@@ -1003,54 +1046,62 @@ export function HomePage(): React.ReactNode {
                   View all experts <i className="ti ti-arrow-right" style={{ fontSize: 13 }} />
                 </div>
               </div>
+
               <div className="experts-row">
                 {isLoggedIn ? (
                   expertsQuery.isLoading ? (
                     [1, 2, 3, 4].map((i) => (
-                      <div className="expert-card" key={i}>
-                        <div className="exp-ava animate-pulse bg-neutral-200" />
-                        <div className="h-3 w-24 bg-neutral-200 rounded animate-pulse mb-2" />
-                        <div className="h-2 w-16 bg-neutral-200 rounded animate-pulse" />
+                      <div className="expert-card-v2" key={i}>
+                        <div className="exp-photo-wrap animate-pulse bg-neutral-200" />
+                        <div className="h-3 w-24 bg-neutral-200 rounded animate-pulse mb-2 mx-auto" />
+                        <div className="h-2 w-16 bg-neutral-200 rounded animate-pulse mx-auto" />
                       </div>
                     ))
                   ) : realExperts.map((e) => {
                     const initials = e.name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
                     return (
                       <div
-                        className="expert-card"
+                        className="expert-card-v2"
                         key={e.id}
                         onClick={() => window.location.href = `/experts/${e.id}`}
-                        style={{ cursor: 'pointer' }}
                       >
-                        {e.imageUrl ? (
-                          <img src={e.imageUrl} alt={e.name} className="exp-ava" style={{ objectFit: 'cover', borderRadius: '50%' }} />
-                        ) : (
-                          <div className="exp-ava" style={{ background: '#F0FAF4', color: '#1E6E3A' }}>{initials}</div>
-                        )}
-                        <div className="exp-name">{e.name}</div>
-                        <div className="exp-role">{e.role}</div>
-                        <div className="exp-article">{e.credentials}</div>
-                        <div className="exp-link">View profile <i className="ti ti-arrow-right" style={{ fontSize: 12 }} /></div>
+                        <div className="exp-photo-wrap">
+                          {e.imageUrl ? (
+                            <img src={e.imageUrl} alt={e.name} className="exp-photo" />
+                          ) : (
+                            <div className="exp-photo exp-initials" style={{ background: '#F0FAF4', color: '#1E6E3A' }}>{initials}</div>
+                          )}
+                        </div>
+                        <div className="exp-name-v2">{e.name}</div>
+                        <div className="exp-divider-v2" />
+                        <div className="exp-cred-v2">{e.role} · {e.credentials}</div>
+                        <div className="exp-socials-v2">
+                          <i className="ti ti-brand-linkedin" aria-hidden="true" />
+                          <i className="ti ti-brand-facebook" aria-hidden="true" />
+                          <i className="ti ti-brand-twitter" aria-hidden="true" />
+                          <i className="ti ti-brand-instagram" aria-hidden="true" />
+                        </div>
                       </div>
                     )
                   })
                 ) : (
                   STATIC_EXPERTS.map((e) => (
-                    <div className="expert-card" key={e.id}>
-                      <img
-                        src={e.imageUrl}
-                        alt={e.name}
-                        className="exp-ava"
-                        style={{ objectFit: 'cover', borderRadius: '50%' }}
-                      />
-                      <div className="exp-name">{e.name}</div>
-                      <div className="exp-role">{e.role}</div>
-                      <div className="exp-article">{e.credentials}</div>
-                      <div
-                        className="exp-link"
-                        onClick={() => setLoginOpen(true)}
-                      >
-                        Login to view profile<i className="ti ti-arrow-right" style={{ fontSize: 12 }} />
+                    <div
+                      className="expert-card-v2"
+                      key={e.id}
+                      onClick={() => setLoginOpen(true)}
+                    >
+                      <div className="exp-photo-wrap">
+                        <img src={e.imageUrl} alt={e.name} className="exp-photo" />
+                      </div>
+                      <div className="exp-name-v2">{e.name}</div>
+                      <div className="exp-divider-v2" />
+                      <div className="exp-cred-v2">{e.role} · {e.credentials}</div>
+                      <div className="exp-socials-v2">
+                        <i className="ti ti-brand-linkedin" aria-hidden="true" />
+                        <i className="ti ti-brand-facebook" aria-hidden="true" />
+                        <i className="ti ti-brand-twitter" aria-hidden="true" />
+                        <i className="ti ti-brand-instagram" aria-hidden="true" />
                       </div>
                     </div>
                   ))
@@ -1098,7 +1149,7 @@ export function HomePage(): React.ReactNode {
                       className="nl-inp"
                       value={nlEmail}
                       onChange={(e) => setNlEmail(e.target.value)}
-                      placeholder="Enter your email address"
+                      placeholder="Enter your email address..."
                       autoComplete="email"
                       disabled={nlSubmitted}
                       required

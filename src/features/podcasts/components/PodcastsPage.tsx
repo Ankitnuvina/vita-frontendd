@@ -153,9 +153,9 @@ export function PodcastsPage(): React.ReactNode {
               onRetry={() => void refetch()}
             />
           ) : !podcasts || podcasts.length === 0 ? (
-            <EmptyState message="Please log in to view our podcasts" icon="🎧" />
+            <EmptyState message="Please log in to view our podcasts" />
           ) : filteredPodcasts.length === 0 ? (
-            <EmptyState message="No podcasts match your search." icon="🔎" />
+            <EmptyState message="No podcasts match your search." />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
               {filteredPodcasts.map((p) => (
@@ -306,7 +306,7 @@ function PodcastCard({
       </article>
       {openComments && (
         <div
-          className="border-t border-border bg-neutral-50 p-4"
+          className="fixed z-50 border-t border-border bg-neutral-50 p-4"
           onClick={(e) => e.stopPropagation()}
         >
           <CommentModal

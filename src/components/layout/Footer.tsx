@@ -57,9 +57,9 @@ export function Footer(): React.ReactNode {
               className="flex items-center gap-2 shrink-0"
               aria-label="Vitalize Health — go to home"
             >
-              <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300 hover:bg-white/50">
+              <div className="flex items-center rounded-xl px-2 py-1 transition-all duration-300">
                 <img
-                  src="/vitalizeLogo/logo.svg"
+                  src="/vitalizeLogo/vita_footer_logo.svg"
                   alt="Vitalize Logo"
                   className="h-8 cursor-pointer w-auto object-contain transition-transform duration-300 hover:scale-105"
                 />

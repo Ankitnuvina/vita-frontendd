@@ -6,12 +6,9 @@ interface Props {
   action?: { label: string; onClick: () => void }
 }
 
-export function EmptyState({ message, icon = '🌿', action }: Props): React.ReactNode {
+export function EmptyState({ message, action }: Props): React.ReactNode {
   return (
-    <div className="text-center py-16">
-      <div aria-hidden="true" className="text-4xl mb-3">
-        {icon}
-      </div>
+    <div className="text-center py-16">      
       <p className="font-serif text-lg font-bold text-ink mb-1.5">{message}</p>
       <p className="text-sm text-ink-3 font-light">Check back soon.</p>
       {action && (

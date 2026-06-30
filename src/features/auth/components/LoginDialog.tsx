@@ -247,7 +247,7 @@ function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNo
           {/* Error */}
           {error && (
             <div role="alert" className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-              ⚠️ {error}
+              {error}
               {showResend && (
                 <button
                   type="button"
@@ -263,32 +263,32 @@ function LoginDialogContent({ onClose }: { onClose: () => void }): React.ReactNo
           <button
             type="submit"
             disabled={isLoading || !email || !password || (isSignup && !username)}
-            className="w-full mt-6 py-3 rounded-full text-white font-semibold text-sm bg-gradient-to-r from-[#86EFAC] via-[#4ADE80] to-[#22C55E] shadow-md hover:shadow-lg hover:opacity-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer"
+            className="w-full mt-6 py-3 rounded-full text-black font-semibold text-md bg-gradient-to-r from-[#86EFAC] via-[#4ADE80] to-[#22C55E] shadow-md hover:shadow-lg hover:opacity-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer"
           >
             {submitLabel}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-3">
+        <p className="text-center text-sm text-gray-500 mt-3">
           {isSignup ? (
             <>
               Already have an account?{' '}
-              <button type="button" onClick={() => switchMode('signin')} className="text-[#22C55E] font-semibold hover:underline no-underline">
+              <button type="button" onClick={() => switchMode('signin')} className="text-[#1E6E3A] font-semibold hover:underline no-underline">
                 Sign in
               </button>
             </>
           ) : (
             <>
               New here?{' '}
-              <button type="button" onClick={() => switchMode('signup')} className="text-[#22C55E] font-semibold hover:underline no-underline">
+              <button type="button" onClick={() => switchMode('signup')} className="text-[#1E6E3A] font-semibold hover:underline no-underline">
                 Create an account
               </button>
-              <div className="text-center mt-5">
+              <div className="text-center">
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-[#22C55E] font-medium hover:underline no-underline"
+                  className="text-sm text-[#1E6E3A] font-medium hover:underline no-underline"
                 >
-                  Forget Password ?
+                  Forget Password?
                 </Link>
               </div>
             </>
