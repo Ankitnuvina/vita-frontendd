@@ -154,6 +154,7 @@ describe('useAuthStore', () => {
       .adminRegister('newadmin',  'newuser@example.com', 'secret123', 'invite')
     // expect(result?.role).toBe(UserRole.ADMIN)
     expect(result).toBe(true)
+    // comment for testing
     expect(useAuthStore.getState().user?.userId).toBe('admin-9')
   })
 
