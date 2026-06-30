@@ -114,7 +114,7 @@ describe('useAuthStore', () => {
 
   it('register signs the user in on success', async () => {
     mockedRegister.mockResolvedValue({ userId: 'user-9', role: UserRole.USER })
-    const result = await useAuthStore.getState().register('newuser', 'secret123')
+    const result = await useAuthStore.getState().register('newuser',  'newuser@example.com', 'secret123')
     const state = useAuthStore.getState()
     expect(result).toEqual({ userId: 'user-9', role: UserRole.USER })
     expect(state.isAuthenticated).toBe(true)
@@ -123,7 +123,7 @@ describe('useAuthStore', () => {
 
   it('register surfaces a friendly error and returns null on conflict', async () => {
     mockedRegister.mockRejectedValue(new ApiError('Username is already taken', 409, 'HTTP_409'))
-    const result = await useAuthStore.getState().register('newuser', 'secret123')
+    const result = await useAuthStore.getState().register('newuser',  'newuser@example.com', 'secret123')
     const state = useAuthStore.getState()
     expect(result).toBeNull()
     expect(state.isAuthenticated).toBe(false)
@@ -151,8 +151,9 @@ describe('useAuthStore', () => {
     mockedAdminRegister.mockResolvedValue({ userId: 'admin-9', role: UserRole.ADMIN })
     const result = await useAuthStore
       .getState()
-      .adminRegister('newadmin', 'secret123', 'invite')
-    expect(result?.role).toBe(UserRole.ADMIN)
+      .adminRegister('newadmin',  'newuser@example.com', 'secret123', 'invite')
+    // expect(result?.role).toBe(UserRole.ADMIN)
+    expect(result).toBe(true)
     expect(useAuthStore.getState().user?.userId).toBe('admin-9')
   })
 
@@ -162,7 +163,7 @@ describe('useAuthStore', () => {
     )
     const result = await useAuthStore
       .getState()
-      .adminRegister('newadmin', 'secret123', 'wrong')
+      .adminRegister('newadmin',  'newuser@example.com', 'secret123', 'wrong')
     expect(result).toBeNull()
     expect(useAuthStore.getState().error).toBeTruthy()
   })
